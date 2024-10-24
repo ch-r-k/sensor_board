@@ -1,0 +1,34 @@
+{
+    "version": "0.2",
+    "ignorePaths": [
+        ".devcontainer",
+        ".vscode",
+        "3d_party",
+        "build",
+        "cmake",
+        "tools"
+    ],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "Allman",
+        "Blinky",
+        "CMSIS",
+        "datasheet",
+        "devcontainer",
+        "GPIO",
+        "GPIOA",
+        "GPIOB",
+        "JTAG",
+        "NOPULL",
+        "NUCLEO",
+        "NVIC",
+        "PRIVDEFENA",
+        "qpcpp",
+        "RASR",
+        "RBAR",
+        "subscr"
+    ],
+    "ignoreWords": [],
+    "import": []
+}

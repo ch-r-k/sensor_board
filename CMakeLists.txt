@@ -42,6 +42,7 @@ set(INCLUDE_DIRS
     src/device/user_indication
     src/hardware
     src/hardware/output_pin
+    src/hardware/driver/spi
     src/_common
 )
 
@@ -59,6 +60,7 @@ set(APP_CPP_SRCS
     src/device/user_indication/user_indication.cpp
     src/hardware/hardware_manager.cpp
     src/hardware/output_pin/output_pin.cpp
+    src/hardware/driver/spi/spi.cpp
 )
 
 include_directories(${INCLUDE_DIRS})

@@ -44,6 +44,7 @@ set(INCLUDE_DIRS
     src/hardware/output_pin
     src/hardware/driver/spi
     src/_common
+    src/hardware/qpcpp_callbacks
 )
 
 
@@ -54,6 +55,8 @@ set(APP_CPP_SRCS
     src/main.cpp
     src/_common/io_functions.cpp
     src/_common/common.cpp
+    src/hardware/qpcpp_callbacks/qpcpp_callbacks.cpp
+    src/hardware/qpcpp_callbacks/qpcpp_error.cpp
     src/application/application_manager.cpp
     src/application/blinky/blinky.cpp
     src/device/device_manager.cpp
@@ -71,6 +74,8 @@ add_executable( ${PROJECT}
 target_include_directories(${PROJECT} PRIVATE include)
 
 target_link_libraries(${PROJECT} PRIVATE stm32)
+
+target_link_libraries(${PROJECT} PRIVATE qpcpp)
 
 target_linker_script(${PROJECT} "${CMAKE_CURRENT_LIST_DIR}/src/hardware/linker/blinky.ld")
 

@@ -7,8 +7,9 @@
 //! @file
 //! @brief Blinky example
 //!
+#include "qpcpp.hpp"
 #include "blinky.hpp"
-#include <common.hpp>
+#include "qpcpp_callbacks.hpp"
 
 // unnamed namespace for local definitions with internal linkage
 namespace
@@ -20,22 +21,70 @@ namespace
 namespace APP
 {
 //............................................................................
-Blinky::Blinky()
+Blinky::Blinky() : QP::QActive(&initial), m_timeEvt(this, TIMEOUT_SIG, 0U)
 {
     // empty
 }
 
-void Blinky::run()
+// HSM definition ------------------------------------------------------------
+Q_STATE_DEF(Blinky, initial)
 {
-    for(;;)
-    {
-        userIndication->reset();
-        //busyWaiting(100);
-        userIndication->set();
-        //busyWaiting(100);
-    }
-}
+    (void)e;  // unused parameter
 
+    // arm the time event to expire in half a second and every half second
+    m_timeEvt.armX(TICKS_PER_SEC / 2U, TICKS_PER_SEC / 2U);
+    return tran(&off);
+}
+//............................................................................
+Q_STATE_DEF(Blinky, off)
+{
+    QP::QState status;
+    switch (e->sig)
+    {
+        case Q_ENTRY_SIG:
+        {
+            userIndication->reset();
+            status = Q_RET_HANDLED;
+            break;
+        }
+        case TIMEOUT_SIG:
+        {
+            status = tran(&on);
+            break;
+        }
+        default:
+        {
+            status = super(&top);
+            break;
+        }
+    }
+    return status;
+}
+//............................................................................
+Q_STATE_DEF(Blinky, on)
+{
+    QP::QState status;
+    switch (e->sig)
+    {
+        case Q_ENTRY_SIG:
+        {
+            userIndication->set();
+            status = Q_RET_HANDLED;
+            break;
+        }
+        case TIMEOUT_SIG:
+        {
+            status = tran(&off);
+            break;
+        }
+        default:
+        {
+            status = super(&top);
+            break;
+        }
+    }
+    return status;
+}
 //............................................................................
 void Blinky::setUserIndication(IUserIndication& initUserIndication)
 {

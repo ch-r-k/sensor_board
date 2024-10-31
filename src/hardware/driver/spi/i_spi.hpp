@@ -1,5 +1,5 @@
-#ifndef I_OUTPUT_PIN_HPP
-#define I_OUTPUT_PIN_HPP
+#ifndef I_SPI_HPP
+#define I_SPI_HPP
 
 #include <span>
 #include <cstdint>
@@ -13,4 +13,4 @@ class ISpi
     virtual void StartRead(const std::span<std::uint8_t> data) = 0;
 };
 
-#endif  // I_OUTPUT_PIN_HPP
+#endif  // I_SPI_HPP

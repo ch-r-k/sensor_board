@@ -1,5 +1,5 @@
-#ifndef OUTPUT_PIN_HPP
-#define OUTPUT_PIN_HPP
+#ifndef SPI_HPP
+#define SPI_HPP
 
 #include "i_spi.hpp"
 #include "stm32l4xx.h"
@@ -127,4 +127,4 @@ class Spi : public ISpi
     }
 };
 
-#endif  // OUTPUT_PIN_HPP
+#endif  // SPI_HPP

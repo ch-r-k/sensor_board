@@ -1,7 +1,4 @@
 #include "spi.hpp"
-#include <type_traits>
-#include <span>
-#include <utility>
 #include <cassert>
 
 Spi::Spi() { handler.Instance = SPI1; }
@@ -84,10 +81,15 @@ void Spi::Configure(NssPMode nssPMode)
     handler.Init.NSSPMode = static_cast<std::uint32_t>(nssPMode);
 }
 
-// Override the HAL callback to call the static TimerCallback method
 extern "C" void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
     Spi::RxISR(hspi);
 }
+
+extern "C" void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+    Spi::TxISR(hspi);
+}
+
 
 

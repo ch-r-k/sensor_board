@@ -7,7 +7,7 @@
 //............................................................................
 int main()
 {
-    SystemManager systemManager;
+    static SystemManager systemManager;
     QP::QF::init();  // initialize the framework
 
     systemManager.run();

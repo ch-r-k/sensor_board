@@ -2,31 +2,31 @@
 // Blinky example
 //============================================================================
 
-#ifndef BLINKY_HPP_
-#define BLINKY_HPP_
+#ifndef SENSOR_HPP_
+#define SENSOR_HPP_
 
 #include "qpcpp.hpp"
-#include "i_user_indication.hpp"
+#include "device/sensors/i_sensor.hpp"
 #include "application_signals.hpp"
+
 namespace APP
 {
-class Blinky : public QP::QActive
+class Sensor : public QP::QActive
 {
    private:
     QP::QTimeEvt m_timeEvt;
-    IUserIndication* userIndication = nullptr;
+    ISensor* iSensor = nullptr;
 
    public:
-    Blinky();
-    void setUserIndication(IUserIndication& initUserIndication);
+    Sensor();
+    void setSensorInterface(ISensor& i_sensor);
 
    protected:
     Q_STATE_DECL(initial);
     Q_STATE_DECL(idle);
-    Q_STATE_DECL(off);
-    Q_STATE_DECL(on);
+    Q_STATE_DECL(main);
 };
 
 }  // namespace APP
 
-#endif  // BLINKY_HPP_
+#endif  // SENSOR_HPP_

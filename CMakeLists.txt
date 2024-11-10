@@ -55,15 +55,22 @@ set(APP_CPP_SRCS
     src/main.cpp
     src/_common/io_functions.cpp
     src/_common/common.cpp
-    src/hardware/qpcpp_callbacks/qpcpp_callbacks.cpp
-    src/hardware/qpcpp_callbacks/qpcpp_error.cpp
+
+
     src/application/application_manager.cpp
     src/application/blinky/blinky.cpp
+    src/application/sensor/sensor.cpp
+    src/application/startup/startup.cpp
+    
     src/device/device_manager.cpp
     src/device/user_indication/user_indication.cpp
+    src/device/sensors/test/test.cpp
+    
     src/hardware/hardware_manager.cpp
     src/hardware/output_pin/output_pin.cpp
     src/hardware/driver/spi/spi.cpp
+    src/hardware/qpcpp_callbacks/qpcpp_callbacks.cpp
+    src/hardware/qpcpp_callbacks/qpcpp_error.cpp
 )
 
 include_directories(${INCLUDE_DIRS})

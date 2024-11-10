@@ -2,6 +2,7 @@
 #include <cassert>
 
 Spi::Spi() { handler.Instance = SPI1; }
+Spi::~Spi() { handler.Instance = nullptr; };
 
 void Spi::Open()
 {
@@ -90,6 +91,3 @@ extern "C" void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 {
     Spi::TxISR(hspi);
 }
-
-
-

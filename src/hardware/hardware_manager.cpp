@@ -30,8 +30,22 @@ HardwareManager::HardwareManager()
     ledPin.configure(OutputPin::Port::PORT_A, OutputPin::Pin::PIN_5,
                      OutputPin::Mode::PUSH_PULL, OutputPin::Pull::NOPULL,
                      OutputPin::Speed::LOW);
+
+    // Spi
+    __HAL_RCC_SPI1_CLK_ENABLE();
+
+    sensorSpi.Configure(Spi::Mode::Master);
+    sensorSpi.Configure(Spi::BaudratePrescaler::preScale128);
+    sensorSpi.Configure(Spi::ClockPhase::Phase1Edge);
+    sensorSpi.Configure(Spi::ClockPolarity::PolarityLow);
+    sensorSpi.Configure(Spi::CRCCalculation::Disable);
+    sensorSpi.Configure(Spi::DataSize::DataSize8Bit);
+    sensorSpi.Configure(Spi::FirstBit::LSB);
+    sensorSpi.Open();
 }
 
 HardwareManager::~HardwareManager() {}
 
 OutputPin& HardwareManager::getLedPin() { return ledPin; }
+
+Spi& HardwareManager::getSensorSpi() { return sensorSpi; }

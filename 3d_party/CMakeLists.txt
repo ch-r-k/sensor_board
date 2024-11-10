@@ -11,6 +11,8 @@ set(SOURCE_STM
     stm32l4xx_hal_driver/Src/stm32l4xx_hal.c
     stm32l4xx_hal_driver/Src/stm32l4xx_hal_cortex.c
     stm32l4xx_hal_driver/Src/stm32l4xx_hal_gpio.c
+    stm32l4xx_hal_driver/Src/stm32l4xx_hal_spi.c
+    stm32l4xx_hal_driver/Src/stm32l4xx_hal_dma.c
 )
 
 target_include_directories(stm32 PUBLIC ${INCLUDE_DIRS_STM})

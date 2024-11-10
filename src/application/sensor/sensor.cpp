@@ -7,8 +7,9 @@
 //! @file
 //! @brief Blinky example
 //!
-#include "blinky.hpp"
+#include "qpcpp.hpp"
 #include "qpcpp_callbacks.hpp"
+#include "sensor.hpp"
 
 // unnamed namespace for local definitions with internal linkage
 namespace
@@ -20,20 +21,22 @@ namespace
 namespace APP
 {
 //............................................................................
-Blinky::Blinky() : QP::QActive(&initial), m_timeEvt(this, BLINKY_TIMEOUT, 0U)
+Sensor::Sensor() : QP::QActive(&initial), m_timeEvt(this, SENSOR_TIMEOUT, 0U)
 {
     // empty
 }
 
 // HSM definition ------------------------------------------------------------
-Q_STATE_DEF(Blinky, initial)
+Q_STATE_DEF(Sensor, initial)
 {
     (void)e;  // unused parameter
-    subscribe(AppSignals::BLINKY_START);
+
+    // arm the time event to expire in half a second and every half second
+    m_timeEvt.armX(TICKS_PER_SEC / 2U, TICKS_PER_SEC / 2U);
     return tran(&idle);
 }
 //............................................................................
-Q_STATE_DEF(Blinky, idle)
+Q_STATE_DEF(Sensor, idle)
 {
     QP::QState status;
     switch (e->sig)
@@ -43,16 +46,14 @@ Q_STATE_DEF(Blinky, idle)
             status = Q_RET_HANDLED;
             break;
         }
-        case AppSignals::BLINKY_START:
+        case SENSOR_START:
         {
-            // arm the time event to expire in half a second and every half
-            // second
-            m_timeEvt.armX(TICKS_PER_SEC / 2U, TICKS_PER_SEC / 2U);
+            iSensor->Open();
 
-            static QP::QEvt const myEvt{AppSignals::BLINKY_DONE};
+            static QP::QEvt const myEvt{AppSignals::SENSOR_DONE};
             QP::QActive::PUBLISH(&myEvt, this);
 
-            status = tran(&off);
+            status = Q_RET_HANDLED;
             break;
         }
         default:
@@ -64,20 +65,20 @@ Q_STATE_DEF(Blinky, idle)
     return status;
 }
 //............................................................................
-Q_STATE_DEF(Blinky, off)
+Q_STATE_DEF(Sensor, main)
 {
     QP::QState status;
     switch (e->sig)
     {
         case Q_ENTRY_SIG:
         {
-            userIndication->reset();
             status = Q_RET_HANDLED;
             break;
         }
-        case BLINKY_TIMEOUT:
+        case SENSOR_TIMEOUT:
         {
-            status = tran(&on);
+            iSensor->StartSensor();
+            status = Q_RET_HANDLED;
             break;
         }
         default:
@@ -89,34 +90,6 @@ Q_STATE_DEF(Blinky, off)
     return status;
 }
 //............................................................................
-Q_STATE_DEF(Blinky, on)
-{
-    QP::QState status;
-    switch (e->sig)
-    {
-        case Q_ENTRY_SIG:
-        {
-            userIndication->set();
-            status = Q_RET_HANDLED;
-            break;
-        }
-        case BLINKY_TIMEOUT:
-        {
-            status = tran(&off);
-            break;
-        }
-        default:
-        {
-            status = super(&top);
-            break;
-        }
-    }
-    return status;
-}
-//............................................................................
-void Blinky::setUserIndication(IUserIndication& initUserIndication)
-{
-    userIndication = &initUserIndication;
-}
+void Sensor::setSensorInterface(ISensor& i_sensor) { iSensor = &i_sensor; }
 
 }  // namespace APP

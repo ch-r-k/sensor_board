@@ -1,4 +1,3 @@
-
 #include "i2c.hpp"
 #include <cassert>
 
@@ -89,7 +88,6 @@ void I2c::Configure(NoStretchMode noStretchMode)
 
 void I2c::setAddress(std::uint8_t address) { this->address = address; }
 
-
 extern "C" void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
     I2c::RxISR(hi2c);
@@ -99,4 +97,3 @@ extern "C" void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
     I2c::TxISR(hi2c);
 }
-

@@ -18,8 +18,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(${PROJECT} LANGUAGES C CXX ASM)
 
-option(ENABLE_FOTA "Enable firmware update over the air" OFF)
-option(ENABLE_RTT "Enable SEGGER RTT for debugging" OFF)
+# option(ENABLE_FOTA "Enable firmware update over the air" OFF)
+# option(ENABLE_RTT "Enable SEGGER RTT for debugging" OFF)
+
+option(ENABLE_QS "Enable Qs for tracing" ON)
+
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "")
@@ -69,8 +72,7 @@ set(APP_CPP_SRCS
     src/hardware/hardware_manager.cpp
     src/hardware/output_pin/output_pin.cpp
     src/hardware/driver/spi/spi.cpp
-    src/hardware/qpcpp_callbacks/qpcpp_callbacks.cpp
-    src/hardware/qpcpp_callbacks/qpcpp_error.cpp
+    src/hardware/driver/uart/uart.cpp
 )
 
 include_directories(${INCLUDE_DIRS})
@@ -85,6 +87,11 @@ target_link_libraries(${PROJECT} PRIVATE stm32)
 target_link_libraries(${PROJECT} PRIVATE qpcpp)
 
 target_linker_script(${PROJECT} "${CMAKE_CURRENT_LIST_DIR}/src/hardware/linker/blinky.ld")
+
+if (ENABLE_QS)
+target_compile_definitions(${PROJECT} PUBLIC Q_SPY)
+target_compile_definitions(qpcpp PUBLIC Q_SPY)
+endif ()
 
 set(WARNINGS
     all

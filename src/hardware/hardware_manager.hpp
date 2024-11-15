@@ -3,6 +3,7 @@
 
 #include "output_pin/output_pin.hpp"
 #include "driver/spi/spi.hpp"
+#include "driver/uart/uart.hpp"
 
 class HardwareManager
 {
@@ -10,6 +11,8 @@ class HardwareManager
     OutputPin ledPin;
     OutputPin TEST;
     Spi sensorSpi;
+
+    void SystemClock_Config();
 
    public:
     HardwareManager();

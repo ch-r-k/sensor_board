@@ -9,6 +9,7 @@
 //!
 #include "qpcpp.hpp"
 #include "sensor.hpp"
+#include "common.hpp"
 
 // unnamed namespace for local definitions with internal linkage
 namespace

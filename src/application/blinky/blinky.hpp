@@ -15,7 +15,6 @@ class Blinky : public QP::QActive
    private:
     QP::QTimeEvt m_timeEvt;
     IUserIndication* userIndication = nullptr;
-    const std::uint32_t ticksPerSec{1000U};
 
    public:
     Blinky();

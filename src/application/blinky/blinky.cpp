@@ -8,6 +8,7 @@
 //! @brief Blinky example
 //!
 #include "blinky.hpp"
+#include "common.hpp"
 
 // unnamed namespace for local definitions with internal linkage
 namespace

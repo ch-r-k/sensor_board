@@ -3,14 +3,13 @@
 //============================================================================
 #include "qpcpp.hpp"  // QP/C++ real-time embedded framework
 #include "system_manager.hpp"
+#include "common.hpp"
 
 static SystemManager systemManager;
 static Uart qsUart{2};
 
 static QP::QSTimeCtr qsTickTime;
 static QP::QSTimeCtr qsTickPeriod;
-
-constexpr std::uint32_t ticksPerSec{1000U};
 
 //............................................................................
 int main()

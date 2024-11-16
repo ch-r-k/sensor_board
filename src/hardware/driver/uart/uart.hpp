@@ -68,6 +68,15 @@ class Uart : public IUart
 
    private:
     UART_HandleTypeDef handler;
+
+    GPIO_InitTypeDef gpioTx = {};
+    GPIO_TypeDef* portTx = nullptr;
+
+    GPIO_InitTypeDef gpioRx = {};
+    GPIO_TypeDef* portRx = nullptr;
+
+    RCC_PeriphCLKInitTypeDef periphClkInit = {};
+
     bool open = false;
 
    public:
@@ -93,7 +102,7 @@ class Uart : public IUart
     void Configure(WordLength word_length);
 
     // ISR functions for handling UART interrupts
-    static void RxISR(UART_HandleTypeDef *hUart)
+    static void RxISR([[maybe_unused]] UART_HandleTypeDef* hUart)
     {
         /*switch (reinterpret_cast<uintptr_t>(hUart->Instance))
         {
@@ -118,7 +127,7 @@ class Uart : public IUart
         }*/
     }
 
-    static void TxISR(UART_HandleTypeDef *hUart)
+    static void TxISR([[maybe_unused]] UART_HandleTypeDef* hUart)
     {
         switch (reinterpret_cast<uintptr_t>(hUart->Instance))
         {

@@ -16,6 +16,7 @@ class Sensor : public QP::QActive
    private:
     QP::QTimeEvt m_timeEvt;
     ISensor* iSensor = nullptr;
+    const std::uint32_t ticksPerSec{1000U};
 
    public:
     Sensor();

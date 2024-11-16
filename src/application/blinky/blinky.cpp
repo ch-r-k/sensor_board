@@ -8,7 +8,6 @@
 //! @brief Blinky example
 //!
 #include "blinky.hpp"
-#include "qpcpp_callbacks.hpp"
 
 // unnamed namespace for local definitions with internal linkage
 namespace
@@ -47,7 +46,7 @@ Q_STATE_DEF(Blinky, idle)
         {
             // arm the time event to expire in half a second and every half
             // second
-            m_timeEvt.armX(TICKS_PER_SEC / 2U, TICKS_PER_SEC / 2U);
+            m_timeEvt.armX(ticksPerSec / 2U, ticksPerSec / 2U);
 
             static QP::QEvt const myEvt{AppSignals::BLINKY_DONE};
             QP::QActive::PUBLISH(&myEvt, this);

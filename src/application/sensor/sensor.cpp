@@ -8,7 +8,6 @@
 //! @brief Blinky example
 //!
 #include "qpcpp.hpp"
-#include "qpcpp_callbacks.hpp"
 #include "sensor.hpp"
 
 // unnamed namespace for local definitions with internal linkage
@@ -32,7 +31,7 @@ Q_STATE_DEF(Sensor, initial)
     (void)e;  // unused parameter
 
     // arm the time event to expire in half a second and every half second
-    m_timeEvt.armX(TICKS_PER_SEC / 2U, TICKS_PER_SEC / 2U);
+    m_timeEvt.armX(ticksPerSec / 2U, ticksPerSec / 2U);
     return tran(&idle);
 }
 //............................................................................

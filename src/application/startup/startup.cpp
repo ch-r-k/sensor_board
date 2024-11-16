@@ -8,7 +8,6 @@
 //! @brief Blinky example
 //!
 #include "qpcpp.hpp"
-#include "qpcpp_callbacks.hpp"
 #include "startup.hpp"
 
 // unnamed namespace for local definitions with internal linkage

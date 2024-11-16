@@ -17,7 +17,8 @@ int main()
 {
     QP::QF::init();  // initialize the framework
 
-    QS_GLB_FILTER(QP::QS_ALL_RECORDS);
+    QS_GLB_FILTER(QP::QS_SM_RECORDS);
+    QS_GLB_FILTER(QP::QS_SC_RECORDS);
 
     return QP::QF::run();  // run the QF application
 }

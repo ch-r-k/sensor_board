@@ -73,6 +73,7 @@ set(APP_CPP_SRCS
     src/hardware/output_pin/output_pin.cpp
     src/hardware/driver/spi/spi.cpp
     src/hardware/driver/uart/uart.cpp
+    src/hardware/driver/interrupt_dispatcher/interrupt.cpp
 )
 
 include_directories(${INCLUDE_DIRS})

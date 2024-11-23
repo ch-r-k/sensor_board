@@ -5,6 +5,8 @@
 #include "system_manager.hpp"
 #include "common.hpp"
 
+#include <cstdint>
+
 static SystemManager systemManager;
 static Uart qsUart{2};
 
@@ -60,7 +62,7 @@ void QP::QV::onIdle()
     QS::rxParse();  // parse all the received bytes
     QF_INT_ENABLE();
 
-    if (!qsUart.isBusy())
+    if (!qsUart.isTxBusy())
     {  // TXE empty?
         QF_INT_DISABLE();
         std::uint16_t b = QS::getByte();
@@ -104,7 +106,7 @@ void onFlush()
         std::uint16_t b = QP::QS::getByte();
         if (b != QS_EOD)
         {
-            while (qsUart.isBusy())
+            while (qsUart.isTxBusy())
             {
             }
 

@@ -1,14 +1,15 @@
 #include "uart.hpp"
 #include <cassert>
+#include "driver/interrupt_dispatcher/interrupt.hpp"
 
 Uart::Uart(std::uint8_t instance)
 {
     assert(instance >= 1 && instance <= 5);
 
-    static constexpr USART_TypeDef *uart_instances[] = {USART1, USART2, USART3,
-                                                        UART4, UART5};
+    static constexpr USART_TypeDef *uartInstances[] = {USART1, USART2, USART3,
+                                                       UART4, UART5};
 
-    handler.Instance = uart_instances[instance - 1];
+    handler.Instance = uartInstances[instance - 1];
 
     switch (instance)
     {
@@ -123,6 +124,15 @@ void Uart::Open()
     {
         assert(false && "Failed to initialize UART");
     }
+
+    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
+
+    Interrupt &dispatcher = Interrupt::getInstance();
+
+    // Register the USART3 callback
+    dispatcher.registerInterrupt(this, &Uart::Isr, USART2_IRQn);
+
     open = true;
 }
 
@@ -141,7 +151,7 @@ void Uart::StartWrite(const std::span<std::uint8_t> data)
     assert(open && "UART must be opened before writing");
 
     HAL_StatusTypeDef status =
-        HAL_UART_Transmit(&handler, data.data(), data.size(), 100);
+        HAL_UART_Transmit_IT(&handler, data.data(), data.size());
 
     assert(status == HAL_OK && "UART Write failed");
 }
@@ -151,7 +161,7 @@ void Uart::StartRead(const std::span<std::uint8_t> data)
     assert(open && "UART must be opened before reading");
 
     HAL_StatusTypeDef status =
-        HAL_UART_Receive(&handler, data.data(), data.size(), 100);
+        HAL_UART_Receive_IT(&handler, data.data(), data.size());
 
     assert(status == HAL_OK && "UART Read failed");
 }
@@ -196,11 +206,11 @@ void Uart::Configure(WordLength word_length)
     handler.Init.WordLength = static_cast<std::uint32_t>(word_length);
 }
 
-bool Uart::isBusy()
+bool Uart::isTxBusy()
 {
     HAL_UART_StateTypeDef uart_state = HAL_UART_GetState(&handler);
 
-    return (uart_state == HAL_UART_STATE_BUSY);
+    return (uart_state == HAL_UART_STATE_BUSY_TX);
 }
 
 extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)

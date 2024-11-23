@@ -83,6 +83,8 @@ class Uart : public IUart
     Uart(std::uint8_t instance);
     ~Uart();
 
+    UART_HandleTypeDef* getHandler() { return &handler; }
+
     void Open() override;
     void Close() override;
 
@@ -90,7 +92,7 @@ class Uart : public IUart
 
     void StartRead(const std::span<std::uint8_t> data) override;
 
-    bool isBusy();
+    bool isTxBusy();
 
     void ConfigureBaudrate(std::uint32_t baudrate);
     void Configure(Mode mode);
@@ -102,53 +104,22 @@ class Uart : public IUart
     void Configure(WordLength word_length);
 
     // ISR functions for handling UART interrupts
-    static void RxISR([[maybe_unused]] UART_HandleTypeDef* hUart)
+    // void Isr(UART_HandleTypeDef* huart) { HAL_UART_IRQHandler(huart); }
+
+    static void Isr(void* callbackObject, [[maybe_unused]] void* parameter)
     {
-        /*switch (reinterpret_cast<uintptr_t>(hUart->Instance))
-        {
-            case reinterpret_cast<uintptr_t>(USART1):
-                // Handle USART1 RX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(USART2):
-                // Handle USART2 RX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(USART3):
-                // Handle USART3 RX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(UART4):
-                // Handle UART4 RX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(UART5):
-                // Handle UART5 RX interrupt
-                break;
-            default:
-                assert(false && "Unsupported UART instance in RxISR");
-                break;
-        }*/
+        // Cast callbackObject to Uart* and call the non-static ISR
+        Uart* uart = static_cast<Uart*>(callbackObject);
+
+        HAL_UART_IRQHandler(&uart->handler);
     }
+
+    static void RxISR([[maybe_unused]] UART_HandleTypeDef* hUart) {}
 
     static void TxISR([[maybe_unused]] UART_HandleTypeDef* hUart)
     {
         switch (reinterpret_cast<uintptr_t>(hUart->Instance))
         {
-            /*case reinterpret_cast<uintptr_t>(USART1):
-                // Handle USART1 TX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(USART2):
-                // Handle USART2 TX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(USART3):
-                // Handle USART3 TX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(UART4):
-                // Handle UART4 TX interrupt
-                break;
-            case reinterpret_cast<uintptr_t>(UART5):
-                // Handle UART5 TX interrupt
-                break;
-            default:
-                assert(false && "Unsupported UART instance in TxISR");
-                break;*/
         }
     }
 };

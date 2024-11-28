@@ -10,7 +10,7 @@ class HardwareManager
    private:
     OutputPin ledPin;
     OutputPin TEST;
-    Spi sensorSpi;
+    Spi sensorSpi{2};
 
     void SystemClock_Config();
 

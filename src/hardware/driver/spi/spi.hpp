@@ -81,8 +81,19 @@ class Spi : public ISpi
     SPI_HandleTypeDef handler;
     bool open = false;
 
+    GPIO_InitTypeDef gpioClk = {};
+    GPIO_TypeDef* portClk = nullptr;
+
+    GPIO_InitTypeDef gpioMiso = {};
+    GPIO_TypeDef* portMiso = nullptr;
+
+    GPIO_InitTypeDef gpioMosi = {};
+    GPIO_TypeDef* portMosi = nullptr;
+
+    RCC_PeriphCLKInitTypeDef periphClkInit = {};
+
    public:
-    Spi();
+    Spi(std::uint8_t instance);
     ~Spi();
 
     void Open() override;
@@ -104,7 +115,15 @@ class Spi : public ISpi
     void Configure(Nss nss);
     void Configure(NssPMode nssPMode);
 
-    static void RxISR(SPI_HandleTypeDef *hspi)
+    static void Isr(void* callbackObject, [[maybe_unused]] void* parameter)
+    {
+        // Cast callbackObject to Uart* and call the non-static ISR
+        Spi* spi = static_cast<Spi*>(callbackObject);
+
+        HAL_SPI_IRQHandler(&spi->handler);
+    }
+
+    static void RxISR(SPI_HandleTypeDef* hspi)
     {
         if (hspi->Instance == SPI1)
         {
@@ -115,7 +134,7 @@ class Spi : public ISpi
         }
     }
 
-    static void TxISR(SPI_HandleTypeDef *hspi)
+    static void TxISR(SPI_HandleTypeDef* hspi)
     {
         if (hspi->Instance == SPI1)
         {

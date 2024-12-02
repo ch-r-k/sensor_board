@@ -5,6 +5,7 @@
 #ifndef SENSOR_HPP_
 #define SENSOR_HPP_
 
+#include <cstdint>
 #include "qpcpp.hpp"
 #include "device/sensors/i_sensor.hpp"
 #include "application_signals.hpp"

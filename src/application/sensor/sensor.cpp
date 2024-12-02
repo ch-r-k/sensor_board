@@ -32,6 +32,7 @@ Q_STATE_DEF(Sensor, initial)
     (void)e;  // unused parameter
 
     // arm the time event to expire in half a second and every half second
+    subscribe(AppSignals::SENSOR_START);
     m_timeEvt.armX(ticksPerSec / 2U, ticksPerSec / 2U);
     return tran(&idle);
 }
@@ -53,7 +54,7 @@ Q_STATE_DEF(Sensor, idle)
             static QP::QEvt const myEvt{AppSignals::SENSOR_DONE};
             QP::QActive::PUBLISH(&myEvt, this);
 
-            status = Q_RET_HANDLED;
+            status = tran(main);
             break;
         }
         default:

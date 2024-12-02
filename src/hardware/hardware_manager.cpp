@@ -28,9 +28,9 @@ HardwareManager::HardwareManager()
 
     // GPIO Ports Clock Enable
     __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOH_CLK_ENABLE();
-    __HAL_RCC_GPIOB_CLK_ENABLE();
 
     __HAL_RCC_SYSCFG_CLK_ENABLE();
     __HAL_RCC_PWR_CLK_ENABLE();
@@ -43,13 +43,16 @@ HardwareManager::HardwareManager()
     __HAL_RCC_SPI1_CLK_ENABLE();
 
     sensorSpi.Configure(Spi::Mode::Master);
-    sensorSpi.Configure(Spi::BaudratePrescaler::preScale128);
-    sensorSpi.Configure(Spi::ClockPhase::Phase1Edge);
-    sensorSpi.Configure(Spi::ClockPolarity::PolarityLow);
-    sensorSpi.Configure(Spi::CRCCalculation::Disable);
+    sensorSpi.Configure(Spi::Direction::Direction2Lines);
     sensorSpi.Configure(Spi::DataSize::DataSize8Bit);
-    sensorSpi.Configure(Spi::FirstBit::LSB);
-    sensorSpi.Open();
+    sensorSpi.Configure(Spi::ClockPolarity::PolarityLow);
+    sensorSpi.Configure(Spi::ClockPhase::Phase1Edge);
+    sensorSpi.Configure(Spi::Nss::Soft);
+    sensorSpi.Configure(Spi::BaudratePrescaler::preScale256);
+    sensorSpi.Configure(Spi::FirstBit::MSB);
+    // sensorSpi.Configure(Spi::T);
+    sensorSpi.Configure(Spi::CRCCalculation::Disable);
+    sensorSpi.Configure(Spi::NssPMode::PulseEnable);
 }
 
 void HardwareManager::SystemClock_Config(void)
@@ -85,9 +88,9 @@ void HardwareManager::SystemClock_Config(void)
     RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK |
                                   RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
     RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV16;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV16;
 
     if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
     {

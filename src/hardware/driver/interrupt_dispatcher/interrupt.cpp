@@ -1,5 +1,6 @@
 #include "interrupt.hpp"
 #include "driver/interrupt_dispatcher/icb_interrupt.hpp"
+#include "stm32l476xx.h"
 
 // Singleton instance
 Interrupt& Interrupt::getInstance()
@@ -17,33 +18,33 @@ Interrupt::Interrupt()
 void Interrupt::registerInterrupt(
     void* callbackObject,
     IcbInterrupt::ServiceInterruptCallback serviceCallback,
-    IRQn_Type intVecNumber)
+    IRQn_Type int_vec_number)
 {
     if (callbackObject && serviceCallback &&
-        static_cast<uint8_t>(intVecNumber) < intVecNumber)
+        static_cast<uint8_t>(int_vec_number) < intVecNumberMax)
     {
-        callbackObj[intVecNumber] = callbackObject;
-        serviceCallbacks[intVecNumber] = serviceCallback;
+        callbackObj[int_vec_number] = callbackObject;
+        serviceCallbacks[int_vec_number] = serviceCallback;
     }
 }
 
-void Interrupt::unregisterInterrupt(IRQn_Type intVecNumber)
+void Interrupt::unregisterInterrupt(IRQn_Type int_vec_number)
 {
-    if (static_cast<uint8_t>(intVecNumber) < intVecNumber)
+    if (static_cast<uint8_t>(int_vec_number) < intVecNumberMax)
     {
-        callbackObj[intVecNumber] = nullptr;
-        serviceCallbacks[intVecNumber] = nullptr;
+        callbackObj[int_vec_number] = nullptr;
+        serviceCallbacks[int_vec_number] = nullptr;
     }
 }
 
-void Interrupt::dispatchInterrupt(IRQn_Type intVecNumber, void* parameter)
+void Interrupt::dispatchInterrupt(IRQn_Type int_vec_number, void* parameter)
 {
-    if (static_cast<uint8_t>(intVecNumber) < intVecNumber)
+    if (static_cast<uint8_t>(int_vec_number) < intVecNumberMax)
     {
-        if (callbackObj[intVecNumber] && serviceCallbacks[intVecNumber])
+        if (callbackObj[int_vec_number] && serviceCallbacks[int_vec_number])
         {
-            serviceCallbacks[intVecNumber](callbackObj[intVecNumber],
-                                           parameter);
+            serviceCallbacks[int_vec_number](callbackObj[int_vec_number],
+                                             parameter);
         }
     }
 }
@@ -51,4 +52,14 @@ void Interrupt::dispatchInterrupt(IRQn_Type intVecNumber, void* parameter)
 extern "C" void USART2_IRQHandler(void)
 {
     Interrupt::getInstance().dispatchInterrupt(USART2_IRQn, nullptr);
+}
+
+extern "C" void SPI2_IRQHandler(void)
+{
+    Interrupt::getInstance().dispatchInterrupt(SPI2_IRQn, nullptr);
+}
+
+extern "C" void SPI3_IRQHandler(void)
+{
+    Interrupt::getInstance().dispatchInterrupt(SPI3_IRQn, nullptr);
 }

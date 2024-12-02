@@ -16,21 +16,21 @@ class Interrupt
     void registerInterrupt(
         void* callbackObject,
         IcbInterrupt::ServiceInterruptCallback serviceCallback,
-        IRQn_Type intVecNumber);
+        IRQn_Type int_vec_number);
 
-    void unregisterInterrupt(IRQn_Type intVecNumber);
+    void unregisterInterrupt(IRQn_Type int_vec_number);
 
-    void dispatchInterrupt(IRQn_Type intVecNumber, void* parameter);
+    void dispatchInterrupt(IRQn_Type int_vec_number, void* parameter);
 
    private:
     Interrupt();
     Interrupt(const Interrupt&) = delete;
     Interrupt& operator=(const Interrupt&) = delete;
 
-    static constexpr size_t intVecNumber = 82;  // Adjust as per actual size
+    static constexpr size_t intVecNumberMax = 82;  // Adjust as per actual size
 
-    std::array<void*, intVecNumber> callbackObj;
-    std::array<IcbInterrupt::ServiceInterruptCallback, intVecNumber>
+    std::array<void*, intVecNumberMax> callbackObj;
+    std::array<IcbInterrupt::ServiceInterruptCallback, intVecNumberMax>
         serviceCallbacks;
 };
 

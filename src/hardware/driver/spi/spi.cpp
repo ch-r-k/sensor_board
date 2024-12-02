@@ -1,6 +1,8 @@
 #include "spi.hpp"
 #include <cassert>
 #include "driver/interrupt_dispatcher/interrupt.hpp"
+#include "stm32l476xx.h"
+#include "stm32l4xx_hal_spi.h"
 
 Spi::Spi(std::uint8_t instance)
 {
@@ -65,13 +67,8 @@ Spi::~Spi() { handler.Instance = nullptr; };
 
 void Spi::Open()
 {
-    assert(open == false || "already open");
-    assert(handler.Instance != nullptr || "instance can't be nullptr");
-
-    if (HAL_RCCEx_PeriphCLKConfig(&periphClkInit) != HAL_OK)
-    {
-        assert(false && "Failed to initialize UART clock");
-    }
+    assert((open == false) && "already open");
+    assert(handler.Instance != nullptr && "instance can't be nullptr");
 
     if (handler.Instance == SPI1)
     {
@@ -80,7 +77,6 @@ void Spi::Open()
     else if (handler.Instance == SPI2)
     {
         __HAL_RCC_SPI2_CLK_ENABLE();
-        //__HAL_RCC_GPIOA_CLK_ENABLE();
     }
     else if (handler.Instance == SPI3)
     {
@@ -103,18 +99,34 @@ void Spi::Open()
     HAL_GPIO_Init(portMiso, &gpioMiso);
     HAL_GPIO_Init(portMosi, &gpioMosi);
 
-    if (HAL_SPI_Init(&handler) != HAL_OK)
-    {
-        assert(false && "Failed to initialize UART");
-    }
-
-    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(USART2_IRQn);
-
     Interrupt &dispatcher = Interrupt::getInstance();
 
-    // Register the USART3 callback
-    dispatcher.registerInterrupt(this, &Spi::Isr, USART2_IRQn);
+    if (handler.Instance == SPI1)
+    {
+        dispatcher.registerInterrupt(this, &Spi::Isr, SPI1_IRQn);
+
+        HAL_NVIC_SetPriority(SPI1_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(SPI1_IRQn);
+    }
+    else if (handler.Instance == SPI2)
+    {
+        dispatcher.registerInterrupt(this, &Spi::Isr, SPI2_IRQn);
+
+        HAL_NVIC_SetPriority(SPI2_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(SPI2_IRQn);
+    }
+    else if (handler.Instance == SPI3)
+    {
+        dispatcher.registerInterrupt(this, &Spi::Isr, SPI3_IRQn);
+
+        HAL_NVIC_SetPriority(SPI3_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(SPI3_IRQn);
+    }
+
+    if (HAL_SPI_Init(&handler) != HAL_OK)
+    {
+        assert(false && "Failed to initialize SPI");
+    }
 
     open = true;
 }
@@ -127,13 +139,17 @@ void Spi::Close()
 
 void Spi::StartWrite(const std::span<const std::uint8_t> data)
 {
-    assert(open || "must be open");
-    HAL_SPI_Transmit_IT(&handler, data.data(), data.size());
+    assert(open && "must be open");
+
+    if (HAL_SPI_Transmit_IT(&handler, data.data(), data.size()) != HAL_OK)
+    {
+        assert(false && "Failed to start SPI write");
+    }
 }
 
 void Spi::StartRead(const std::span<std::uint8_t> data)
 {
-    assert(open || "must be open");
+    assert(open && "must be open");
     HAL_SPI_Receive_IT(&handler, data.data(), data.size());
 }
 

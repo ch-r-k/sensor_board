@@ -90,8 +90,6 @@ class Spi : public ISpi
     GPIO_InitTypeDef gpioMosi = {};
     GPIO_TypeDef* portMosi = nullptr;
 
-    RCC_PeriphCLKInitTypeDef periphClkInit = {};
-
    public:
     Spi(std::uint8_t instance);
     ~Spi();
@@ -117,7 +115,7 @@ class Spi : public ISpi
 
     static void Isr(void* callbackObject, [[maybe_unused]] void* parameter)
     {
-        // Cast callbackObject to Uart* and call the non-static ISR
+        // Cast callbackObject to Spi* and call the non-static ISR
         Spi* spi = static_cast<Spi*>(callbackObject);
 
         HAL_SPI_IRQHandler(&spi->handler);

@@ -79,7 +79,7 @@ Uart::~Uart() { handler.Instance = nullptr; }
 
 void Uart::Open()
 {
-    assert(handler.Instance != nullptr || "nullptr");
+    assert(handler.Instance != nullptr && "nullptr");
     assert(open != true && "must be closed");
 
     if (HAL_RCCEx_PeriphCLKConfig(&periphClkInit) != HAL_OK)

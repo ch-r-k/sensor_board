@@ -123,23 +123,23 @@ class Spi : public ISpi
 
     static void RxISR(SPI_HandleTypeDef* hspi)
     {
-        if (hspi->Instance == SPI1)
+        if (hspi->Instance == SPI2)
         {
         }
         else
         {
-            assert(false || "not implemented");
+            assert(false && "not implemented");
         }
     }
 
     static void TxISR(SPI_HandleTypeDef* hspi)
     {
-        if (hspi->Instance == SPI1)
+        if (hspi->Instance == SPI2)
         {
         }
         else
         {
-            assert(false || "not implemented");
+            assert(false && "not implemented");
         }
     }
 };

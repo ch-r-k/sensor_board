@@ -7,8 +7,8 @@ Test::~Test() {}
 
 void Test::Open()
 {
-    assert(open == false || "already open");
-    assert(iSpi != nullptr || "instance can't be nullptr");
+    assert(open == false && "already open");
+    assert(iSpi != nullptr && "instance can't be nullptr");
 
     open = true;
     iSpi->Open();

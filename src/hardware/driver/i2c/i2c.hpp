@@ -68,7 +68,7 @@ class I2c : public II2c
         }
         else
         {
-            assert(false || "not implemented");
+            assert(false && "not implemented");
         }
     }
 
@@ -81,7 +81,7 @@ class I2c : public II2c
         }
         else
         {
-            assert(false || "not implemented");
+            assert(false && "not implemented");
         }
     }
 };

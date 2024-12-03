@@ -25,12 +25,12 @@ I2c::~I2c() { handler.Instance = nullptr; }
 
 void I2c::Open()
 {
-    assert(handler.Instance != nullptr || "nullptr");
-    assert(open != true || "must be closed");
+    assert(handler.Instance != nullptr && "nullptr");
+    assert(open != true && "must be closed");
 
     if (HAL_I2C_Init(&handler) != HAL_OK)
     {
-        assert(false || "Failed to initialize I2C");
+        assert(false && "Failed to initialize I2C");
     }
 
     open = true;
@@ -38,11 +38,11 @@ void I2c::Open()
 
 void I2c::Close()
 {
-    assert(open == false || "must be open");
+    assert(open == false && "must be open");
 
     if (HAL_I2C_DeInit(&handler) != HAL_OK)
     {
-        assert(false || "Failed to initialize I2C");
+        assert(false && "Failed to initialize I2C");
     }
 }
 

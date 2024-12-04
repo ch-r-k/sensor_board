@@ -44,13 +44,20 @@ class I2c : public II2c
     I2c(std::uint8_t instance);
     ~I2c();
 
+    GPIO_InitTypeDef gpioClk = {};
+    GPIO_TypeDef* portClk = nullptr;
+
+    GPIO_InitTypeDef gpioSData = {};
+    GPIO_TypeDef* portSData = nullptr;
+
     void Open() override;
     void Close() override;
 
-    void StartWrite(const std::span<std::uint8_t> data) override;
+    void StartWrite(const std::span<const std::uint8_t> data) override;
 
     void StartRead(const std::span<std::uint8_t> data) override;
 
+    void ConfigureTiming(std::uint32_t timing);
     void Configure(AddressingMode addressingMode);
     void Configure(DualAddressMode dualAddressMode);
     void Configure(GeneralCallMode generalCallMode);
@@ -58,8 +65,16 @@ class I2c : public II2c
 
     void setAddress(std::uint8_t address);
 
+    static void Isr(void* callbackObject, [[maybe_unused]] void* parameter)
+    {
+        // Cast callbackObject to Spi* and call the non-static ISR
+        I2c* i2c = static_cast<I2c*>(callbackObject);
+
+        HAL_I2C_EV_IRQHandler(&i2c->handler);
+    }
+
     // ISR functions for handling I2C interrupts
-    static void RxISR(I2C_HandleTypeDef *hi2c)
+    static void RxISR(I2C_HandleTypeDef* hi2c)
     {
         // Implement the RX interrupt handling logic here
         if (hi2c->Instance == I2C1)
@@ -72,7 +87,7 @@ class I2c : public II2c
         }
     }
 
-    static void TxISR(I2C_HandleTypeDef *hi2c)
+    static void TxISR(I2C_HandleTypeDef* hi2c)
     {
         // Implement the TX interrupt handling logic here
         if (hi2c->Instance == I2C1)

@@ -63,3 +63,13 @@ extern "C" void SPI3_IRQHandler(void)
 {
     Interrupt::getInstance().dispatchInterrupt(SPI3_IRQn, nullptr);
 }
+
+extern "C" void I2C1_EV_IRQHandler(void)
+{
+    Interrupt::getInstance().dispatchInterrupt(I2C1_EV_IRQn, nullptr);
+}
+
+extern "C" void I2C2_EV_IRQHandler(void)
+{
+    Interrupt::getInstance().dispatchInterrupt(I2C2_EV_IRQn, nullptr);
+}

@@ -4,6 +4,7 @@ DeviceManager::DeviceManager(HardwareManager& hardwareManager)
 {
     userIndication.setOutputPin(hardwareManager.getLedPin());
     test.setSpiInterface(hardwareManager.getSensorSpi());
+    test.setI2cInterface(hardwareManager.getSensorI2c());
 }
 
 DeviceManager::~DeviceManager() {}

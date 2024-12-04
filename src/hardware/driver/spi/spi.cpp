@@ -84,11 +84,11 @@ void Spi::Open()
     }
 
     gpioClk.Mode = GPIO_MODE_AF_PP;
-    gpioClk.Pull = GPIO_NOPULL;
+    gpioClk.Pull = GPIO_PULLUP;
     gpioClk.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
     gpioMiso.Mode = GPIO_MODE_AF_PP;
-    gpioMiso.Pull = GPIO_NOPULL;
+    gpioMiso.Pull = GPIO_PULLUP;
     gpioMiso.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
     gpioMosi.Mode = GPIO_MODE_AF_PP;

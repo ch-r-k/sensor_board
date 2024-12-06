@@ -7,7 +7,6 @@
 
 #include <cstdint>
 
-static SystemManager systemManager;
 static Uart qsUart{2};
 
 static QP::QSTimeCtr qsTickTime;
@@ -30,6 +29,8 @@ namespace QP::QF
 {
 void onStartup()
 {
+    static SystemManager systemManager;
+
     NVIC_SetPriorityGrouping(0U);
 
     // set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
@@ -44,8 +45,6 @@ void onStartup()
     qsUart.Configure(Uart::Mode::TxRx);
     qsUart.Configure(Uart::OneBitSample::Disable);
     qsUart.Configure(Uart::Oversampling::Oversampling16);
-
-    // lUartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
 
     qsUart.Open();
 

@@ -16,25 +16,10 @@ static QP::QSTimeCtr qsTickPeriod;
 int main()
 {
     QP::QF::init();  // initialize the framework
-
-    QS_GLB_FILTER(QP::QS_SM_RECORDS);
+    // QS_GLB_FILTER(QP::QS_SM_RECORDS);
     QS_GLB_FILTER(QP::QS_SC_RECORDS);
 
-    return QP::QF::run();  // run the QF application
-}
-
-//............................................................................
-
-namespace QP::QF
-{
-void onStartup()
-{
     static SystemManager systemManager;
-
-    NVIC_SetPriorityGrouping(0U);
-
-    // set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
-    SysTick_Config(SystemCoreClock / ticksPerSec);
 
     // Uart for QSPY
     qsUart.ConfigureBaudrate(115200);
@@ -49,6 +34,22 @@ void onStartup()
     qsUart.Open();
 
     systemManager.run();
+    return QP::QF::run();  // run the QF application
+}
+
+//............................................................................
+
+namespace QP::QF
+{
+void onStartup()
+{
+    NVIC_SetPriorityGrouping(0U);
+
+    // set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
+    SysTick_Config(SystemCoreClock / ticksPerSec);
+
+    // QS_GLB_FILTER(QP::QS_SM_RECORDS);
+    QS_GLB_FILTER(QP::QS_SC_RECORDS);
 }
 
 void onCleanup() {}
@@ -86,6 +87,8 @@ void QP::QV::onIdle()
 namespace QP::QS
 {
 void onCleanup() {}
+
+bool onStartup(void const *arg) {}
 
 void onReset() { NVIC_SystemReset(); }
 

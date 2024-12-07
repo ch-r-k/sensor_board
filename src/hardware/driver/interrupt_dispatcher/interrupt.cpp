@@ -1,6 +1,7 @@
 #include "interrupt.hpp"
 #include "driver/interrupt_dispatcher/icb_interrupt.hpp"
 #include "stm32l476xx.h"
+#include "qpcpp.hpp"
 
 // Singleton instance
 Interrupt& Interrupt::getInstance()

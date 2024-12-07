@@ -32,6 +32,11 @@ Q_STATE_DEF(Startup, initial)
 
     subscribe(AppSignals::BLINKY_DONE);
     subscribe(AppSignals::SENSOR_DONE);
+
+    QS_FUN_DICTIONARY(&blinky);
+    QS_FUN_DICTIONARY(&sensor);
+    QS_FUN_DICTIONARY(&done);
+
     return tran(&blinky);
 }
 //............................................................................

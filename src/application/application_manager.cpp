@@ -3,7 +3,9 @@
 ApplicationManager::ApplicationManager(DeviceManager& deviceManager)
 {
     aoBlinky.setUserIndication(deviceManager.getUserIndication());
-    aoSensor.setSensorInterface(deviceManager.getTest());
+
+    aoSensor.setSensorInterface(deviceManager.getAht10());
+    deviceManager.getAht10().setIcbSensor(aoSensor);
 }
 
 ApplicationManager::~ApplicationManager() {}
@@ -26,6 +28,7 @@ void ApplicationManager::start()
                    Q_DIM(blinkyQueueSto),  // queue length [events]
                    nullptr, 0U,            // no stack storage
                    nullptr);               // no initialization param
+    QS_OBJ_DICTIONARY(&aoBlinky);
 
     static QP::QEvt const* sensorQueueSto[10];
     aoSensor.start(2U,                     // QP prio. of the AO
@@ -33,6 +36,7 @@ void ApplicationManager::start()
                    Q_DIM(sensorQueueSto),  // queue length [events]
                    nullptr, 0U,            // no stack storage
                    nullptr);               // no initialization param
+    QS_OBJ_DICTIONARY(&aoSensor);
 
     static QP::QEvt const* startupQueueSto[10];
     aoStartup.start(3U,                      // QP prio. of the AO
@@ -40,4 +44,5 @@ void ApplicationManager::start()
                     Q_DIM(startupQueueSto),  // queue length [events]
                     nullptr, 0U,             // no stack storage
                     nullptr);                // no initialization param
+    QS_OBJ_DICTIONARY(&aoStartup);
 }

@@ -17,7 +17,7 @@ void Test::Open()
 
 void Test::Close() { open = false; }
 
-void Test::StartSensor()
+void Test::TriggerMeasurement()
 {
     assert(open && "must be open");
 

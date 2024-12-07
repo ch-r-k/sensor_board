@@ -2,6 +2,9 @@
 #include <cassert>
 #include <cstdint>
 #include "driver/interrupt_dispatcher/interrupt.hpp"
+#include "qpcpp.hpp"
+
+std::unordered_map<I2C_TypeDef *, I2c *> I2c::instanceMap;
 
 I2c::I2c(std::uint8_t instance)
 {
@@ -10,6 +13,7 @@ I2c::I2c(std::uint8_t instance)
     static constexpr I2C_TypeDef *i2cInstances[] = {I2C1, I2C2, I2C3};
 
     handler.Instance = i2cInstances[instance - 1];
+    RegisterInstance();
 
     switch (instance)
     {
@@ -54,7 +58,11 @@ I2c::I2c(std::uint8_t instance)
     }
 }
 
-I2c::~I2c() { handler.Instance = nullptr; }
+I2c::~I2c()
+{
+    handler.Instance = nullptr;
+    UnregisterInstance();
+}
 
 void I2c::Open()
 {
@@ -91,21 +99,21 @@ void I2c::Open()
     {
         dispatcher.registerInterrupt(this, &I2c::Isr, I2C1_EV_IRQn);
 
-        HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(I2C1_EV_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
     }
     else if (handler.Instance == I2C2)
     {
         dispatcher.registerInterrupt(this, &I2c::Isr, I2C2_EV_IRQn);
 
-        HAL_NVIC_SetPriority(I2C2_EV_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(I2C2_EV_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(I2C2_EV_IRQn);
     }
     else if (handler.Instance == I2C3)
     {
         dispatcher.registerInterrupt(this, &I2c::Isr, I2C3_EV_IRQn);
 
-        HAL_NVIC_SetPriority(I2C3_EV_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(I2C3_EV_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(I2C3_EV_IRQn);
     }
 
@@ -127,6 +135,8 @@ void I2c::Close()
     }
 }
 
+void I2c::SetIcb(IcbI2c &icb_i2c) { icbI2c = &icb_i2c; }
+
 void I2c::StartWrite(const std::span<const std::uint8_t> data)
 {
     assert(open && "I2C must be opened before writing");
@@ -146,6 +156,8 @@ void I2c::StartRead(const std::span<std::uint8_t> data)
 
     assert(status == HAL_OK && "I2C Read failed");
 }
+
+void I2c::SetAddress(const std::uint8_t address) { this->address = address; }
 
 void I2c::ConfigureTiming(std::uint32_t timing)
 {
@@ -172,14 +184,17 @@ void I2c::Configure(NoStretchMode noStretchMode)
     handler.Init.NoStretchMode = static_cast<std::uint32_t>(noStretchMode);
 }
 
-void I2c::setAddress(std::uint8_t address) { this->address = address; }
-
 extern "C" void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
     I2c::RxISR(hi2c);
 }
 
 extern "C" void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+    I2c::TxISR(hi2c);
+}
+
+extern "C" void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
     I2c::TxISR(hi2c);
 }

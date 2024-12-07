@@ -20,7 +20,7 @@ class Test : public ISensor
 
     void Open() override;
     void Close() override;
-    void StartSensor() override;
+    void TriggerMeasurement() override;
     void setSpiInterface(ISpi& i_spi);
     void setI2cInterface(II2c& i_i2c);
 };

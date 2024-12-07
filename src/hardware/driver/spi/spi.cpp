@@ -3,6 +3,7 @@
 #include "driver/interrupt_dispatcher/interrupt.hpp"
 #include "stm32l476xx.h"
 #include "stm32l4xx_hal_spi.h"
+#include "qpcpp.hpp"
 
 Spi::Spi(std::uint8_t instance)
 {
@@ -105,21 +106,21 @@ void Spi::Open()
     {
         dispatcher.registerInterrupt(this, &Spi::Isr, SPI1_IRQn);
 
-        HAL_NVIC_SetPriority(SPI1_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(SPI1_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(SPI1_IRQn);
     }
     else if (handler.Instance == SPI2)
     {
         dispatcher.registerInterrupt(this, &Spi::Isr, SPI2_IRQn);
 
-        HAL_NVIC_SetPriority(SPI2_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(SPI2_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(SPI2_IRQn);
     }
     else if (handler.Instance == SPI3)
     {
         dispatcher.registerInterrupt(this, &Spi::Isr, SPI3_IRQn);
 
-        HAL_NVIC_SetPriority(SPI3_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(SPI3_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(SPI3_IRQn);
     }
 

@@ -17,7 +17,7 @@ int main()
 {
     QP::QF::init();  // initialize the framework
     // QS_GLB_FILTER(QP::QS_SM_RECORDS);
-    QS_GLB_FILTER(QP::QS_SC_RECORDS);
+    // QS_GLB_FILTER(QP::QS_SC_RECORDS);
 
     static SystemManager systemManager;
 
@@ -48,7 +48,7 @@ void onStartup()
     // set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
     SysTick_Config(SystemCoreClock / ticksPerSec);
 
-    // QS_GLB_FILTER(QP::QS_SM_RECORDS);
+    QS_GLB_FILTER(QP::QS_SM_RECORDS);
     QS_GLB_FILTER(QP::QS_SC_RECORDS);
 }
 

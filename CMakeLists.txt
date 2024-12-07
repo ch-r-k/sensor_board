@@ -68,6 +68,7 @@ set(APP_CPP_SRCS
     src/device/device_manager.cpp
     src/device/user_indication/user_indication.cpp
     src/device/sensors/test/test.cpp
+    src/device/sensors/aht10/aht10.cpp
     
     src/hardware/hardware_manager.cpp
     src/hardware/output_pin/output_pin.cpp

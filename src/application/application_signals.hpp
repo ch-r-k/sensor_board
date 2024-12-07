@@ -14,6 +14,7 @@ enum AppSignals : QP::QSignal
     BLINKY_DONE,
     MAX_PUB_SIG,  // the last published signal
 
+    SENSOR_READ_DONE,
     BLINKY_TIMEOUT,
     SENSOR_TIMEOUT,
     MAX_SIG  // the last signal

@@ -2,11 +2,13 @@
 #define I2C_HPP
 
 #include "i_i2c.hpp"
+#include "icb_i2c.hpp"
 #include "stm32l4xx.h"
 #include "stm32l4xx_hal.h"
 #include "stm32l476xx.h"
 #include <cassert>
 #include <span>
+#include <unordered_map>
 
 class I2c : public II2c
 {
@@ -39,6 +41,8 @@ class I2c : public II2c
     I2C_HandleTypeDef handler;
     bool open = false;
     std::uint8_t address;
+    IcbI2c* icbI2c = nullptr;
+    static std::unordered_map<I2C_TypeDef*, I2c*> instanceMap;
 
    public:
     I2c(std::uint8_t instance);
@@ -52,10 +56,11 @@ class I2c : public II2c
 
     void Open() override;
     void Close() override;
+    void SetIcb(IcbI2c& icb_i2c);
 
     void StartWrite(const std::span<const std::uint8_t> data) override;
-
     void StartRead(const std::span<std::uint8_t> data) override;
+    void SetAddress(const std::uint8_t address) override;
 
     void ConfigureTiming(std::uint32_t timing);
     void Configure(AddressingMode addressingMode);
@@ -63,7 +68,10 @@ class I2c : public II2c
     void Configure(GeneralCallMode generalCallMode);
     void Configure(NoStretchMode noStretchMode);
 
-    void setAddress(std::uint8_t address);
+    void RegisterInstance() { instanceMap[handler.Instance] = this; }
+
+    // Remove the association (optional)
+    void UnregisterInstance() { instanceMap.erase(handler.Instance); }
 
     static void Isr(void* callbackObject, [[maybe_unused]] void* parameter)
     {
@@ -76,27 +84,43 @@ class I2c : public II2c
     // ISR functions for handling I2C interrupts
     static void RxISR(I2C_HandleTypeDef* hi2c)
     {
-        // Implement the RX interrupt handling logic here
-        if (hi2c->Instance == I2C1)
+        auto it = instanceMap.find(hi2c->Instance);
+        if (it != instanceMap.end())
         {
-            // Handle I2C1 RX interrupt
+            I2c* i2c = it->second;  // Retrieve the I2c instance
+            if (i2c->icbI2c)
+            {
+                i2c->icbI2c->Done();
+            }
+            else
+            {
+                assert(false && "icbI2c is null");
+            }
         }
         else
         {
-            assert(false && "not implemented");
+            assert(false && "No associated I2c instance found");
         }
     }
 
     static void TxISR(I2C_HandleTypeDef* hi2c)
     {
-        // Implement the TX interrupt handling logic here
-        if (hi2c->Instance == I2C1)
+        auto it = instanceMap.find(hi2c->Instance);
+        if (it != instanceMap.end())
         {
-            // Handle I2C1 TX interrupt
+            I2c* i2c = it->second;  // Retrieve the I2c instance
+            if (i2c->icbI2c)
+            {
+                i2c->icbI2c->Done();
+            }
+            else
+            {
+                assert(false && "icbI2c is null");
+            }
         }
         else
         {
-            assert(false && "not implemented");
+            assert(false && "No associated I2c instance found");
         }
     }
 };

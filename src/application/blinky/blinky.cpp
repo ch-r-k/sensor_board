@@ -30,6 +30,11 @@ Q_STATE_DEF(Blinky, initial)
 {
     (void)e;  // unused parameter
     subscribe(AppSignals::BLINKY_START);
+
+    QS_FUN_DICTIONARY(&idle);
+    QS_FUN_DICTIONARY(&off);
+    QS_FUN_DICTIONARY(&on);
+
     return tran(&idle);
 }
 //............................................................................

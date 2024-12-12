@@ -54,7 +54,7 @@ HardwareManager::HardwareManager()
     sensorSpi.Configure(Spi::CRCCalculation::Disable);
     sensorSpi.Configure(Spi::NssPMode::PulseEnable);
 
-    sensorI2c.ConfigureTiming(0x10909CEC);  // todo
+    sensorI2c.ConfigureTiming(0xF010F3FE);  // todo
     sensorI2c.Configure(I2c::AddressingMode::SevenBit);
     sensorI2c.Configure(I2c::DualAddressMode::Disable);
     sensorI2c.Configure(I2c::GeneralCallMode::Disable);

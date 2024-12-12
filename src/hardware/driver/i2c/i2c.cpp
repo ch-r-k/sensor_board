@@ -82,12 +82,12 @@ void I2c::Open()
         __HAL_RCC_I2C3_CLK_ENABLE();
     }
 
-    gpioClk.Mode = GPIO_MODE_AF_PP;
-    gpioClk.Pull = GPIO_NOPULL;
+    gpioClk.Mode = GPIO_MODE_AF_OD;
+    gpioClk.Pull = GPIO_PULLUP;
     gpioClk.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
-    gpioSData.Mode = GPIO_MODE_AF_PP;
-    gpioSData.Pull = GPIO_NOPULL;
+    gpioSData.Mode = GPIO_MODE_AF_OD;
+    gpioSData.Pull = GPIO_PULLUP;
     gpioSData.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
     HAL_GPIO_Init(portClk, &gpioClk);
@@ -142,7 +142,8 @@ void I2c::StartWrite(const std::span<const std::uint8_t> data)
     assert(open && "I2C must be opened before writing");
 
     HAL_StatusTypeDef status = HAL_I2C_Master_Transmit_IT(
-        &handler, address, const_cast<uint8_t *>(data.data()), data.size());
+        &handler, address << 1, const_cast<uint8_t *>(data.data()),
+        data.size());
 
     assert(status == HAL_OK && "I2C Write failed");
 }
@@ -151,8 +152,8 @@ void I2c::StartRead(const std::span<std::uint8_t> data)
 {
     assert(open && "I2C must be opened before reading");
 
-    HAL_StatusTypeDef status =
-        HAL_I2C_Master_Receive_IT(&handler, address, data.data(), data.size());
+    HAL_StatusTypeDef status = HAL_I2C_Master_Receive_IT(
+        &handler, address << 1, data.data(), data.size());
 
     assert(status == HAL_OK && "I2C Read failed");
 }

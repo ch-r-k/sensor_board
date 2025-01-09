@@ -14,6 +14,11 @@
 
 namespace APP
 {
+class SensorEvent : public QP::QEvt
+{
+   public:
+    ISensor::SensorData data;
+};
 class Sensor : public QP::QActive, public IcbSensor
 {
    private:

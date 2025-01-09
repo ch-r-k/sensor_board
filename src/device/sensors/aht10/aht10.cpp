@@ -64,19 +64,42 @@ void Aht10::TriggerRead()
     assert(open && "must be open");
     assert(initialized && "sensor must be initialized");
 
-    std::array<std::uint8_t, 6> readBuffer = {0};
     iI2c->StartRead(readBuffer);
-}
-
-Aht10::SensorData Aht10::ReadData()
-{
-    assert(open && "must be open");
-    assert(initialized && "sensor must be initialized");
-    return sensorData;
 }
 
 void Aht10::setI2cInterface(II2c& i_i2c) { iI2c = &i_i2c; }
 
 void Aht10::setIcbSensor(IcbSensor& icb_sensor) { icbSensor = &icb_sensor; }
 
-void Aht10::Done() { icbSensor->done(); }
+void Aht10::WriteDone() { icbSensor->done(); }
+
+void Aht10::ReadDone()
+{
+    temperature.value = (((readBuffer[3] & 0x0F) << 16) | (readBuffer[4] << 8) |
+                         readBuffer[5]) *
+                            200.0 / (1 << 20) -
+                        50;
+
+    humidity.value =
+        ((readBuffer[1] << 12) | (readBuffer[2] << 4) | (readBuffer[3] >> 4)) *
+        100.0 / (1 << 20);
+
+    icbSensor->done();
+}
+
+ISensor::SensorData Aht10::GetMeasurement(Quantities quantity)
+{
+    switch (quantity)
+    {
+        case ISensor::Quantities::TEMPERATURE:
+            return temperature;
+            break;
+
+        case ISensor::Quantities::HUMIDITY:
+            return humidity;
+            break;
+        default:
+            assert(false && "not doesn't include this quantity");
+            break;
+    }
+}

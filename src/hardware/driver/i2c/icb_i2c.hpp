@@ -8,7 +8,8 @@ class IcbI2c
 {
    public:
     virtual ~IcbI2c() = default;
-    virtual void Done() = 0;
+    virtual void WriteDone() = 0;
+    virtual void ReadDone() = 0;
 };
 
 #endif  // ICB_I2C_HPP

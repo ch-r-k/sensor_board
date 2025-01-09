@@ -7,6 +7,7 @@
 //! @file
 //! @brief Blinky example
 //!
+#include "application_signals.hpp"
 #include "qpcpp.hpp"
 #include "sensor.hpp"
 #include "common.hpp"
@@ -176,8 +177,17 @@ void Sensor::setSensorInterface(ISensor& i_sensor) { iSensor = &i_sensor; }
 
 void Sensor::done()
 {
-    static QP::QEvt const myEvt{AppSignals::SENSOR_READ_DONE};
-    QP::QActive::POST(&myEvt, this);
+    iSensor->GetMeasurement(ISensor::Quantities::HUMIDITY);
+
+    SensorEvent* sensorEvent = Q_NEW(SensorEvent, SENSOR_READ_DONE);
+
+    sensorEvent->data.value =
+        iSensor->GetMeasurement(ISensor::Quantities::TEMPERATURE).value;
+
+    sensorEvent->data.quantity =
+        iSensor->GetMeasurement(ISensor::Quantities::TEMPERATURE).quantity;
+
+    this->POST(sensorEvent, this);
 }
 
 }  // namespace APP

@@ -12,12 +12,6 @@
 class Aht10 : public ISensor, public IcbI2c
 {
    public:
-    struct SensorData
-    {
-        float temperature;
-        float humidity;
-    };
-
     // Enum for AHT10 commands
     enum class Command : std::uint8_t
     {
@@ -51,7 +45,10 @@ class Aht10 : public ISensor, public IcbI2c
 
     std::uint8_t address = 0x38;
 
-    SensorData sensorData = {0.0f, 0.0f};
+    SensorData humidity = {0.0f, Quantities::HUMIDITY};
+    SensorData temperature = {0.0f, Quantities::TEMPERATURE};
+
+    std::array<std::uint8_t, 6> readBuffer = {0};
 
     // Default "command continuation" byte value
     CommandContinuation commandContinuation = {.reserved1 = 0,
@@ -70,11 +67,12 @@ class Aht10 : public ISensor, public IcbI2c
     void TriggerMeasurement() override;
     void TriggerRead() override;
 
-    void Done() override;
+    void WriteDone() override;
+    void ReadDone() override;
 
     void setI2cInterface(II2c& i_i2c);
     void setIcbSensor(IcbSensor& icb_sensor);
-    SensorData ReadData();
+    SensorData GetMeasurement(Quantities quantity) override;
 };
 
 #endif  // AHT10_HPP

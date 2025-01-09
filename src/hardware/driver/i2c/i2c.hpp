@@ -90,7 +90,7 @@ class I2c : public II2c
             I2c* i2c = it->second;  // Retrieve the I2c instance
             if (i2c->icbI2c)
             {
-                i2c->icbI2c->Done();
+                i2c->icbI2c->ReadDone();
             }
             else
             {
@@ -111,7 +111,7 @@ class I2c : public II2c
             I2c* i2c = it->second;  // Retrieve the I2c instance
             if (i2c->icbI2c)
             {
-                i2c->icbI2c->Done();
+                i2c->icbI2c->WriteDone();
             }
             else
             {

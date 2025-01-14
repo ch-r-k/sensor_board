@@ -6,7 +6,7 @@
 #include "user_indication/user_indication.hpp"
 #include "serial_commander/serial_commander.hpp"
 #include "device/sensors/test/test.hpp"
-#include "device/display/ssd1306/ssd1306.hpp"
+//#include "device/display/ssd1306/ssd1306.hpp"
 
 class DeviceManager
 {

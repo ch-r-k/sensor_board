@@ -6,7 +6,8 @@ class IcbSerialCommander
    private:
    public:
     virtual ~IcbSerialCommander() = default;
-    virtual void done() = 0;
+    virtual void WriteDone() = 0;
+    virtual void ReadDone() = 0;
 };
 
 #endif  // ICB_SERIAL_COMMANDER_HPP

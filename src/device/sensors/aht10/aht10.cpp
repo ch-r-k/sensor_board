@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cstdint>
 #include "sensors/icb_sensor.hpp"
+#include "serial_commander/i_serial_commander.hpp"
 
 Aht10::Aht10() {}
 Aht10::~Aht10() {}
@@ -9,11 +10,8 @@ Aht10::~Aht10() {}
 void Aht10::Open()
 {
     assert(!open && "already open");
-    assert(iI2c != nullptr && "instance can't be nullptr");
 
     open = true;
-    iI2c->SetAddress(address);
-    iI2c->Open();
     Init();
 }
 
@@ -30,13 +28,15 @@ void Aht10::Init()
     const std::uint8_t commandContinuationByte =
         *(reinterpret_cast<std::uint8_t*>(&commandContinuation));
 
-    // Construct the initialization command
-    const std::array<std::uint8_t, 3> initCmd = {
-        static_cast<std::uint8_t>(Command::INIT),  // Initialization command
-        commandContinuationByte,  // "Command continuation" byte
-        0x00                      // Reserved byte
-    };
-    iI2c->StartWrite(initCmd);
+    ISerialCommander::Command command;
+    command.instruction = ISerialCommander::Instructions::Write;
+    command.data[0] = static_cast<std::uint8_t>(Command::INIT);
+    command.data[1] = commandContinuationByte;
+    command.data[2] = 0x00U;
+    command.data_length = 3;
+
+    iSerial->SetCommand(command);
+    iSerial->StartCommands();
 
     initialized = true;
 }
@@ -50,13 +50,16 @@ void Aht10::TriggerMeasurement()
         *(reinterpret_cast<std::uint8_t*>(&commandContinuation));
 
     // Trigger a measurement
-    const std::array<std::uint8_t, 3> measureCmd = {
-        static_cast<std::uint8_t>(
-            Command::MEASURE),    // Trigger measurement command
-        commandContinuationByte,  // "Command continuation" byte
-        0x00                      // Additional options
-    };
-    iI2c->StartWrite(measureCmd);
+
+    ISerialCommander::Command command;
+    command.instruction = ISerialCommander::Instructions::Write;
+    command.data[0] = static_cast<std::uint8_t>(Command::MEASURE);
+    command.data[1] = commandContinuationByte;
+    command.data[2] = 0x00U;
+    command.data_length = 3;
+
+    iSerial->SetCommand(command);
+    iSerial->StartCommands();
 }
 
 void Aht10::TriggerRead()
@@ -64,10 +67,18 @@ void Aht10::TriggerRead()
     assert(open && "must be open");
     assert(initialized && "sensor must be initialized");
 
-    iI2c->StartRead(readBuffer);
+    ISerialCommander::Command command;
+    command.instruction = ISerialCommander::Instructions::Read;
+    command.data_length = 6;
+
+    iSerial->SetCommand(command);
+    iSerial->StartCommands();
 }
 
-void Aht10::setI2cInterface(II2c& i_i2c) { iI2c = &i_i2c; }
+void Aht10::setSerialInterface(ISerialCommander& i_serial)
+{
+    iSerial = &i_serial;
+}
 
 void Aht10::setIcbSensor(IcbSensor& icb_sensor) { icbSensor = &icb_sensor; }
 

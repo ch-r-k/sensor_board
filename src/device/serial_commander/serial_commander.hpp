@@ -19,8 +19,6 @@
 #include "driver/i2c/icb_i2c.hpp"
 #include "driver/spi/i_spi.hpp"
 
-namespace DEVICE
-{
 using Instructions = ISerialCommander::Instructions;
 using Command = ISerialCommander::Command;
 
@@ -65,7 +63,5 @@ class SerialCommander : public QP::QActive,
     Q_STATE_DECL(read);
     Q_STATE_DECL(pause);
 };
-
-}  // namespace DEVICE
 
 #endif  // SERIAL_COMMANDER_HPP_

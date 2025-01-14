@@ -12,11 +12,15 @@ enum AppSignals : QP::QSignal
     SENSOR_DONE,
     BLINKY_START,
     BLINKY_DONE,
+    SERIAL_COMMANDER_SET,
+    SERIAL_COMMANDER_START,
     MAX_PUB_SIG,  // the last published signal
 
     SENSOR_READ_DONE,
     BLINKY_TIMEOUT,
     SENSOR_TIMEOUT,
+    SERIAL_COMMANDER_TIMEOUT,
+    SERIAL_COMMANDER_DONE,
     MAX_SIG  // the last signal
 };
 }

@@ -18,6 +18,7 @@ class ISensor
 
    private:
    public:
+    virtual ~ISensor() = default;
     virtual void Open() = 0;
     virtual void Close() = 0;
     virtual void TriggerMeasurement() = 0;

@@ -8,8 +8,13 @@ DeviceManager::DeviceManager(HardwareManager& hardwareManager)
     // test.setSpiInterface(hardwareManager.getSensorSpi());
     // test.setI2cInterface(hardwareManager.getSensorI2c());
 
-    aht10.setI2cInterface(hardwareManager.getSensorI2c());
-    hardwareManager.getSensorI2c().SetIcb(aht10);
+    // serial commander to devices
+    aht10.setSerialInterface(serialCommander);
+    serialCommander.setIcbSerialCommander(aht10);
+
+    // serial commander to hardware
+    serialCommander.setSerialInterface(hardwareManager.getSensorI2c());
+    hardwareManager.getSensorI2c().SetIcb(serialCommander);
 }
 
 DeviceManager::~DeviceManager() {}
@@ -17,3 +22,15 @@ DeviceManager::~DeviceManager() {}
 UserIndication& DeviceManager::getUserIndication() { return userIndication; }
 // Test& DeviceManager::getTest() {}
 Aht10& DeviceManager::getAht10() { return aht10; };
+
+void DeviceManager::start()
+{
+    static QP::QEvt const* serialCommanderQueueSto[10];
+    serialCommander.start(
+        4U,                              // QP prio. of the AO
+        serialCommanderQueueSto,         // event queue storage
+        Q_DIM(serialCommanderQueueSto),  // queue length [events]
+        nullptr, 0U,                     // no stack storage
+        nullptr);                        // no initialization param
+    QS_OBJ_DICTIONARY(&serialCommander);
+}

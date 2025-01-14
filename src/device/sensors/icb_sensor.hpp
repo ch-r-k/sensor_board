@@ -5,6 +5,7 @@ class IcbSensor
 {
    private:
    public:
+    virtual ~IcbSensor() = default;
     virtual void done() = 0;
 };
 

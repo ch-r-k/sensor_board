@@ -18,8 +18,6 @@ namespace
 
 }  // unnamed namespace
 
-namespace DEVICE
-{
 //............................................................................
 SerialCommander::SerialCommander()
     : QP::QActive(&initial), m_timeEvt(this, 0U, 0U)
@@ -75,6 +73,20 @@ Q_STATE_DEF(SerialCommander, idle)
         }
         case APP::AppSignals::SERIAL_COMMANDER_START:
         {
+            if (iI2c)
+            {
+                iI2c->Open();
+                iI2c->SetAddress(0x38);
+            }
+            else if (iSpi)
+            {
+                iSpi->Open();
+            }
+            else
+            {
+                assert(false && "no interface set");
+            }
+
             status =
                 tran(getStateFromInst(commands[command_index].instruction));
             break;
@@ -203,6 +215,19 @@ QP::QStateHandler SerialCommander::nextState()
 
     if (command_index >= command_length)
     {
+        if (iI2c)
+        {
+            iI2c->Close();
+        }
+        else if (iSpi)
+        {
+            iSpi->Close();
+        }
+        else
+        {
+            assert(false && "no interface set");
+        }
+
         return &idle;
     }
 
@@ -228,6 +253,8 @@ QP::QStateHandler SerialCommander::getStateFromInst(Instructions instruction)
             return &pause;
         }
     }
+
+    assert(false);
 }
 
 void SerialCommander::setSerialInterface(II2c& i_i2c)
@@ -280,5 +307,3 @@ void SerialCommander::StartCommands()
     static QP::QEvt const myEvt{APP::AppSignals::SERIAL_COMMANDER_START};
     this->POST(&myEvt, this);
 }
-
-}  // namespace DEVICE

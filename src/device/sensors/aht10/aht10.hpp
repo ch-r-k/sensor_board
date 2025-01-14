@@ -3,13 +3,13 @@
 
 #include "../i_sensor.hpp"
 #include "../icb_sensor.hpp"
-#include "driver/i2c/i_i2c.hpp"
-#include "driver/i2c/icb_i2c.hpp"
+#include "serial_commander/i_serial_commander.hpp"
+#include "serial_commander/icb_serial_commander.hpp"
 #include <array>
 #include <cassert>
 #include <cstdint>
 
-class Aht10 : public ISensor, public IcbI2c
+class Aht10 : public ISensor, public IcbSerialCommander
 {
    public:
     // Enum for AHT10 commands
@@ -40,7 +40,7 @@ class Aht10 : public ISensor, public IcbI2c
    private:
     bool open = false;
     bool initialized = false;
-    II2c* iI2c = nullptr;
+    ISerialCommander* iSerial = nullptr;
     IcbSensor* icbSensor = nullptr;
 
     std::uint8_t address = 0x38;
@@ -70,7 +70,7 @@ class Aht10 : public ISensor, public IcbI2c
     void WriteDone() override;
     void ReadDone() override;
 
-    void setI2cInterface(II2c& i_i2c);
+    void setSerialInterface(ISerialCommander& i_serial);
     void setIcbSensor(IcbSensor& icb_sensor);
     SensorData GetMeasurement(Quantities quantity) override;
 };

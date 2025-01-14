@@ -15,4 +15,8 @@ SystemManager::SystemManager()
 
 SystemManager::~SystemManager() {}
 
-void SystemManager::run() { applicationManager.start(); }
+void SystemManager::run()
+{
+    applicationManager.start();
+    deviceManager.start();
+}

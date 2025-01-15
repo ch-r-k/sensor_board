@@ -127,12 +127,14 @@ void I2c::Open()
 
 void I2c::Close()
 {
-    assert(open == false && "must be open");
+    assert(open == true && "must be open");
 
     if (HAL_I2C_DeInit(&handler) != HAL_OK)
     {
         assert(false && "Failed to initialize I2C");
     }
+
+    open = false;
 }
 
 void I2c::SetIcb(IcbI2c &icb_i2c) { icbI2c = &icb_i2c; }

@@ -20,7 +20,7 @@ namespace
 
 //............................................................................
 SerialCommander::SerialCommander()
-    : QP::QActive(&initial), m_timeEvt(this, 0U, 0U)
+    : QP::QActive(&initial), m_timeEvt(this, APP::SERIAL_COMMANDER_TIMEOUT, 0U)
 {
     // empty
 }
@@ -63,10 +63,12 @@ Q_STATE_DEF(SerialCommander, idle)
         {
             status = Q_RET_HANDLED;
 
-            commands[command_length].instruction = Instructions::Pause;
-            commands[command_length].data.fill(0U);
-            commands[command_length].data_length++;
-            commands[command_length].pauseTime = 100;
+             Command command = Q_EVT_CAST(CommandEvent)->command;
+
+            commands[command_length].instruction = command.instruction;
+            commands[command_length].data = command.data;
+            commands[command_length].data_length = command.data_length;
+            commands[command_length].pauseTime = command.pauseTime;
 
             command_length++;
             break;
@@ -227,6 +229,10 @@ QP::QStateHandler SerialCommander::nextState()
         {
             assert(false && "no interface set");
         }
+        
+        // ToDo fix callback:
+        //icbSerialCommander->ReadDone();
+        //icbSerialCommander->WriteDone();
 
         return &idle;
     }

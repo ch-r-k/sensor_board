@@ -17,6 +17,13 @@ SystemManager::~SystemManager() {}
 
 void SystemManager::run()
 {
+        // initialize event pools
+    static QF_MPOOL_EL(APP::SensorEvent) smlPoolSto[20];
+    QP::QF::poolInit(smlPoolSto, sizeof(smlPoolSto), sizeof(smlPoolSto[0]));
+
+    static QF_MPOOL_EL(CommandEvent) largePoolSto[10];
+    QP::QF::poolInit(largePoolSto, sizeof(largePoolSto), sizeof(largePoolSto[0]));
+    
     applicationManager.start();
     deviceManager.start();
 }

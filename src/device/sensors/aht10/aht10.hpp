@@ -41,14 +41,13 @@ class Aht10 : public ISensor, public IcbSerialCommander
     bool open = false;
     bool initialized = false;
     ISerialCommander* iSerial = nullptr;
+    ISensor::Operation activeInstruction = ISensor::Operation::NOP;
     IcbSensor* icbSensor = nullptr;
 
     std::uint8_t address = 0x38;
 
     SensorData humidity = {0.0f, Quantities::HUMIDITY};
     SensorData temperature = {0.0f, Quantities::TEMPERATURE};
-
-    std::array<std::uint8_t, 6> readBuffer = {0};
 
     // Default "command continuation" byte value
     CommandContinuation commandContinuation = {.reserved1 = 0,
@@ -65,10 +64,10 @@ class Aht10 : public ISensor, public IcbSerialCommander
     void Close() override;
     void Init();
     void TriggerMeasurement() override;
-    void TriggerRead() override;
 
-    void WriteDone() override;
-    void ReadDone() override;
+    void ReadDone();
+
+    void Done(ReturnValue return_value) override;
 
     void setSerialInterface(ISerialCommander& i_serial);
     void setIcbSensor(IcbSensor& icb_sensor);

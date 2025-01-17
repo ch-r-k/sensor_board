@@ -24,7 +24,8 @@ class Sensor : public QP::QActive, public IcbSensor
    private:
     QP::QTimeEvt m_timeEvt;
     ISensor* iSensor = nullptr;
-    void done() override;
+    void initDone() override;
+    void readDone() override;
 
    public:
     Sensor();
@@ -34,8 +35,6 @@ class Sensor : public QP::QActive, public IcbSensor
     Q_STATE_DECL(initial);
     Q_STATE_DECL(idle);
     Q_STATE_DECL(init);
-    Q_STATE_DECL(start_measurement);
-    Q_STATE_DECL(pause);
     Q_STATE_DECL(read_measurement);
 };
 

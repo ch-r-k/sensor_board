@@ -37,10 +37,8 @@ Q_STATE_DEF(Sensor, initial)
 
     QS_FUN_DICTIONARY(&idle);
     QS_FUN_DICTIONARY(&init);
-    QS_FUN_DICTIONARY(&start_measurement);
-    QS_FUN_DICTIONARY(&pause);
     QS_FUN_DICTIONARY(&read_measurement);
-    QS_FUN_DICTIONARY(&pause);
+
     return tran(&idle);
 }
 //............................................................................
@@ -56,8 +54,6 @@ Q_STATE_DEF(Sensor, idle)
         }
         case SENSOR_START:
         {
-            iSensor->Open();
-
             static QP::QEvt const myEvt{AppSignals::SENSOR_DONE};
             QP::QActive::PUBLISH(&myEvt, this);
 
@@ -80,61 +76,11 @@ Q_STATE_DEF(Sensor, init)
     {
         case Q_ENTRY_SIG:
         {
-            m_timeEvt.armX(ticksPerSec / 2U, 0);
+            iSensor->Open();
             status = Q_RET_HANDLED;
             break;
         }
-        case SENSOR_TIMEOUT:
-        {
-            status = tran(start_measurement);
-            break;
-        }
-        default:
-        {
-            status = super(&top);
-            break;
-        }
-    }
-    return status;
-}
-//............................................................................
-Q_STATE_DEF(Sensor, start_measurement)
-{
-    QP::QState status;
-    switch (e->sig)
-    {
-        case Q_ENTRY_SIG:
-        {
-            iSensor->TriggerMeasurement();
-            status = Q_RET_HANDLED;
-            break;
-        }
-        case SENSOR_READ_DONE:
-        {
-            status = tran(pause);
-            break;
-        }
-        default:
-        {
-            status = super(&top);
-            break;
-        }
-    }
-    return status;
-}
-//............................................................................
-Q_STATE_DEF(Sensor, pause)
-{
-    QP::QState status;
-    switch (e->sig)
-    {
-        case Q_ENTRY_SIG:
-        {
-            m_timeEvt.armX(ticksPerSec / 2U, 0);
-            status = Q_RET_HANDLED;
-            break;
-        }
-        case SENSOR_TIMEOUT:
+        case SENSOR_INIT_DONE:
         {
             status = tran(read_measurement);
             break;
@@ -155,13 +101,19 @@ Q_STATE_DEF(Sensor, read_measurement)
     {
         case Q_ENTRY_SIG:
         {
-            iSensor->TriggerRead();
+            m_timeEvt.armX(ticksPerSec / 2U, 0);
+            status = Q_RET_HANDLED;
+            break;
+        }
+        case SENSOR_TIMEOUT:
+        {
+            iSensor->TriggerMeasurement();
             status = Q_RET_HANDLED;
             break;
         }
         case SENSOR_READ_DONE:
         {
-            status = tran(init);
+            status = tran(read_measurement);
             break;
         }
         default:
@@ -175,7 +127,13 @@ Q_STATE_DEF(Sensor, read_measurement)
 //............................................................................
 void Sensor::setSensorInterface(ISensor& i_sensor) { iSensor = &i_sensor; }
 
-void Sensor::done()
+void Sensor::initDone()
+{
+    static QP::QEvt const myEvt{AppSignals::SENSOR_INIT_DONE};
+    this->POST(&myEvt, this);
+}
+
+void Sensor::readDone()
 {
     iSensor->GetMeasurement(ISensor::Quantities::HUMIDITY);
 

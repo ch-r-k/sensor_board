@@ -6,7 +6,8 @@ class IcbSensor
    private:
    public:
     virtual ~IcbSensor() = default;
-    virtual void done() = 0;
+    virtual void initDone() = 0;
+    virtual void readDone() = 0;
 };
 
 #endif  // ICB_SENSOR_HPP

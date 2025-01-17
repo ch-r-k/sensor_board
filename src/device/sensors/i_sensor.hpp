@@ -5,6 +5,12 @@
 class ISensor
 {
    public:
+    enum class Operation : std::uint8_t
+    {
+        NOP,
+        INIT,
+        MEASURE,
+    };
     enum class Quantities : std::uint8_t
     {
         TEMPERATURE,
@@ -22,7 +28,6 @@ class ISensor
     virtual void Open() = 0;
     virtual void Close() = 0;
     virtual void TriggerMeasurement() = 0;
-    virtual void TriggerRead() = 0;
     virtual SensorData GetMeasurement(Quantities quantity) = 0;
 };
 

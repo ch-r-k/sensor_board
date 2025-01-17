@@ -13,8 +13,6 @@ namespace APP
 class Startup : public QP::QActive
 {
    private:
-    QP::QTimeEvt m_timeEvt;
-
    public:
     Startup();
 

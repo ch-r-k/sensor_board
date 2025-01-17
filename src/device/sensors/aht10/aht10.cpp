@@ -38,6 +38,7 @@ void Aht10::Init()
     iSerial->SetCommand(command);
     iSerial->StartCommands();
 
+    activeInstruction = ISensor::Operation::INIT;
     initialized = true;
 }
 
@@ -52,26 +53,28 @@ void Aht10::TriggerMeasurement()
     // Trigger a measurement
 
     ISerialCommander::Command command;
+
+    // Start Measurement
     command.instruction = ISerialCommander::Instructions::Write;
     command.data[0] = static_cast<std::uint8_t>(Command::MEASURE);
     command.data[1] = commandContinuationByte;
     command.data[2] = 0x00U;
     command.data_length = 3;
-
     iSerial->SetCommand(command);
-    iSerial->StartCommands();
-}
 
-void Aht10::TriggerRead()
-{
-    assert(open && "must be open");
-    assert(initialized && "sensor must be initialized");
+    // Pause
+    command.instruction = ISerialCommander::Instructions::Pause;
+    command.data_length = 0;
+    command.pauseTime = 100;
+    iSerial->SetCommand(command);
 
-    ISerialCommander::Command command;
+    // Read Measurement
     command.instruction = ISerialCommander::Instructions::Read;
     command.data_length = 6;
-
     iSerial->SetCommand(command);
+
+    // Start
+    activeInstruction = ISensor::Operation::MEASURE;
     iSerial->StartCommands();
 }
 
@@ -82,20 +85,40 @@ void Aht10::setSerialInterface(ISerialCommander& i_serial)
 
 void Aht10::setIcbSensor(IcbSensor& icb_sensor) { icbSensor = &icb_sensor; }
 
-void Aht10::WriteDone() { icbSensor->done(); }
-
-void Aht10::ReadDone()
+void Aht10::Done(ReturnValue return_value)
 {
-    temperature.value = (((readBuffer[3] & 0x0F) << 16) | (readBuffer[4] << 8) |
-                         readBuffer[5]) *
-                            200.0 / (1 << 20) -
-                        50;
+    //
+    switch (activeInstruction)
+    {
+        case Operation::INIT:
+        {
+            icbSensor->initDone();
+            break;
+        }
+        case Operation::MEASURE:
+        {
+            temperature.value =
+                (((return_value.data[3] & 0x0F) << 16) |
+                 (return_value.data[4] << 8) | return_value.data[5]) *
+                    200.0 / (1 << 20) -
+                50;
 
-    humidity.value =
-        ((readBuffer[1] << 12) | (readBuffer[2] << 4) | (readBuffer[3] >> 4)) *
-        100.0 / (1 << 20);
+            humidity.value =
+                ((return_value.data[1] << 12) | (return_value.data[2] << 4) |
+                 (return_value.data[3] >> 4)) *
+                100.0 / (1 << 20);
 
-    icbSensor->done();
+            icbSensor->readDone();
+            break;
+        }
+        case Operation::NOP:
+        {
+            assert(false);
+            break;
+        }
+    }
+
+    activeInstruction = ISensor::Operation::NOP;
 }
 
 ISensor::SensorData Aht10::GetMeasurement(Quantities quantity)

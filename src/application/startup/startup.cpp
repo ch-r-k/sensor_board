@@ -20,7 +20,7 @@ namespace
 namespace APP
 {
 //............................................................................
-Startup::Startup() : QP::QActive(&initial), m_timeEvt(this, SENSOR_TIMEOUT, 0U)
+Startup::Startup() : QP::QActive(&initial)
 {
     // empty
 }
@@ -104,7 +104,7 @@ Q_STATE_DEF(Startup, done)
             status = Q_RET_HANDLED;
             break;
         }
-        case SENSOR_TIMEOUT:
+        case SENSOR_DONE:
         {
             status = Q_RET_HANDLED;
             break;

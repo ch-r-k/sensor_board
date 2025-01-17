@@ -6,10 +6,15 @@
 #include <cassert>
 #include <cstdint>
 #include <span>
-#include "application_signals.hpp"
-#include "driver/i2c/i_i2c.hpp"
+
 #include "qpcpp.hpp"
+#include "application_signals.hpp"
+#include "common.hpp"
+
 #include "serial_commander.hpp"
+
+#include "driver/i2c/i_i2c.hpp"
+#include "serial_commander/icb_serial_commander.hpp"
 
 // unnamed namespace for local definitions with internal linkage
 namespace
@@ -63,7 +68,7 @@ Q_STATE_DEF(SerialCommander, idle)
         {
             status = Q_RET_HANDLED;
 
-             Command command = Q_EVT_CAST(CommandEvent)->command;
+            Command command = Q_EVT_CAST(CommandEvent)->command;
 
             commands[command_length].instruction = command.instruction;
             commands[command_length].data = command.data;
@@ -191,12 +196,15 @@ Q_STATE_DEF(SerialCommander, pause)
     {
         case Q_ENTRY_SIG:
         {
+            std::uint16_t pauseTime = commands[command_index].pauseTime;
+
+            m_timeEvt.armX(ticksPerSec / 1000U * pauseTime, 0);
             status = Q_RET_HANDLED;
             break;
         }
         case APP::AppSignals::SERIAL_COMMANDER_TIMEOUT:
         {
-            status = Q_RET_HANDLED;
+            status = tran(nextState());
             break;
         }
         default:
@@ -213,6 +221,10 @@ Q_STATE_DEF(SerialCommander, pause)
 
 QP::QStateHandler SerialCommander::nextState()
 {
+    IcbSerialCommander::ReturnValue returnValue;
+    returnValue.data = commands[command_index].data;
+    returnValue.data_length = commands[command_index].data_length;
+
     command_index++;
 
     if (command_index >= command_length)
@@ -229,10 +241,8 @@ QP::QStateHandler SerialCommander::nextState()
         {
             assert(false && "no interface set");
         }
-        
-        // ToDo fix callback:
-        //icbSerialCommander->ReadDone();
-        //icbSerialCommander->WriteDone();
+
+        icbSerialCommander->Done(returnValue);
 
         return &idle;
     }

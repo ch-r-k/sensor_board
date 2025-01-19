@@ -2,6 +2,7 @@
 // APP example
 //============================================================================
 #include "qpcpp.hpp"  // QP/C++ real-time embedded framework
+#include "stm32l4xx_hal_def.h"
 #include "system_manager.hpp"
 #include "common.hpp"
 
@@ -88,7 +89,11 @@ namespace QP::QS
 {
 void onCleanup() {}
 
-bool onStartup(void const *arg) {}
+bool onStartup(void const *arg)
+{
+    UNUSED(arg);
+    return true;
+}
 
 void onReset() { NVIC_SystemReset(); }
 

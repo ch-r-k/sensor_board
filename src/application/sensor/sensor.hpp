@@ -34,7 +34,7 @@ class Sensor : public QP::QActive, public IcbSensor
    protected:
     Q_STATE_DECL(initial);
     Q_STATE_DECL(idle);
-    Q_STATE_DECL(init);
+    Q_STATE_DECL(initialize);
     Q_STATE_DECL(read_measurement);
 };
 

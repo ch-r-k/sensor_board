@@ -36,7 +36,7 @@ Q_STATE_DEF(Sensor, initial)
     subscribe(AppSignals::SENSOR_START);
 
     QS_FUN_DICTIONARY(&idle);
-    QS_FUN_DICTIONARY(&init);
+    QS_FUN_DICTIONARY(&initialize);
     QS_FUN_DICTIONARY(&read_measurement);
 
     return tran(&idle);
@@ -57,7 +57,7 @@ Q_STATE_DEF(Sensor, idle)
             static QP::QEvt const myEvt{AppSignals::SENSOR_DONE};
             QP::QActive::PUBLISH(&myEvt, this);
 
-            status = tran(init);
+            status = tran(initialize);
             break;
         }
         default:
@@ -69,7 +69,7 @@ Q_STATE_DEF(Sensor, idle)
     return status;
 }
 //............................................................................
-Q_STATE_DEF(Sensor, init)
+Q_STATE_DEF(Sensor, initialize)
 {
     QP::QState status;
     switch (e->sig)

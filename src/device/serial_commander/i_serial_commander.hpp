@@ -29,6 +29,8 @@ class ISerialCommander
    public:
     virtual ~ISerialCommander() = default;
     virtual void SetCommand(Command command) = 0;
+    virtual void SetI2CAddress(std::uint8_t address) = 0;
+    virtual void SetChipSelect(std::uint8_t pin) = 0;
     virtual void StartCommands() = 0;
 };
 

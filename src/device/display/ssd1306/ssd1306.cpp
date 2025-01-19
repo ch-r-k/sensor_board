@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cstdint>
 #include "serial_commander/serial_commander.hpp"
+#include "stm32l4xx_hal_def.h"
 
 Ssd1306::Ssd1306() {}
 Ssd1306::~Ssd1306() {}
@@ -9,12 +10,8 @@ Ssd1306::~Ssd1306() {}
 void Ssd1306::Open()
 {
     assert(!open && "already open");
-    assert(iI2c != nullptr && "instance can't be nullptr");
-
-    open = true;
-    iI2c->SetAddress(address);
-    iI2c->Open();
     Init();
+    open = true;
 }
 
 void Ssd1306::Close()
@@ -59,6 +56,7 @@ void Ssd1306::Init()
     displayOn(command);
     iSerial->SetCommand(command);
 
+    iSerial->SetI2CAddress(address);
     iSerial->StartCommands();
 
     initialized = true;
@@ -97,10 +95,14 @@ void Ssd1306::update()
     command.data_span = cache;
     iSerial->SetCommand(command);
 
+    iSerial->SetI2CAddress(address);
     iSerial->StartCommands();
 }
 
-void Ssd1306::setI2cInterface(II2c& i_i2c) { iI2c = &i_i2c; }
+void Ssd1306::setSerialCommanderInterface(ISerialCommander& i_serial_commander)
+{
+    iSerial = &i_serial_commander;
+}
 
 void Ssd1306::prepareCommand(ISerialCommander::Command& command,
                              const std::initializer_list<std::uint8_t>& data)
@@ -172,5 +174,8 @@ void Ssd1306::displayOn(ISerialCommander::Command& command)
                    {static_cast<std::uint8_t>(Command::SET_DISPLAY) | 0x01});
 }
 
-// void Ssd1306::setIcbDisplay(IcbSensor& icb_sensor) { icbSensor = &icb_sensor;
-// }
+void Ssd1306::Done(IcbSerialCommander::ReturnValue return_value)
+{
+    UNUSED(return_value);
+    // todo: implement
+}

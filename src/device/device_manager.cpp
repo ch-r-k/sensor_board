@@ -11,6 +11,8 @@ DeviceManager::DeviceManager(HardwareManager& hardwareManager)
     // serial commander to devices
     aht10.setSerialInterface(serialCommander);
     serialCommander.setIcbSerialCommander(aht10);
+    ssd1306.setSerialCommanderInterface(serialCommander);
+    serialCommander.setIcbSerialCommander(ssd1306);
 
     // serial commander to hardware
     serialCommander.setSerialInterface(hardwareManager.getSensorI2c());

@@ -69,7 +69,7 @@ set(APP_CPP_SRCS
     src/device/user_indication/user_indication.cpp
     src/device/sensors/test/test.cpp
     src/device/sensors/aht10/aht10.cpp
-    #src/device/display/ssd1306/ssd1306.cpp
+    src/device/display/ssd1306/ssd1306.cpp
     src/device/serial_commander/serial_commander.cpp
     
     src/hardware/hardware_manager.cpp

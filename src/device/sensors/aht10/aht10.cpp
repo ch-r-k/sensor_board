@@ -36,6 +36,8 @@ void Aht10::Init()
     command.data_length = 3;
 
     iSerial->SetCommand(command);
+
+    iSerial->SetI2CAddress(address);
     iSerial->StartCommands();
 
     activeInstruction = ISensor::Operation::INIT;
@@ -75,6 +77,7 @@ void Aht10::TriggerMeasurement()
 
     // Start
     activeInstruction = ISensor::Operation::MEASURE;
+    iSerial->SetI2CAddress(address);
     iSerial->StartCommands();
 }
 

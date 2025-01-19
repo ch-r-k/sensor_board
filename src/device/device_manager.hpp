@@ -2,11 +2,13 @@
 #define DEVICE_MANAGER_HPP
 
 #include "hardware_manager.hpp"
-#include "sensors/aht10/aht10.hpp"
-#include "user_indication/user_indication.hpp"
+
 #include "serial_commander/serial_commander.hpp"
-#include "device/sensors/test/test.hpp"
-//#include "device/display/ssd1306/ssd1306.hpp"
+
+#include "sensors/test/test.hpp"
+#include "sensors/aht10/aht10.hpp"
+#include "display/ssd1306/ssd1306.hpp"
+#include "user_indication/user_indication.hpp"
 
 class DeviceManager
 {
@@ -14,8 +16,8 @@ class DeviceManager
     UserIndication userIndication;
     SerialCommander serialCommander;
     Aht10 aht10;
+    Ssd1306 ssd1306;
 
-    // Ssd1306 ssd1306;
     // Test test;
 
    public:

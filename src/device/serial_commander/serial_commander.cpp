@@ -14,7 +14,7 @@
 #include "serial_commander.hpp"
 
 #include "driver/i2c/i_i2c.hpp"
-#include "serial_commander/icb_serial_commander.hpp"
+#include "stm32l4xx_hal_def.h"
 
 // unnamed namespace for local definitions with internal linkage
 namespace
@@ -56,6 +56,7 @@ Q_STATE_DEF(SerialCommander, idle)
             command_index = 0;
 
             commands.fill(Command{
+                // todo: check if ok
                 Instructions::Pause,
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 0U,
@@ -86,7 +87,6 @@ Q_STATE_DEF(SerialCommander, idle)
             if (iI2c)
             {
                 iI2c->Open();
-                iI2c->SetAddress(0x38);
             }
             else if (iSpi)
             {
@@ -363,6 +363,16 @@ void SerialCommander::SetCommand(Command command)
     commandEvent->command.pauseTime = command.pauseTime;
 
     this->POST(commandEvent, this);
+}
+
+void SerialCommander::SetI2CAddress(std::uint8_t address)
+{
+    iI2c->SetAddress(address);
+}
+void SerialCommander::SetChipSelect(std::uint8_t pin)
+{
+    UNUSED(pin);
+    assert(false && "not implemented jet");
 }
 
 void SerialCommander::StartCommands()

@@ -13,10 +13,7 @@
 #include "serial_commander/i_serial_commander.hpp"
 #include "serial_commander/icb_serial_commander.hpp"
 
-#include "driver/i2c/i_i2c.hpp"
-#include "driver/i2c/icb_i2c.hpp"
-
-class Ssd1306 : public IDisplay, public IcbI2c
+class Ssd1306 : public IDisplay, public IcbSerialCommander
 {
    public:
     // Enum for AHT10 commands
@@ -85,7 +82,6 @@ class Ssd1306 : public IDisplay, public IcbI2c
     bool open = false;
     bool initialized = false;
 
-    II2c* iI2c = nullptr;
     IcbDisplay* icbDisplay = nullptr;
     ISerialCommander* iSerial = nullptr;
 
@@ -99,12 +95,15 @@ class Ssd1306 : public IDisplay, public IcbI2c
 
     void Open() override;
     void Close() override;
+
+    void Done(IcbSerialCommander::ReturnValue return_value) override;
+
     void Init();
     void drawPixel(uint8_t x, uint8_t y);
     void clear();
     void update();
 
-    void setI2cInterface(II2c& i_i2c);
+    void setSerialCommanderInterface(ISerialCommander& i_serial_commander);
     void setIcbDisplay(IcbDisplay& icb_display);
 
    private:

@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <array>
+#include <span>
 
 class ISerialCommander
 {
@@ -10,6 +11,7 @@ class ISerialCommander
     enum class Instructions : std::uint8_t
     {
         Write,
+        WriteSpan,  // don't change during writing
         Read,
         Pause
     };
@@ -19,6 +21,7 @@ class ISerialCommander
         Instructions instruction;
         std::array<std::uint8_t, 16U> data;
         std::size_t data_length;
+        std::span<std::uint8_t> data_span;
         std::uint16_t pauseTime;
     };
 

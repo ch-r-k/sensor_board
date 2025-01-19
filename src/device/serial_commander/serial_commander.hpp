@@ -60,6 +60,7 @@ class SerialCommander : public QP::QActive,
     Q_STATE_DECL(initial);
     Q_STATE_DECL(idle);
     Q_STATE_DECL(write);
+    Q_STATE_DECL(write_span);
     Q_STATE_DECL(read);
     Q_STATE_DECL(pause);
 };

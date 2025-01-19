@@ -55,11 +55,13 @@ Q_STATE_DEF(SerialCommander, idle)
             command_length = 0;
             command_index = 0;
 
-            commands.fill(
-                Command{Instructions::Pause,
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        0U,
-                        0U});
+            commands.fill(Command{
+                Instructions::Pause,
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                0U,
+                {},
+                0U,
+            });
 
             status = Q_RET_HANDLED;
             break;
@@ -74,6 +76,7 @@ Q_STATE_DEF(SerialCommander, idle)
             commands[command_length].data = command.data;
             commands[command_length].data_length = command.data_length;
             commands[command_length].pauseTime = command.pauseTime;
+            commands[command_length].data_span = command.data_span;
 
             command_length++;
             break;
@@ -117,6 +120,46 @@ Q_STATE_DEF(SerialCommander, write)
             const std::span<const std::uint8_t> temp(
                 commands[command_index].data.data(),
                 commands[command_index].data_length);
+
+            if (iI2c)
+            {
+                iI2c->StartWrite(temp);
+            }
+            else if (iSpi)
+            {
+                iSpi->StartWrite(temp);
+            }
+            else
+            {
+                assert(false && "no interface set");
+            }
+
+            status = Q_RET_HANDLED;
+            break;
+        }
+        case APP::AppSignals::SERIAL_COMMANDER_DONE:
+        {
+            status = tran(nextState());
+            break;
+        }
+        default:
+        {
+            status = super(&top);
+            break;
+        }
+    }
+    return status;
+}
+//............................................................................
+Q_STATE_DEF(SerialCommander, write_span)
+{
+    QP::QState status;
+    switch (e->sig)
+    {
+        case Q_ENTRY_SIG:
+        {
+            const std::span<const std::uint8_t> temp(
+                commands[command_index].data_span);
 
             if (iI2c)
             {
@@ -259,6 +302,10 @@ QP::QStateHandler SerialCommander::getStateFromInst(Instructions instruction)
         case Instructions::Write:
         {
             return &write;
+        }
+        case Instructions::WriteSpan:
+        {
+            return &write_span;
         }
         case Instructions::Read:
         {

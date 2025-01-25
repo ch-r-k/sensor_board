@@ -10,7 +10,7 @@
 #include "common.hpp"
 #include "display/i_display.hpp"
 
-namespace APP
+namespace app
 {
 //............................................................................
 Gui::Gui() : QP::QActive(&initial), m_timeEvt(this, BLINKY_TIMEOUT, 0U)
@@ -43,8 +43,8 @@ Q_STATE_DEF(Gui, idle)
         }
         case AppSignals::GUI_START:
         {
-            static QP::QEvt const myEvt{AppSignals::GUI_DONE};
-            QP::QActive::PUBLISH(&myEvt, this);
+            static QP::QEvt const my_evt{AppSignals::GUI_DONE};
+            QP::QActive::PUBLISH(&my_evt, this);
 
             status = tran(&initialize);
             break;
@@ -65,7 +65,7 @@ Q_STATE_DEF(Gui, initialize)
     {
         case Q_ENTRY_SIG:
         {
-            iDisplay->Open();
+            iDisplay->open();
             status = Q_RET_HANDLED;
             break;
         }
@@ -92,9 +92,9 @@ Q_STATE_DEF(Gui, update)
         {
             for (std::size_t it = 0; it < 32; it++)
             {
-                iDisplay->DrawPixel(it, it);
+                iDisplay->drawPixel(it, it);
             }
-            iDisplay->Update();
+            iDisplay->update();
             status = Q_RET_HANDLED;
             break;
         }
@@ -116,14 +116,14 @@ void Gui::setDisplayInterface(IDisplay& i_display) { iDisplay = &i_display; }
 
 void Gui::initDone()
 {
-    static QP::QEvt const myEvt{AppSignals::GUI_INIT_DONE};
-    this->POST(&myEvt, this);
+    static QP::QEvt const my_evt{AppSignals::GUI_INIT_DONE};
+    this->POST(&my_evt, this);
 }
 
 void Gui::printDone()
 {
-    static QP::QEvt const myEvt{AppSignals::GUI_UPDATE_DONE};
-    this->POST(&myEvt, this);
+    static QP::QEvt const my_evt{AppSignals::GUI_UPDATE_DONE};
+    this->POST(&my_evt, this);
 }
 
-}  // namespace APP
+}  // namespace app

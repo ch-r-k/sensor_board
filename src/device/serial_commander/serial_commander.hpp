@@ -44,12 +44,12 @@ class SerialCommander : public QP::QActive,
    private:
     QP::QStateHandler getStateFromInst(Instructions instruction);
     QP::QStateHandler nextState();
-    void WriteDone() override;
-    void ReadDone() override;
-    void SetCommand(Command command) override;
-    void StartCommands() override;
-    void SetI2CAddress(std::uint8_t address) override;
-    void SetChipSelect(std::uint8_t pin) override;
+    void writeDone() override;
+    void readDone() override;
+    void setCommand(Command command) override;
+    void startCommands() override;
+    void setI2CAddress(std::uint8_t address) override;
+    void setChipSelect(std::uint8_t pin) override;
 
    public:
     SerialCommander();

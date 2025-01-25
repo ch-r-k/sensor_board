@@ -42,29 +42,29 @@ HardwareManager::HardwareManager()
     // Spi
     __HAL_RCC_SPI1_CLK_ENABLE();
 
-    sensorSpi.Configure(Spi::Mode::Master);
-    sensorSpi.Configure(Spi::Direction::Direction2Lines);
-    sensorSpi.Configure(Spi::DataSize::DataSize8Bit);
-    sensorSpi.Configure(Spi::ClockPolarity::PolarityLow);
-    sensorSpi.Configure(Spi::ClockPhase::Phase1Edge);
-    sensorSpi.Configure(Spi::Nss::Soft);
-    sensorSpi.Configure(Spi::BaudratePrescaler::preScale256);
-    sensorSpi.Configure(Spi::FirstBit::MSB);
+    sensorSpi.configure(Spi::Mode::MASTER);
+    sensorSpi.configure(Spi::Direction::DIRECTION2_LINES);
+    sensorSpi.configure(Spi::DataSize::DATA_SIZE8_BIT);
+    sensorSpi.configure(Spi::ClockPolarity::POLARITY_LOW);
+    sensorSpi.configure(Spi::ClockPhase::PHASE1_EDGE);
+    sensorSpi.configure(Spi::Nss::SOFT);
+    sensorSpi.configure(Spi::BaudratePrescaler::PRE_SCALE256);
+    sensorSpi.configure(Spi::FirstBit::MSB);
     // sensorSpi.Configure(Spi::T);
-    sensorSpi.Configure(Spi::CRCCalculation::Disable);
-    sensorSpi.Configure(Spi::NssPMode::PulseEnable);
+    sensorSpi.configure(Spi::CRCCalculation::DISABLE);
+    sensorSpi.configure(Spi::NssPMode::PULSE_ENABLE);
 
-    sensorI2c.ConfigureTiming(0xF010F3FE);  // todo
-    sensorI2c.Configure(I2c::AddressingMode::SevenBit);
-    sensorI2c.Configure(I2c::DualAddressMode::Disable);
-    sensorI2c.Configure(I2c::GeneralCallMode::Disable);
-    sensorI2c.Configure(I2c::NoStretchMode::Disable);
+    sensorI2c.configureTiming(0xF010F3FE);  // todo
+    sensorI2c.configure(I2c::AddressingMode::SEVEN_BIT);
+    sensorI2c.configure(I2c::DualAddressMode::DISABLE);
+    sensorI2c.configure(I2c::GeneralCallMode::DISABLE);
+    sensorI2c.configure(I2c::NoStretchMode::DISABLE);
 
-    displayI2c.ConfigureTiming(0xF010F3FE);  // todo
-    displayI2c.Configure(I2c::AddressingMode::SevenBit);
-    displayI2c.Configure(I2c::DualAddressMode::Disable);
-    displayI2c.Configure(I2c::GeneralCallMode::Disable);
-    displayI2c.Configure(I2c::NoStretchMode::Disable);
+    displayI2c.configureTiming(0xF010F3FE);  // todo
+    displayI2c.configure(I2c::AddressingMode::SEVEN_BIT);
+    displayI2c.configure(I2c::DualAddressMode::DISABLE);
+    displayI2c.configure(I2c::GeneralCallMode::DISABLE);
+    displayI2c.configure(I2c::NoStretchMode::DISABLE);
 }
 
 void HardwareManager::SystemClock_Config(void)

@@ -3,7 +3,7 @@
 
 #include "qpcpp.hpp"
 
-namespace APP
+namespace app
 {
 enum AppSignals : QP::QSignal
 {

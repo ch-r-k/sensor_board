@@ -4,7 +4,7 @@ void UserIndication::set() { outputPin->set(); }
 
 void UserIndication::reset() { outputPin->reset(); }
 
-void UserIndication::setOutputPin(IOutputPin& initOutputPin)
+void UserIndication::setOutputPin(IOutputPin& init_output_pin)
 {
-    this->outputPin = &initOutputPin;
+    this->outputPin = &init_output_pin;
 }

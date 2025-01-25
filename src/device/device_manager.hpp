@@ -22,7 +22,7 @@ class DeviceManager
     // Test test;
 
    public:
-    DeviceManager(HardwareManager& hardwareManager);
+    DeviceManager(HardwareManager& hardware_manager);
     ~DeviceManager();
     UserIndication& getUserIndication();
     // Test& getTest();

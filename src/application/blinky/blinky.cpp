@@ -17,7 +17,7 @@ namespace
 
 }  // unnamed namespace
 
-namespace APP
+namespace app
 {
 //............................................................................
 Blinky::Blinky() : QP::QActive(&initial), m_timeEvt(this, BLINKY_TIMEOUT, 0U)
@@ -52,10 +52,10 @@ Q_STATE_DEF(Blinky, idle)
         {
             // arm the time event to expire in half a second and every half
             // second
-            m_timeEvt.armX(ticksPerSec / 2U, ticksPerSec / 2U);
+            m_timeEvt.armX(TICKS_PER_SEC / 2U, TICKS_PER_SEC / 2U);
 
-            static QP::QEvt const myEvt{AppSignals::BLINKY_DONE};
-            QP::QActive::PUBLISH(&myEvt, this);
+            static QP::QEvt const my_evt{AppSignals::BLINKY_DONE};
+            QP::QActive::PUBLISH(&my_evt, this);
 
             status = tran(&off);
             break;
@@ -119,9 +119,9 @@ Q_STATE_DEF(Blinky, on)
     return status;
 }
 //............................................................................
-void Blinky::setUserIndication(IUserIndication& initUserIndication)
+void Blinky::setUserIndication(IUserIndication& init_user_indication)
 {
-    userIndication = &initUserIndication;
+    userIndication = &init_user_indication;
 }
 
-}  // namespace APP
+}  // namespace app

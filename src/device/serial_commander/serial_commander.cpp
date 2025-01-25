@@ -25,7 +25,7 @@ namespace
 
 //............................................................................
 SerialCommander::SerialCommander()
-    : QP::QActive(&initial), m_timeEvt(this, APP::SERIAL_COMMANDER_TIMEOUT, 0U)
+    : QP::QActive(&initial), m_timeEvt(this, app::SERIAL_COMMANDER_TIMEOUT, 0U)
 {
     // empty
 }
@@ -57,7 +57,7 @@ Q_STATE_DEF(SerialCommander, idle)
 
             commands.fill(Command{
                 // todo: check if ok
-                Instructions::Pause,
+                Instructions::PAUSE,
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 0U,
                 {},
@@ -67,7 +67,7 @@ Q_STATE_DEF(SerialCommander, idle)
             status = Q_RET_HANDLED;
             break;
         }
-        case APP::AppSignals::SERIAL_COMMANDER_SET:
+        case app::AppSignals::SERIAL_COMMANDER_SET:
         {
             status = Q_RET_HANDLED;
 
@@ -82,15 +82,15 @@ Q_STATE_DEF(SerialCommander, idle)
             command_length++;
             break;
         }
-        case APP::AppSignals::SERIAL_COMMANDER_START:
+        case app::AppSignals::SERIAL_COMMANDER_START:
         {
             if (iI2c)
             {
-                iI2c->Open();
+                iI2c->open();
             }
             else if (iSpi)
             {
-                iSpi->Open();
+                iSpi->open();
             }
             else
             {
@@ -123,11 +123,11 @@ Q_STATE_DEF(SerialCommander, write)
 
             if (iI2c)
             {
-                iI2c->StartWrite(temp);
+                iI2c->startWrite(temp);
             }
             else if (iSpi)
             {
-                iSpi->StartWrite(temp);
+                iSpi->startWrite(temp);
             }
             else
             {
@@ -137,7 +137,7 @@ Q_STATE_DEF(SerialCommander, write)
             status = Q_RET_HANDLED;
             break;
         }
-        case APP::AppSignals::SERIAL_COMMANDER_DONE:
+        case app::AppSignals::SERIAL_COMMANDER_DONE:
         {
             status = tran(nextState());
             break;
@@ -163,11 +163,11 @@ Q_STATE_DEF(SerialCommander, write_span)
 
             if (iI2c)
             {
-                iI2c->StartWrite(temp);
+                iI2c->startWrite(temp);
             }
             else if (iSpi)
             {
-                iSpi->StartWrite(temp);
+                iSpi->startWrite(temp);
             }
             else
             {
@@ -177,7 +177,7 @@ Q_STATE_DEF(SerialCommander, write_span)
             status = Q_RET_HANDLED;
             break;
         }
-        case APP::AppSignals::SERIAL_COMMANDER_DONE:
+        case app::AppSignals::SERIAL_COMMANDER_DONE:
         {
             status = tran(nextState());
             break;
@@ -204,11 +204,11 @@ Q_STATE_DEF(SerialCommander, read)
 
             if (iI2c)
             {
-                iI2c->StartRead(temp);
+                iI2c->startRead(temp);
             }
             else if (iSpi)
             {
-                iSpi->StartRead(temp);
+                iSpi->startRead(temp);
             }
             else
             {
@@ -218,7 +218,7 @@ Q_STATE_DEF(SerialCommander, read)
             status = Q_RET_HANDLED;
             break;
         }
-        case APP::AppSignals::SERIAL_COMMANDER_DONE:
+        case app::AppSignals::SERIAL_COMMANDER_DONE:
         {
             status = tran(nextState());
             break;
@@ -241,11 +241,11 @@ Q_STATE_DEF(SerialCommander, pause)
         {
             std::uint16_t pauseTime = commands[command_index].pauseTime;
 
-            m_timeEvt.armX(ticksPerSec / 1000U * pauseTime, 0);
+            m_timeEvt.armX(TICKS_PER_SEC / 1000U * pauseTime, 0);
             status = Q_RET_HANDLED;
             break;
         }
-        case APP::AppSignals::SERIAL_COMMANDER_TIMEOUT:
+        case app::AppSignals::SERIAL_COMMANDER_TIMEOUT:
         {
             status = tran(nextState());
             break;
@@ -274,18 +274,18 @@ QP::QStateHandler SerialCommander::nextState()
     {
         if (iI2c)
         {
-            iI2c->Close();
+            iI2c->close();
         }
         else if (iSpi)
         {
-            iSpi->Close();
+            iSpi->close();
         }
         else
         {
             assert(false && "no interface set");
         }
 
-        icbSerialCommander->Done(returnValue);
+        icbSerialCommander->done(returnValue);
 
         return &idle;
     }
@@ -299,19 +299,19 @@ QP::QStateHandler SerialCommander::getStateFromInst(Instructions instruction)
 
     switch (instruction)
     {
-        case Instructions::Write:
+        case Instructions::WRITE:
         {
             return &write;
         }
-        case Instructions::WriteSpan:
+        case Instructions::WRITE_SPAN:
         {
             return &write_span;
         }
-        case Instructions::Read:
+        case Instructions::READ:
         {
             return &read;
         }
-        case Instructions::Pause:
+        case Instructions::PAUSE:
         {
             return &pause;
         }
@@ -340,22 +340,22 @@ void SerialCommander::setIcbSerialCommander(
 
 //............................................................................
 //............................................................................
-void SerialCommander::WriteDone()
+void SerialCommander::writeDone()
 {
-    static QP::QEvt const myEvt{APP::AppSignals::SERIAL_COMMANDER_DONE};
-    this->POST(&myEvt, this);
+    static QP::QEvt const my_evt{app::AppSignals::SERIAL_COMMANDER_DONE};
+    this->POST(&my_evt, this);
 }
 
-void SerialCommander::ReadDone()
+void SerialCommander::readDone()
 {
-    static QP::QEvt const myEvt{APP::AppSignals::SERIAL_COMMANDER_DONE};
-    this->POST(&myEvt, this);
+    static QP::QEvt const my_evt{app::AppSignals::SERIAL_COMMANDER_DONE};
+    this->POST(&my_evt, this);
 }
 
-void SerialCommander::SetCommand(Command command)
+void SerialCommander::setCommand(Command command)
 {
     CommandEvent* commandEvent =
-        Q_NEW(CommandEvent, APP::AppSignals::SERIAL_COMMANDER_SET);
+        Q_NEW(CommandEvent, app::AppSignals::SERIAL_COMMANDER_SET);
 
     commandEvent->command.instruction = command.instruction;
     commandEvent->command.data = command.data;
@@ -365,18 +365,18 @@ void SerialCommander::SetCommand(Command command)
     this->POST(commandEvent, this);
 }
 
-void SerialCommander::SetI2CAddress(std::uint8_t address)
+void SerialCommander::setI2CAddress(std::uint8_t address)
 {
-    iI2c->SetAddress(address);
+    iI2c->setAddress(address);
 }
-void SerialCommander::SetChipSelect(std::uint8_t pin)
+void SerialCommander::setChipSelect(std::uint8_t pin)
 {
     UNUSED(pin);
     assert(false && "not implemented jet");
 }
 
-void SerialCommander::StartCommands()
+void SerialCommander::startCommands()
 {
-    static QP::QEvt const myEvt{APP::AppSignals::SERIAL_COMMANDER_START};
-    this->POST(&myEvt, this);
+    static QP::QEvt const my_evt{app::AppSignals::SERIAL_COMMANDER_START};
+    this->POST(&my_evt, this);
 }

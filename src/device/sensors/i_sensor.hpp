@@ -25,10 +25,10 @@ class ISensor
    private:
    public:
     virtual ~ISensor() = default;
-    virtual void Open() = 0;
-    virtual void Close() = 0;
-    virtual void TriggerMeasurement() = 0;
-    virtual SensorData GetMeasurement(Quantities quantity) = 0;
+    virtual void open() = 0;
+    virtual void close() = 0;
+    virtual void triggerMeasurement() = 0;
+    virtual SensorData getMeasurement(Quantities quantity) = 0;
 };
 
 #endif  // I_SENSOR_HPP

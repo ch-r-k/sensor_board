@@ -7,10 +7,10 @@
 class ISpi
 {
    public:
-    virtual void Open() = 0;
-    virtual void Close() = 0;
-    virtual void StartWrite(const std::span<const std::uint8_t> data) = 0;
-    virtual void StartRead(const std::span<std::uint8_t> data) = 0;
+    virtual void open() = 0;
+    virtual void close() = 0;
+    virtual void startWrite(const std::span<const std::uint8_t> data) = 0;
+    virtual void startRead(const std::span<std::uint8_t> data) = 0;
 };
 
 #endif  // I_SPI_HPP

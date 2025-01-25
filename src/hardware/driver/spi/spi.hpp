@@ -12,44 +12,44 @@ class Spi : public ISpi
    public:
     enum class BaudratePrescaler : std::uint8_t
     {
-        preScale2 = SPI_BAUDRATEPRESCALER_2,
-        preScale4 = SPI_BAUDRATEPRESCALER_4,
-        preScale8 = SPI_BAUDRATEPRESCALER_8,
-        preScale16 = SPI_BAUDRATEPRESCALER_16,
-        preScale32 = SPI_BAUDRATEPRESCALER_32,
-        preScale64 = SPI_BAUDRATEPRESCALER_64,
-        preScale128 = SPI_BAUDRATEPRESCALER_128,
-        preScale256 = SPI_BAUDRATEPRESCALER_256,
+        PRE_SCALE2 = SPI_BAUDRATEPRESCALER_2,
+        PRE_SCALE4 = SPI_BAUDRATEPRESCALER_4,
+        PRE_SCALE8 = SPI_BAUDRATEPRESCALER_8,
+        PRE_SCALE16 = SPI_BAUDRATEPRESCALER_16,
+        PRE_SCALE32 = SPI_BAUDRATEPRESCALER_32,
+        PRE_SCALE64 = SPI_BAUDRATEPRESCALER_64,
+        PRE_SCALE128 = SPI_BAUDRATEPRESCALER_128,
+        PRE_SCALE256 = SPI_BAUDRATEPRESCALER_256,
     };
 
     enum class ClockPhase : std::uint8_t
     {
-        Phase1Edge = SPI_PHASE_1EDGE,
-        Phase2Edge = SPI_PHASE_2EDGE
+        PHASE1_EDGE = SPI_PHASE_1EDGE,
+        PHASE2_EDGE = SPI_PHASE_2EDGE
     };
 
     enum class ClockPolarity : std::uint8_t
     {
-        PolarityLow = SPI_POLARITY_LOW,
-        PolarityHigh = SPI_POLARITY_HIGH
+        POLARITY_LOW = SPI_POLARITY_LOW,
+        POLARITY_HIGH = SPI_POLARITY_HIGH
     };
 
     enum class CRCCalculation : std::uint16_t
     {
-        Disable = SPI_CRCCALCULATION_DISABLE,
-        Enable = SPI_CRCCALCULATION_ENABLE
+        DISABLE = SPI_CRCCALCULATION_DISABLE,
+        ENABLE = SPI_CRCCALCULATION_ENABLE
     };
 
     enum class DataSize : std::uint16_t
     {
-        DataSize8Bit = SPI_DATASIZE_8BIT,
-        DataSize16Bit = SPI_DATASIZE_16BIT
+        DATA_SIZE8_BIT = SPI_DATASIZE_8BIT,
+        DATA_SIZE16_BIT = SPI_DATASIZE_16BIT
     };
 
     enum class Direction : std::uint16_t
     {
-        Direction2Lines = SPI_DIRECTION_2LINES,
-        Direction1Line = SPI_DIRECTION_1LINE
+        DIRECTION2_LINES = SPI_DIRECTION_2LINES,
+        DIRECTION1_LINE = SPI_DIRECTION_1LINE
     };
 
     enum class FirstBit : std::uint8_t
@@ -60,26 +60,26 @@ class Spi : public ISpi
 
     enum class Mode : std::uint16_t
     {
-        Master = SPI_MODE_MASTER,
-        Slave = SPI_MODE_SLAVE
+        MASTER = SPI_MODE_MASTER,
+        SLAVE = SPI_MODE_SLAVE
     };
 
     enum class Nss : std::uint32_t
     {
-        HardOutput = SPI_NSS_HARD_OUTPUT,
-        Soft = SPI_NSS_SOFT,
-        HardInput = SPI_NSS_HARD_INPUT
+        HARD_OUTPUT = SPI_NSS_HARD_OUTPUT,
+        SOFT = SPI_NSS_SOFT,
+        HARD_INPUT = SPI_NSS_HARD_INPUT
     };
 
     enum class NssPMode : uint8_t
     {
-        PulseEnable = SPI_NSS_PULSE_ENABLE,
-        PulseDisable = SPI_NSS_PULSE_DISABLE
+        PULSE_ENABLE = SPI_NSS_PULSE_ENABLE,
+        PULSE_DISABLE = SPI_NSS_PULSE_DISABLE
     };
 
    private:
     SPI_HandleTypeDef handler;
-    bool open = false;
+    bool isOpen = false;
 
     GPIO_InitTypeDef gpioClk = {};
     GPIO_TypeDef* portClk = nullptr;
@@ -94,34 +94,34 @@ class Spi : public ISpi
     Spi(std::uint8_t instance);
     ~Spi();
 
-    void Open() override;
+    void open() override;
 
-    void Close() override;
+    void close() override;
 
-    void StartWrite(const std::span<const std::uint8_t> data) override;
+    void startWrite(const std::span<const std::uint8_t> data) override;
 
-    void StartRead(const std::span<std::uint8_t> data) override;
+    void startRead(const std::span<std::uint8_t> data) override;
 
-    void Configure(BaudratePrescaler baudratePrescaler);
-    void Configure(ClockPhase clockPhase);
-    void Configure(ClockPolarity clockPolarity);
-    void Configure(CRCCalculation crcCalculation);
-    void Configure(DataSize dataSize);
-    void Configure(Direction direction);
-    void Configure(FirstBit firstBit);
-    void Configure(Mode mode);
-    void Configure(Nss nss);
-    void Configure(NssPMode nssPMode);
+    void configure(BaudratePrescaler baudrate_prescaler);
+    void configure(ClockPhase clock_phase);
+    void configure(ClockPolarity clock_polarity);
+    void configure(CRCCalculation crc_calculation);
+    void configure(DataSize data_size);
+    void configure(Direction direction);
+    void configure(FirstBit first_bit);
+    void configure(Mode mode);
+    void configure(Nss nss);
+    void configure(NssPMode nss_p_mode);
 
-    static void Isr(void* callbackObject, [[maybe_unused]] void* parameter)
+    static void isr(void* callback_object, [[maybe_unused]] void* parameter)
     {
         // Cast callbackObject to Spi* and call the non-static ISR
-        Spi* spi = static_cast<Spi*>(callbackObject);
+        Spi* spi = static_cast<Spi*>(callback_object);
 
         HAL_SPI_IRQHandler(&spi->handler);
     }
 
-    static void RxISR(SPI_HandleTypeDef* hspi)
+    static void rxIsr(SPI_HandleTypeDef* hspi)
     {
         if (hspi->Instance == SPI2)
         {
@@ -132,7 +132,7 @@ class Spi : public ISpi
         }
     }
 
-    static void TxISR(SPI_HandleTypeDef* hspi)
+    static void txIsr(SPI_HandleTypeDef* hspi)
     {
         if (hspi->Instance == SPI2)
         {

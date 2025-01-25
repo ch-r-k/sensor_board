@@ -13,13 +13,13 @@
 class ApplicationManager
 {
    private:
-    APP::Blinky aoBlinky;
-    APP::Sensor aoSensor;
-    APP::Startup aoStartup;
-    APP::Gui aoGui;
+    app::Blinky aoBlinky;
+    app::Sensor aoSensor;
+    app::Startup aoStartup;
+    app::Gui aoGui;
 
    public:
-    ApplicationManager(DeviceManager& deviceManager);
+    ApplicationManager(DeviceManager& device_manager);
     ~ApplicationManager();
 
     void start();

@@ -10,7 +10,7 @@
 #include "device/display/icb_display.hpp"
 #include "application_signals.hpp"
 
-namespace APP
+namespace app
 {
 class Gui : public QP::QActive, public IcbDisplay
 {
@@ -33,6 +33,6 @@ class Gui : public QP::QActive, public IcbDisplay
     Q_STATE_DECL(update);
 };
 
-}  // namespace APP
+}  // namespace app
 
 #endif  // GUI_HPP_

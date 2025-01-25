@@ -8,11 +8,11 @@ class II2c
 {
    public:
     virtual ~II2c() = default;
-    virtual void Open() = 0;
-    virtual void Close() = 0;
-    virtual void SetAddress(const std::uint8_t) = 0;
-    virtual void StartWrite(const std::span<const std::uint8_t> data) = 0;
-    virtual void StartRead(const std::span<std::uint8_t> data) = 0;
+    virtual void open() = 0;
+    virtual void close() = 0;
+    virtual void setAddress(const std::uint8_t) = 0;
+    virtual void startWrite(const std::span<const std::uint8_t> data) = 0;
+    virtual void startRead(const std::span<std::uint8_t> data) = 0;
 };
 
 #endif  // I_I2C_HPP

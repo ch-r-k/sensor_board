@@ -17,7 +17,7 @@ namespace
 
 }  // unnamed namespace
 
-namespace APP
+namespace app
 {
 //............................................................................
 Startup::Startup() : QP::QActive(&initial)
@@ -48,8 +48,8 @@ Q_STATE_DEF(Startup, blinky)
     {
         case Q_ENTRY_SIG:
         {
-            static QP::QEvt const myEvt{AppSignals::BLINKY_START};
-            QP::QActive::PUBLISH(&myEvt, this);
+            static QP::QEvt const my_evt{AppSignals::BLINKY_START};
+            QP::QActive::PUBLISH(&my_evt, this);
 
             status = Q_RET_HANDLED;
             break;
@@ -75,8 +75,8 @@ Q_STATE_DEF(Startup, sensor)
     {
         case Q_ENTRY_SIG:
         {
-            static QP::QEvt const myEvt{AppSignals::SENSOR_START};
-            QP::QActive::PUBLISH(&myEvt, this);
+            static QP::QEvt const my_evt{AppSignals::SENSOR_START};
+            QP::QActive::PUBLISH(&my_evt, this);
 
             status = Q_RET_HANDLED;
             break;
@@ -102,8 +102,8 @@ Q_STATE_DEF(Startup, display)
     {
         case Q_ENTRY_SIG:
         {
-            static QP::QEvt const myEvt{AppSignals::GUI_START};
-            QP::QActive::PUBLISH(&myEvt, this);
+            static QP::QEvt const my_evt{AppSignals::GUI_START};
+            QP::QActive::PUBLISH(&my_evt, this);
 
             status = Q_RET_HANDLED;
             break;
@@ -146,4 +146,4 @@ Q_STATE_DEF(Startup, done)
     return status;
 }
 
-}  // namespace APP
+}  // namespace app

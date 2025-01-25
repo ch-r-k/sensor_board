@@ -10,7 +10,7 @@ class Test : public ISensor
 {
    public:
    private:
-    bool open = false;
+    bool isOpen = false;
     ISpi* iSpi = nullptr;
     II2c* iI2c = nullptr;
 
@@ -18,9 +18,9 @@ class Test : public ISensor
     Test();
     ~Test();
 
-    void Open() override;
-    void Close() override;
-    void TriggerMeasurement() override;
+    void open() override;
+    void close() override;
+    void triggerMeasurement() override;
     void setSpiInterface(ISpi& i_spi);
     void setI2cInterface(II2c& i_i2c);
 };

@@ -19,7 +19,7 @@ namespace
 
 }  // unnamed namespace
 
-namespace APP
+namespace app
 {
 //............................................................................
 Sensor::Sensor() : QP::QActive(&initial), m_timeEvt(this, SENSOR_TIMEOUT, 0U)
@@ -54,8 +54,8 @@ Q_STATE_DEF(Sensor, idle)
         }
         case SENSOR_START:
         {
-            static QP::QEvt const myEvt{AppSignals::SENSOR_DONE};
-            QP::QActive::PUBLISH(&myEvt, this);
+            static QP::QEvt const my_evt{AppSignals::SENSOR_DONE};
+            QP::QActive::PUBLISH(&my_evt, this);
 
             status = tran(initialize);
             break;
@@ -76,7 +76,7 @@ Q_STATE_DEF(Sensor, initialize)
     {
         case Q_ENTRY_SIG:
         {
-            iSensor->Open();
+            iSensor->open();
             status = Q_RET_HANDLED;
             break;
         }
@@ -101,13 +101,13 @@ Q_STATE_DEF(Sensor, read_measurement)
     {
         case Q_ENTRY_SIG:
         {
-            m_timeEvt.armX(ticksPerSec / 2U, 0);
+            m_timeEvt.armX(TICKS_PER_SEC / 2U, 0);
             status = Q_RET_HANDLED;
             break;
         }
         case SENSOR_TIMEOUT:
         {
-            iSensor->TriggerMeasurement();
+            iSensor->triggerMeasurement();
             status = Q_RET_HANDLED;
             break;
         }
@@ -129,23 +129,23 @@ void Sensor::setSensorInterface(ISensor& i_sensor) { iSensor = &i_sensor; }
 
 void Sensor::initDone()
 {
-    static QP::QEvt const myEvt{AppSignals::SENSOR_INIT_DONE};
-    this->POST(&myEvt, this);
+    static QP::QEvt const my_evt{AppSignals::SENSOR_INIT_DONE};
+    this->POST(&my_evt, this);
 }
 
 void Sensor::readDone()
 {
-    iSensor->GetMeasurement(ISensor::Quantities::HUMIDITY);
+    iSensor->getMeasurement(ISensor::Quantities::HUMIDITY);
 
     SensorEvent* sensorEvent = Q_NEW(SensorEvent, SENSOR_READ_DONE);
 
     sensorEvent->data.value =
-        iSensor->GetMeasurement(ISensor::Quantities::TEMPERATURE).value;
+        iSensor->getMeasurement(ISensor::Quantities::TEMPERATURE).value;
 
     sensorEvent->data.quantity =
-        iSensor->GetMeasurement(ISensor::Quantities::TEMPERATURE).quantity;
+        iSensor->getMeasurement(ISensor::Quantities::TEMPERATURE).quantity;
 
     this->POST(sensorEvent, this);
 }
 
-}  // namespace APP
+}  // namespace app

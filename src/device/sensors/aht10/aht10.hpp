@@ -38,7 +38,7 @@ class Aht10 : public ISensor, public IcbSerialCommander
     };
 
    private:
-    bool open = false;
+    bool isOpen = false;
     bool initialized = false;
     ISerialCommander* iSerial = nullptr;
     ISensor::Operation activeInstruction = ISensor::Operation::NOP;
@@ -60,18 +60,18 @@ class Aht10 : public ISensor, public IcbSerialCommander
     Aht10();
     ~Aht10();
 
-    void Open() override;
-    void Close() override;
-    void Init();
-    void TriggerMeasurement() override;
+    void open() override;
+    void close() override;
+    void init();
+    void triggerMeasurement() override;
 
-    void ReadDone();
+    void readDone();
 
-    void Done(ReturnValue return_value) override;
+    void done(ReturnValue return_value) override;
 
     void setSerialInterface(ISerialCommander& i_serial);
     void setIcbSensor(IcbSensor& icb_sensor);
-    SensorData GetMeasurement(Quantities quantity) override;
+    SensorData getMeasurement(Quantities quantity) override;
 };
 
 #endif  // AHT10_HPP

@@ -7,46 +7,46 @@
 Aht10::Aht10() {}
 Aht10::~Aht10() {}
 
-void Aht10::Open()
+void Aht10::open()
 {
-    assert(!open && "already open");
+    assert(!isOpen && "already open");
 
-    open = true;
-    Init();
+    isOpen = true;
+    init();
 }
 
-void Aht10::Close()
+void Aht10::close()
 {
-    open = false;
+    isOpen = false;
     initialized = false;  // Reset initialization state
 }
 
-void Aht10::Init()
+void Aht10::init()
 {
-    assert(open && "must be open");
+    assert(isOpen && "must be open");
 
     const std::uint8_t commandContinuationByte =
         *(reinterpret_cast<std::uint8_t*>(&commandContinuation));
 
     ISerialCommander::Command command;
-    command.instruction = ISerialCommander::Instructions::Write;
+    command.instruction = ISerialCommander::Instructions::WRITE;
     command.data[0] = static_cast<std::uint8_t>(Command::INIT);
     command.data[1] = commandContinuationByte;
     command.data[2] = 0x00U;
     command.data_length = 3;
 
-    iSerial->SetCommand(command);
+    iSerial->setCommand(command);
 
-    iSerial->SetI2CAddress(address);
-    iSerial->StartCommands();
+    iSerial->setI2CAddress(address);
+    iSerial->startCommands();
 
     activeInstruction = ISensor::Operation::INIT;
     initialized = true;
 }
 
-void Aht10::TriggerMeasurement()
+void Aht10::triggerMeasurement()
 {
-    assert(open && "must be open");
+    assert(isOpen && "must be open");
     assert(initialized && "sensor must be initialized");
 
     const std::uint8_t commandContinuationByte =
@@ -57,28 +57,28 @@ void Aht10::TriggerMeasurement()
     ISerialCommander::Command command;
 
     // Start Measurement
-    command.instruction = ISerialCommander::Instructions::Write;
+    command.instruction = ISerialCommander::Instructions::WRITE;
     command.data[0] = static_cast<std::uint8_t>(Command::MEASURE);
     command.data[1] = commandContinuationByte;
     command.data[2] = 0x00U;
     command.data_length = 3;
-    iSerial->SetCommand(command);
+    iSerial->setCommand(command);
 
     // Pause
-    command.instruction = ISerialCommander::Instructions::Pause;
+    command.instruction = ISerialCommander::Instructions::PAUSE;
     command.data_length = 0;
     command.pauseTime = 100;
-    iSerial->SetCommand(command);
+    iSerial->setCommand(command);
 
     // Read Measurement
-    command.instruction = ISerialCommander::Instructions::Read;
+    command.instruction = ISerialCommander::Instructions::READ;
     command.data_length = 6;
-    iSerial->SetCommand(command);
+    iSerial->setCommand(command);
 
     // Start
     activeInstruction = ISensor::Operation::MEASURE;
-    iSerial->SetI2CAddress(address);
-    iSerial->StartCommands();
+    iSerial->setI2CAddress(address);
+    iSerial->startCommands();
 }
 
 void Aht10::setSerialInterface(ISerialCommander& i_serial)
@@ -88,7 +88,7 @@ void Aht10::setSerialInterface(ISerialCommander& i_serial)
 
 void Aht10::setIcbSensor(IcbSensor& icb_sensor) { icbSensor = &icb_sensor; }
 
-void Aht10::Done(ReturnValue return_value)
+void Aht10::done(ReturnValue return_value)
 {
     //
     switch (activeInstruction)
@@ -124,7 +124,7 @@ void Aht10::Done(ReturnValue return_value)
     activeInstruction = ISensor::Operation::NOP;
 }
 
-ISensor::SensorData Aht10::GetMeasurement(Quantities quantity)
+ISensor::SensorData Aht10::getMeasurement(Quantities quantity)
 {
     switch (quantity)
     {

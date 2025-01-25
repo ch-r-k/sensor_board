@@ -12,7 +12,7 @@ class UserIndication : public IUserIndication
    public:
     void set() override;
     void reset() override;
-    void setOutputPin(IOutputPin& initOutputPin);
+    void setOutputPin(IOutputPin& init_output_pin);
 };
 
 #endif  // USER_INDICATION_HPP

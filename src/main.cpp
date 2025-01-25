@@ -1,5 +1,5 @@
 //============================================================================
-// APP example
+// app example
 //============================================================================
 #include "qpcpp.hpp"  // QP/C++ real-time embedded framework
 #include "stm32l4xx_hal_def.h"
@@ -20,7 +20,7 @@ int main()
     // QS_GLB_FILTER(QP::QS_SM_RECORDS);
     // QS_GLB_FILTER(QP::QS_SC_RECORDS);
 
-    static SystemManager systemManager;
+    static SystemManager system_manager;
 
     // Uart for QSPY
     qsUart.ConfigureBaudrate(115200);
@@ -34,7 +34,7 @@ int main()
 
     qsUart.Open();
 
-    systemManager.run();
+    system_manager.run();
     return QP::QF::run();  // run the QF application
 }
 
@@ -47,7 +47,7 @@ void onStartup()
     NVIC_SetPriorityGrouping(0U);
 
     // set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
-    SysTick_Config(SystemCoreClock / ticksPerSec);
+    SysTick_Config(SystemCoreClock / TICKS_PER_SEC);
 
     QS_GLB_FILTER(QP::QS_SM_RECORDS);
     QS_GLB_FILTER(QP::QS_SC_RECORDS);
@@ -97,10 +97,10 @@ bool onStartup(void const *arg)
 
 void onReset() { NVIC_SystemReset(); }
 
-void onCommand(std::uint8_t cmdId, std::uint32_t param1, std::uint32_t param2,
+void onCommand(std::uint8_t cmd_id, std::uint32_t param1, std::uint32_t param2,
                std::uint32_t param3)
 {
-    Q_UNUSED_PAR(cmdId);
+    Q_UNUSED_PAR(cmd_id);
     Q_UNUSED_PAR(param1);
     Q_UNUSED_PAR(param2);
     Q_UNUSED_PAR(param3);
@@ -167,7 +167,7 @@ extern "C"
         NVIC_SystemReset();
     }
     //............................................................................
-    void assert_failed(char const *const module, int_t const id);  // prototype
+    void assert_failed(char const *const module, int_t const id);  // NOLINT
     void assert_failed(char const *const module, int_t const id)
     {
         Q_onError(module, id);
@@ -175,7 +175,7 @@ extern "C"
 
     // ISRs used in the application
     // ==============================================
-    void SysTick_Handler(void);  // prototype
+    void SysTick_Handler(void);  // NOLINT
     void SysTick_Handler(void)
     {
         QP::QTimeEvt::TICK_X(0U, nullptr);  // process time events at rate 0

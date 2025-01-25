@@ -8,7 +8,7 @@
 #include "qpcpp.hpp"
 #include "application_signals.hpp"
 
-namespace APP
+namespace app
 {
 class Startup : public QP::QActive
 {
@@ -24,6 +24,6 @@ class Startup : public QP::QActive
     Q_STATE_DECL(done);
 };
 
-}  // namespace APP
+}  // namespace app
 
 #endif  // STARTUP_HPP_

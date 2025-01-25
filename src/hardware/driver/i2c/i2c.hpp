@@ -15,31 +15,31 @@ class I2c : public II2c
    public:
     enum class AddressingMode : std::uint32_t
     {
-        SevenBit = I2C_ADDRESSINGMODE_7BIT,
-        TenBit = I2C_ADDRESSINGMODE_10BIT
+        SEVEN_BIT = I2C_ADDRESSINGMODE_7BIT,
+        TEN_BIT = I2C_ADDRESSINGMODE_10BIT
     };
 
     enum class DualAddressMode : std::uint32_t
     {
-        Disable = I2C_DUALADDRESS_DISABLE,
-        Enable = I2C_DUALADDRESS_ENABLE
+        DISABLE = I2C_DUALADDRESS_DISABLE,
+        ENABLE = I2C_DUALADDRESS_ENABLE
     };
 
     enum class GeneralCallMode : std::uint32_t
     {
-        Disable = I2C_GENERALCALL_DISABLE,
-        Enable = I2C_GENERALCALL_ENABLE
+        DISABLE = I2C_GENERALCALL_DISABLE,
+        ENABLE = I2C_GENERALCALL_ENABLE
     };
 
     enum class NoStretchMode : std::uint32_t
     {
-        Disable = I2C_NOSTRETCH_DISABLE,
-        Enable = I2C_NOSTRETCH_ENABLE
+        DISABLE = I2C_NOSTRETCH_DISABLE,
+        ENABLE = I2C_NOSTRETCH_ENABLE
     };
 
    private:
     I2C_HandleTypeDef handler;
-    bool open = false;
+    bool isOpen = false;
     std::uint8_t address;
     IcbI2c* icbI2c = nullptr;
     static std::unordered_map<I2C_TypeDef*, I2c*> instanceMap;
@@ -54,35 +54,35 @@ class I2c : public II2c
     GPIO_InitTypeDef gpioSData = {};
     GPIO_TypeDef* portSData = nullptr;
 
-    void Open() override;
-    void Close() override;
-    void SetIcb(IcbI2c& icb_i2c);
+    void open() override;
+    void close() override;
+    void setIcb(IcbI2c& icb_i2c);
 
-    void StartWrite(const std::span<const std::uint8_t> data) override;
-    void StartRead(const std::span<std::uint8_t> data) override;
-    void SetAddress(const std::uint8_t address) override;
+    void startWrite(const std::span<const std::uint8_t> data) override;
+    void startRead(const std::span<std::uint8_t> data) override;
+    void setAddress(const std::uint8_t address) override;
 
-    void ConfigureTiming(std::uint32_t timing);
-    void Configure(AddressingMode addressingMode);
-    void Configure(DualAddressMode dualAddressMode);
-    void Configure(GeneralCallMode generalCallMode);
-    void Configure(NoStretchMode noStretchMode);
+    void configureTiming(std::uint32_t timing);
+    void configure(AddressingMode addressing_mode);
+    void configure(DualAddressMode dual_address_mode);
+    void configure(GeneralCallMode general_call_mode);
+    void configure(NoStretchMode no_stretch_mode);
 
-    void RegisterInstance() { instanceMap[handler.Instance] = this; }
+    void registerInstance() { instanceMap[handler.Instance] = this; }
 
     // Remove the association (optional)
-    void UnregisterInstance() { instanceMap.erase(handler.Instance); }
+    void unregisterInstance() { instanceMap.erase(handler.Instance); }
 
-    static void Isr(void* callbackObject, [[maybe_unused]] void* parameter)
+    static void isr(void* callback_object, [[maybe_unused]] void* parameter)
     {
         // Cast callbackObject to Spi* and call the non-static ISR
-        I2c* i2c = static_cast<I2c*>(callbackObject);
+        I2c* i2c = static_cast<I2c*>(callback_object);
 
         HAL_I2C_EV_IRQHandler(&i2c->handler);
     }
 
     // ISR functions for handling I2C interrupts
-    static void RxISR(I2C_HandleTypeDef* hi2c)
+    static void rxIsr(I2C_HandleTypeDef* hi2c)
     {
         auto it = instanceMap.find(hi2c->Instance);
         if (it != instanceMap.end())
@@ -90,7 +90,7 @@ class I2c : public II2c
             I2c* i2c = it->second;  // Retrieve the I2c instance
             if (i2c->icbI2c)
             {
-                i2c->icbI2c->ReadDone();
+                i2c->icbI2c->readDone();
             }
             else
             {
@@ -103,7 +103,7 @@ class I2c : public II2c
         }
     }
 
-    static void TxISR(I2C_HandleTypeDef* hi2c)
+    static void txIsr(I2C_HandleTypeDef* hi2c)
     {
         auto it = instanceMap.find(hi2c->Instance);
         if (it != instanceMap.end())
@@ -111,7 +111,7 @@ class I2c : public II2c
             I2c* i2c = it->second;  // Retrieve the I2c instance
             if (i2c->icbI2c)
             {
-                i2c->icbI2c->WriteDone();
+                i2c->icbI2c->writeDone();
             }
             else
             {

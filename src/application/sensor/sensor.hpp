@@ -12,7 +12,7 @@
 
 #include "application_signals.hpp"
 
-namespace APP
+namespace app
 {
 class SensorEvent : public QP::QEvt
 {
@@ -38,6 +38,6 @@ class Sensor : public QP::QActive, public IcbSensor
     Q_STATE_DECL(read_measurement);
 };
 
-}  // namespace APP
+}  // namespace app
 
 #endif  // SENSOR_HPP_

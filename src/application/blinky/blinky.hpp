@@ -8,7 +8,7 @@
 #include "qpcpp.hpp"
 #include "i_user_indication.hpp"
 #include "application_signals.hpp"
-namespace APP
+namespace app
 {
 class Blinky : public QP::QActive
 {
@@ -18,7 +18,7 @@ class Blinky : public QP::QActive
 
    public:
     Blinky();
-    void setUserIndication(IUserIndication& initUserIndication);
+    void setUserIndication(IUserIndication& init_user_indication);
 
    protected:
     Q_STATE_DECL(initial);
@@ -27,6 +27,6 @@ class Blinky : public QP::QActive
     Q_STATE_DECL(on);
 };
 
-}  // namespace APP
+}  // namespace app
 
 #endif  // BLINKY_HPP_

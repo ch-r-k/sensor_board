@@ -9,9 +9,9 @@ Spi::Spi(std::uint8_t instance)
 {
     assert(instance >= 1 && instance <= 3);
 
-    static constexpr SPI_TypeDef *spiInstances[] = {SPI1, SPI2, SPI3};
+    static constexpr SPI_TypeDef *SPI_INSTANCES[] = {SPI1, SPI2, SPI3};
 
-    handler.Instance = spiInstances[instance - 1];
+    handler.Instance = SPI_INSTANCES[instance - 1];
 
     switch (instance)
     {
@@ -66,9 +66,9 @@ Spi::Spi(std::uint8_t instance)
 }
 Spi::~Spi() { handler.Instance = nullptr; };
 
-void Spi::Open()
+void Spi::open()
 {
-    assert((open == false) && "already open");
+    assert((isOpen == false) && "already open");
     assert(handler.Instance != nullptr && "instance can't be nullptr");
 
     if (handler.Instance == SPI1)
@@ -104,21 +104,21 @@ void Spi::Open()
 
     if (handler.Instance == SPI1)
     {
-        dispatcher.registerInterrupt(this, &Spi::Isr, SPI1_IRQn);
+        dispatcher.registerInterrupt(this, &Spi::isr, SPI1_IRQn);
 
         HAL_NVIC_SetPriority(SPI1_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(SPI1_IRQn);
     }
     else if (handler.Instance == SPI2)
     {
-        dispatcher.registerInterrupt(this, &Spi::Isr, SPI2_IRQn);
+        dispatcher.registerInterrupt(this, &Spi::isr, SPI2_IRQn);
 
         HAL_NVIC_SetPriority(SPI2_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(SPI2_IRQn);
     }
     else if (handler.Instance == SPI3)
     {
-        dispatcher.registerInterrupt(this, &Spi::Isr, SPI3_IRQn);
+        dispatcher.registerInterrupt(this, &Spi::isr, SPI3_IRQn);
 
         HAL_NVIC_SetPriority(SPI3_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1, 0);
         HAL_NVIC_EnableIRQ(SPI3_IRQn);
@@ -129,18 +129,18 @@ void Spi::Open()
         assert(false && "Failed to initialize SPI");
     }
 
-    open = true;
+    isOpen = true;
 }
 
-void Spi::Close()
+void Spi::close()
 {
     HAL_SPI_DeInit(&handler);
-    open = false;
+    isOpen = false;
 }
 
-void Spi::StartWrite(const std::span<const std::uint8_t> data)
+void Spi::startWrite(const std::span<const std::uint8_t> data)
 {
-    assert(open && "must be open");
+    assert(isOpen && "must be open");
 
     if (HAL_SPI_Transmit_IT(&handler, data.data(), data.size()) != HAL_OK)
     {
@@ -148,69 +148,69 @@ void Spi::StartWrite(const std::span<const std::uint8_t> data)
     }
 }
 
-void Spi::StartRead(const std::span<std::uint8_t> data)
+void Spi::startRead(const std::span<std::uint8_t> data)
 {
-    assert(open && "must be open");
+    assert(isOpen && "must be open");
     HAL_SPI_Receive_IT(&handler, data.data(), data.size());
 }
 
-void Spi::Configure(BaudratePrescaler baudratePrescaler)
+void Spi::configure(BaudratePrescaler baudrate_prescaler)
 {
     handler.Init.BaudRatePrescaler =
-        static_cast<std::uint32_t>(baudratePrescaler);
+        static_cast<std::uint32_t>(baudrate_prescaler);
 }
 
-void Spi::Configure(ClockPhase clockPhase)
+void Spi::configure(ClockPhase clock_phase)
 {
-    handler.Init.CLKPhase = static_cast<std::uint32_t>(clockPhase);
+    handler.Init.CLKPhase = static_cast<std::uint32_t>(clock_phase);
 }
 
-void Spi::Configure(ClockPolarity clockPolarity)
+void Spi::configure(ClockPolarity clock_polarity)
 {
-    handler.Init.CLKPolarity = static_cast<std::uint32_t>(clockPolarity);
+    handler.Init.CLKPolarity = static_cast<std::uint32_t>(clock_polarity);
 }
 
-void Spi::Configure(CRCCalculation crcCalculation)
+void Spi::configure(CRCCalculation crc_calculation)
 {
-    handler.Init.CRCCalculation = static_cast<std::uint32_t>(crcCalculation);
+    handler.Init.CRCCalculation = static_cast<std::uint32_t>(crc_calculation);
 }
 
-void Spi::Configure(DataSize dataSize)
+void Spi::configure(DataSize data_size)
 {
-    handler.Init.DataSize = static_cast<std::uint32_t>(dataSize);
+    handler.Init.DataSize = static_cast<std::uint32_t>(data_size);
 }
 
-void Spi::Configure(Direction direction)
+void Spi::configure(Direction direction)
 {
     handler.Init.Direction = static_cast<std::uint32_t>(direction);
 }
 
-void Spi::Configure(FirstBit firstBit)
+void Spi::configure(FirstBit first_bit)
 {
-    handler.Init.FirstBit = static_cast<std::uint32_t>(firstBit);
+    handler.Init.FirstBit = static_cast<std::uint32_t>(first_bit);
 }
 
-void Spi::Configure(Mode mode)
+void Spi::configure(Mode mode)
 {
     handler.Init.Mode = static_cast<std::uint32_t>(mode);
 }
 
-void Spi::Configure(Nss nss)
+void Spi::configure(Nss nss)
 {
     handler.Init.NSS = static_cast<std::uint32_t>(nss);
 }
 
-void Spi::Configure(NssPMode nssPMode)
+void Spi::configure(NssPMode nss_p_mode)
 {
-    handler.Init.NSSPMode = static_cast<std::uint32_t>(nssPMode);
+    handler.Init.NSSPMode = static_cast<std::uint32_t>(nss_p_mode);
 }
 
 extern "C" void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-    Spi::RxISR(hspi);
+    Spi::rxIsr(hspi);
 }
 
 extern "C" void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-    Spi::TxISR(hspi);
+    Spi::txIsr(hspi);
 }

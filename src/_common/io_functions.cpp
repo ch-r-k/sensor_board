@@ -1,14 +1,18 @@
-#define UNUSED(expr) do { (void)(expr); } while (0)
+#define UNUSED(expr)  \
+    do                \
+    {                 \
+        (void)(expr); \
+    } while (0)
 
 extern "C"
-{    
-    int _close(int file)
+{
+    int _close(int file)  // NOLINT
     {
         UNUSED(file);
         return -1;  // Not implemented, always fails
     }
 
-    int _fstat(int file, struct stat *st)
+    int _fstat(int file, struct stat *st)  // NOLINT
     {
         UNUSED(file);
         UNUSED(st);
@@ -16,14 +20,14 @@ extern "C"
         return 0;
     }
 
-    int _isatty(int file)
+    int _isatty(int file)  // NOLINT
     {
         UNUSED(file);
 
         return 1;
     }
 
-    int _lseek(int file, int *ptr, int dir)
+    int _lseek(int file, int *ptr, int dir)  // NOLINT
     {
         UNUSED(file);
         UNUSED(ptr);
@@ -32,7 +36,7 @@ extern "C"
         return 0;  // Always successful as we're not implementing a filesystem
     }
 
-    int _read(int file, char *ptr, int len)
+    int _read(int file, char *ptr, int len)  // NOLINT
     {
         UNUSED(file);
         UNUSED(ptr);
@@ -41,7 +45,7 @@ extern "C"
         return 0;  // Not implemented, always returns EOF
     }
 
-    int _write(int file, char *ptr, int len)
+    int _write(int file, char *ptr, int len)  // NOLINT
     {
         UNUSED(file);
         UNUSED(ptr);
@@ -52,7 +56,7 @@ extern "C"
         return len;  // Return the number of bytes written
     }
 
-    void _exit(int status)
+    void _exit(int status)  // NOLINT
     {
         UNUSED(status);
 
@@ -61,7 +65,7 @@ extern "C"
         }  // Infinite loop
     }
 
-    void _kill(int pid, int sig)
+    void _kill(int pid, int sig)  // NOLINT
     {
         UNUSED(pid);
         UNUSED(sig);
@@ -69,7 +73,7 @@ extern "C"
         return;  // Not implemented
     }
 
-    int _getpid(void)
+    int _getpid(void)  // NOLINT
     {
         return 1;  // Return a dummy PID
     }

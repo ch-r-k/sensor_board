@@ -10,10 +10,10 @@ class ISerialCommander
    public:
     enum class Instructions : std::uint8_t
     {
-        Write,
-        WriteSpan,  // don't change during writing
-        Read,
-        Pause
+        WRITE,
+        WRITE_SPAN,  // don't change during writing
+        READ,
+        PAUSE
     };
 
     struct Command
@@ -28,10 +28,10 @@ class ISerialCommander
    private:
    public:
     virtual ~ISerialCommander() = default;
-    virtual void SetCommand(Command command) = 0;
-    virtual void SetI2CAddress(std::uint8_t address) = 0;
-    virtual void SetChipSelect(std::uint8_t pin) = 0;
-    virtual void StartCommands() = 0;
+    virtual void setCommand(Command command) = 0;
+    virtual void setI2CAddress(std::uint8_t address) = 0;
+    virtual void setChipSelect(std::uint8_t pin) = 0;
+    virtual void startCommands() = 0;
 };
 
 #endif  // I_SERIAL_COMMANDER_HPP

@@ -67,19 +67,19 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     };
 
    private:
-    static constexpr std::size_t startPageAddress = 0;
-    static constexpr std::size_t endPageAddress = 3;
-    static constexpr std::size_t startColumNumber = 0;
-    static constexpr std::size_t endColumnAddress = 127;
-    static constexpr std::size_t ramXEnd = endColumnAddress + 1;
-    static constexpr std::size_t ramYEnd = endPageAddress + 1;
-    static constexpr std::size_t cacheSize = (ramXEnd) * (ramYEnd);
+    static constexpr std::size_t START_PAGE_ADDRESS = 0;
+    static constexpr std::size_t END_PAGE_ADDRESS = 3;
+    static constexpr std::size_t START_COLUMN_NUMBER = 0;
+    static constexpr std::size_t END_COLUMN_ADDRESS = 127;
+    static constexpr std::size_t RAM_X_END = END_COLUMN_ADDRESS + 1;
+    static constexpr std::size_t RAM_Y_END = END_PAGE_ADDRESS + 1;
+    static constexpr std::size_t CACHE_SIZE = (RAM_X_END) * (RAM_Y_END);
 
-    static constexpr std::size_t maxX = endColumnAddress;
-    static constexpr std::size_t maxY = (endPageAddress + 1) * 8;
+    static constexpr std::size_t MAX_X = END_COLUMN_ADDRESS;
+    static constexpr std::size_t MAX_Y = (END_PAGE_ADDRESS + 1) * 8;
 
    private:
-    bool open = false;
+    bool isOpen = false;
     bool initialized = false;
 
     IcbDisplay* icbDisplay = nullptr;
@@ -87,21 +87,21 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
 
     std::uint8_t address = 0x3D;
     std::array<std::uint8_t, 6> readBuffer = {0};
-    std::array<std::uint8_t, cacheSize> cache;
+    std::array<std::uint8_t, CACHE_SIZE> cache;
 
    public:
     Ssd1306();
     ~Ssd1306();
 
-    void Open() override;
-    void Close() override;
+    void open() override;
+    void close() override;
 
-    void Done(IcbSerialCommander::ReturnValue return_value) override;
+    void done(IcbSerialCommander::ReturnValue return_value) override;
 
-    void Init();
-    void DrawPixel(std::uint32_t x, std::uint32_t y) override;
-    void Clear() override;
-    void Update() override;
+    void init();
+    void drawPixel(std::uint32_t x, std::uint32_t y) override;
+    void clear() override;
+    void update() override;
 
     void setSerialCommanderInterface(ISerialCommander& i_serial_commander);
     void setIcbDisplay(IcbDisplay& icb_display);

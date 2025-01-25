@@ -15,7 +15,7 @@ class IcbSerialCommander
    private:
    public:
     virtual ~IcbSerialCommander() = default;
-    virtual void Done(ReturnValue return_value) = 0;
+    virtual void done(ReturnValue return_value) = 0;
 };
 
 #endif  // ICB_SERIAL_COMMANDER_HPP

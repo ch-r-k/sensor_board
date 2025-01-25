@@ -5,26 +5,26 @@
 Test::Test() {}
 Test::~Test() {}
 
-void Test::Open()
+void Test::open()
 {
-    assert(open == false && "already open");
+    assert(isOpen == false && "already open");
     assert(iSpi != nullptr && "instance can't be nullptr");
 
-    open = true;
-    iSpi->Open();
-    iI2c->Open();
+    isOpen = true;
+    iSpi->open();
+    iI2c->open();
 }
 
-void Test::Close() { open = false; }
+void Test::close() { isOpen = false; }
 
-void Test::TriggerMeasurement()
+void Test::triggerMeasurement()
 {
-    assert(open && "must be open");
+    assert(isOpen && "must be open");
 
     const std::array<const std::uint8_t, 3> temp = {
         std::uint8_t{1}, std::uint8_t{1}, std::uint8_t{1}};
-    iSpi->StartWrite(temp);
-    iI2c->StartWrite(temp);
+    iSpi->startWrite(temp);
+    iI2c->startWrite(temp);
 }
 
 void Test::setSpiInterface(ISpi& i_spi) { iSpi = &i_spi; }

@@ -59,6 +59,12 @@ HardwareManager::HardwareManager()
     sensorI2c.Configure(I2c::DualAddressMode::Disable);
     sensorI2c.Configure(I2c::GeneralCallMode::Disable);
     sensorI2c.Configure(I2c::NoStretchMode::Disable);
+
+    displayI2c.ConfigureTiming(0xF010F3FE);  // todo
+    displayI2c.Configure(I2c::AddressingMode::SevenBit);
+    displayI2c.Configure(I2c::DualAddressMode::Disable);
+    displayI2c.Configure(I2c::GeneralCallMode::Disable);
+    displayI2c.Configure(I2c::NoStretchMode::Disable);
 }
 
 void HardwareManager::SystemClock_Config(void)
@@ -110,3 +116,5 @@ OutputPin& HardwareManager::getLedPin() { return ledPin; }
 Spi& HardwareManager::getSensorSpi() { return sensorSpi; }
 
 I2c& HardwareManager::getSensorI2c() { return sensorI2c; }
+
+I2c& HardwareManager::getDisplayI2c() { return displayI2c; };

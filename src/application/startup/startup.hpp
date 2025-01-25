@@ -20,6 +20,7 @@ class Startup : public QP::QActive
     Q_STATE_DECL(initial);
     Q_STATE_DECL(blinky);
     Q_STATE_DECL(sensor);
+    Q_STATE_DECL(display);
     Q_STATE_DECL(done);
 };
 

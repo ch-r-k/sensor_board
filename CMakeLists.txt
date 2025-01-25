@@ -64,6 +64,7 @@ set(APP_CPP_SRCS
     src/application/blinky/blinky.cpp
     src/application/sensor/sensor.cpp
     src/application/startup/startup.cpp
+    src/application/gui/gui.cpp
     
     src/device/device_manager.cpp
     src/device/user_indication/user_indication.cpp

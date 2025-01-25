@@ -6,6 +6,9 @@ ApplicationManager::ApplicationManager(DeviceManager& deviceManager)
 
     aoSensor.setSensorInterface(deviceManager.getAht10());
     deviceManager.getAht10().setIcbSensor(aoSensor);
+
+    aoGui.setDisplayInterface(deviceManager.getSsd1306());
+    deviceManager.getSsd1306().setIcbDisplay(aoGui);
 }
 
 ApplicationManager::~ApplicationManager() {}
@@ -40,5 +43,13 @@ void ApplicationManager::start()
                     Q_DIM(startupQueueSto),  // queue length [events]
                     nullptr, 0U,             // no stack storage
                     nullptr);                // no initialization param
+    QS_OBJ_DICTIONARY(&aoStartup);
+
+    static QP::QEvt const* guiQueueSto[10];
+    aoGui.start(4U,                  // QP prio. of the AO
+                guiQueueSto,         // event queue storage
+                Q_DIM(guiQueueSto),  // queue length [events]
+                nullptr, 0U,         // no stack storage
+                nullptr);            // no initialization param
     QS_OBJ_DICTIONARY(&aoStartup);
 }

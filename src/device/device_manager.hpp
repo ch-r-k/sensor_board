@@ -14,7 +14,8 @@ class DeviceManager
 {
    private:
     UserIndication userIndication;
-    SerialCommander serialCommander;
+    SerialCommander aoSensor;
+    SerialCommander aoDisplay;
     Aht10 aht10;
     Ssd1306 ssd1306;
 
@@ -26,6 +27,7 @@ class DeviceManager
     UserIndication& getUserIndication();
     // Test& getTest();
     Aht10& getAht10();
+    Ssd1306& getSsd1306();
 
     void start();
 };

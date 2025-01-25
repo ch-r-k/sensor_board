@@ -13,6 +13,7 @@ class HardwareManager
     OutputPin TEST;
     Spi sensorSpi{2};
     I2c sensorI2c{2};
+    I2c displayI2c{3};
 
     void SystemClock_Config();
 
@@ -23,6 +24,7 @@ class HardwareManager
     OutputPin& getLedPin();
     Spi& getSensorSpi();
     I2c& getSensorI2c();
+    I2c& getDisplayI2c();
 };
 
 #endif  // HARDWARE_MANAGER_HPP

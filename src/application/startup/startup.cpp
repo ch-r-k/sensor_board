@@ -32,6 +32,7 @@ Q_STATE_DEF(Startup, initial)
 
     subscribe(AppSignals::BLINKY_DONE);
     subscribe(AppSignals::SENSOR_DONE);
+    subscribe(AppSignals::GUI_DONE);
 
     QS_FUN_DICTIONARY(&blinky);
     QS_FUN_DICTIONARY(&sensor);
@@ -81,6 +82,33 @@ Q_STATE_DEF(Startup, sensor)
             break;
         }
         case AppSignals::SENSOR_DONE:
+        {
+            status = tran(&display);
+            break;
+        }
+        default:
+        {
+            status = super(&top);
+            break;
+        }
+    }
+    return status;
+}
+//............................................................................
+Q_STATE_DEF(Startup, display)
+{
+    QP::QState status;
+    switch (e->sig)
+    {
+        case Q_ENTRY_SIG:
+        {
+            static QP::QEvt const myEvt{AppSignals::GUI_START};
+            QP::QActive::PUBLISH(&myEvt, this);
+
+            status = Q_RET_HANDLED;
+            break;
+        }
+        case AppSignals::GUI_DONE:
         {
             status = tran(&done);
             break;

@@ -10,8 +10,8 @@ Ssd1306::~Ssd1306() {}
 void Ssd1306::Open()
 {
     assert(!open && "already open");
-    Init();
     open = true;
+    Init();
 }
 
 void Ssd1306::Close()
@@ -62,9 +62,9 @@ void Ssd1306::Init()
     initialized = true;
 }
 
-void Ssd1306::clear() { cache.fill(0U); }
+void Ssd1306::Clear() { cache.fill(0U); }
 
-void Ssd1306::drawPixel(uint8_t x, uint8_t y)
+void Ssd1306::DrawPixel(std::uint32_t x, std::uint32_t y)
 {
     std::uint8_t page = 0;
     std::uint8_t pixel = 0;
@@ -76,7 +76,7 @@ void Ssd1306::drawPixel(uint8_t x, uint8_t y)
     cache[x + (page << 7)] |= pixel;              // save pixel
 }
 
-void Ssd1306::update()
+void Ssd1306::Update()
 {
     assert(open && "must be open");
     assert(initialized && "must be initialized");
@@ -178,4 +178,10 @@ void Ssd1306::Done(IcbSerialCommander::ReturnValue return_value)
 {
     UNUSED(return_value);
     // todo: implement
+    icbDisplay->initDone();
+}
+
+void Ssd1306::setIcbDisplay(IcbDisplay& icb_display)
+{
+    icbDisplay = &icb_display;
 }

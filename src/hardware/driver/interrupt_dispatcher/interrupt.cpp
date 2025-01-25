@@ -74,3 +74,8 @@ extern "C" void I2C2_EV_IRQHandler(void)
 {
     Interrupt::getInstance().dispatchInterrupt(I2C2_EV_IRQn, nullptr);
 }
+
+extern "C" void I2C3_EV_IRQHandler(void)
+{
+    Interrupt::getInstance().dispatchInterrupt(I2C3_EV_IRQn, nullptr);
+}

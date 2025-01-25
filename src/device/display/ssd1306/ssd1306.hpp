@@ -85,7 +85,7 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     IcbDisplay* icbDisplay = nullptr;
     ISerialCommander* iSerial = nullptr;
 
-    std::uint8_t address = 0x3C;
+    std::uint8_t address = 0x3D;
     std::array<std::uint8_t, 6> readBuffer = {0};
     std::array<std::uint8_t, cacheSize> cache;
 
@@ -99,9 +99,9 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     void Done(IcbSerialCommander::ReturnValue return_value) override;
 
     void Init();
-    void drawPixel(uint8_t x, uint8_t y);
-    void clear();
-    void update();
+    void DrawPixel(std::uint32_t x, std::uint32_t y) override;
+    void Clear() override;
+    void Update() override;
 
     void setSerialCommanderInterface(ISerialCommander& i_serial_commander);
     void setIcbDisplay(IcbDisplay& icb_display);

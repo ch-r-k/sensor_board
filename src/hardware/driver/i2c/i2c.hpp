@@ -1,18 +1,21 @@
 #ifndef I2C_HPP
 #define I2C_HPP
 
-#include "i_i2c.hpp"
-#include "icb_i2c.hpp"
-#include "stm32l4xx.h"
-#include "stm32l4xx_hal.h"
-#include "stm32l476xx.h"
 #include <cassert>
 #include <span>
 #include <unordered_map>
 
+#include "stm32l4xx.h"
+#include "stm32l4xx_hal.h"
+#include "stm32l476xx.h"
+
+#include "i_i2c.hpp"
+#include "icb_i2c.hpp"
+
+#include "_common/error/error.hpp"
 namespace hardware_layer
 {
-class I2c : public II2c
+class I2c : public II2c, public Error
 {
    public:
     enum class AddressingMode : std::uint32_t
@@ -114,6 +117,27 @@ class I2c : public II2c
             if (i2c->icbI2c)
             {
                 i2c->icbI2c->writeDone();
+            }
+            else
+            {
+                assert(false && "icbI2c is null");
+            }
+        }
+        else
+        {
+            assert(false && "No associated I2c instance found");
+        }
+    }
+
+    static void errorIsr(I2C_HandleTypeDef* hi2c)
+    {
+        auto it = instanceMap.find(hi2c->Instance);
+        if (it != instanceMap.end())
+        {
+            I2c* i2c = it->second;  // Retrieve the I2c instance
+            if (i2c->icbI2c)
+            {
+                i2c->triggerError(0);
             }
             else
             {

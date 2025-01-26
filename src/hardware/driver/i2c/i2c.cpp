@@ -205,7 +205,8 @@ extern "C" void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 extern "C" void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
     UNUSED(hi2c);
-    assert(true && "i2c error");
+
+    I2c::errorIsr(hi2c);
 }
 
 }  // namespace hardware_layer

@@ -58,6 +58,7 @@ set(APP_CPP_SRCS
     src/main.cpp
     src/_common/io_functions.cpp
     src/_common/common.cpp
+    src/_common/error/error.cpp
 
 
     src/application/application_manager.cpp

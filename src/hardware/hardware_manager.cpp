@@ -24,7 +24,7 @@ HardwareManager::HardwareManager()
 
     HAL_Init();
 
-    SystemClock_Config();
+    systemClockConfig();
 
     // GPIO Ports Clock Enable
     __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -61,15 +61,17 @@ HardwareManager::HardwareManager()
     sensorI2c.configure(hardware_layer::I2c::DualAddressMode::DISABLE);
     sensorI2c.configure(hardware_layer::I2c::GeneralCallMode::DISABLE);
     sensorI2c.configure(hardware_layer::I2c::NoStretchMode::DISABLE);
+    sensorI2c.setErrorCallback(errorCallback);
 
     displayI2c.configureTiming(0xF010F3FE);  // todo
     displayI2c.configure(hardware_layer::I2c::AddressingMode::SEVEN_BIT);
     displayI2c.configure(hardware_layer::I2c::DualAddressMode::DISABLE);
     displayI2c.configure(hardware_layer::I2c::GeneralCallMode::DISABLE);
     displayI2c.configure(hardware_layer::I2c::NoStretchMode::DISABLE);
+    displayI2c.setErrorCallback(errorCallback);
 }
 
-void HardwareManager::SystemClock_Config(void)
+void HardwareManager::systemClockConfig(void)
 {
     RCC_OscInitTypeDef RCC_OscInitStruct = {};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {};

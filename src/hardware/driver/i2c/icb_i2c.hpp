@@ -4,6 +4,8 @@
 #include <span>
 #include <cstdint>
 
+namespace hardware_layer
+{
 class IcbI2c
 {
    public:
@@ -11,5 +13,7 @@ class IcbI2c
     virtual void writeDone() = 0;
     virtual void readDone() = 0;
 };
+
+}  // namespace hardware_layer
 
 #endif  // ICB_I2C_HPP

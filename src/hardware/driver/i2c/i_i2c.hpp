@@ -4,6 +4,8 @@
 #include <span>
 #include <cstdint>
 
+namespace hardware_layer
+{
 class II2c
 {
    public:
@@ -14,5 +16,6 @@ class II2c
     virtual void startWrite(const std::span<const std::uint8_t> data) = 0;
     virtual void startRead(const std::span<std::uint8_t> data) = 0;
 };
+}  // namespace hardware_layer
 
 #endif  // I_I2C_HPP

@@ -9,11 +9,11 @@
 class HardwareManager
 {
    private:
-    OutputPin ledPin;
-    OutputPin TEST;
-    Spi sensorSpi{2};
-    I2c sensorI2c{2};
-    I2c displayI2c{3};
+    hardware_layer::OutputPin ledPin;
+    hardware_layer::OutputPin TEST;
+    hardware_layer::Spi sensorSpi{2};
+    hardware_layer::I2c sensorI2c{2};
+    hardware_layer::I2c displayI2c{3};
 
     void SystemClock_Config();
 
@@ -21,10 +21,10 @@ class HardwareManager
     HardwareManager();
     ~HardwareManager();
     void run();
-    OutputPin& getLedPin();
-    Spi& getSensorSpi();
-    I2c& getSensorI2c();
-    I2c& getDisplayI2c();
+    hardware_layer::OutputPin& getLedPin();
+    hardware_layer::Spi& getSensorSpi();
+    hardware_layer::I2c& getSensorI2c();
+    hardware_layer::I2c& getDisplayI2c();
 };
 
 #endif  // HARDWARE_MANAGER_HPP

@@ -1,6 +1,7 @@
 #ifndef ICB_SENSOR_HPP
 #define ICB_SENSOR_HPP
-
+namespace device_layer
+{
 class IcbSensor
 {
    private:
@@ -9,5 +10,7 @@ class IcbSensor
     virtual void initDone() = 0;
     virtual void readDone() = 0;
 };
+
+}  // namespace device_layer
 
 #endif  // ICB_SENSOR_HPP

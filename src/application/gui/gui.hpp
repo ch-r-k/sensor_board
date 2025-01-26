@@ -8,14 +8,14 @@
 
 namespace app
 {
-class Gui : public QP::QActive, public IcbDisplay
+class Gui : public QP::QActive, public device_layer::IcbDisplay
 {
    private:
-    IDisplay* iDisplay = nullptr;
+    device_layer::IDisplay* iDisplay = nullptr;
 
    public:
     Gui();
-    void setDisplayInterface(IDisplay& i_display);
+    void setDisplayInterface(device_layer::IDisplay& i_display);
 
    private:
     void initDone() override;

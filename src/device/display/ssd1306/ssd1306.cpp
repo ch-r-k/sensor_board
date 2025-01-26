@@ -4,6 +4,8 @@
 #include "serial_commander/serial_commander.hpp"
 #include "stm32l4xx_hal_def.h"
 
+namespace device_layer
+{
 Ssd1306::Ssd1306() {}
 Ssd1306::~Ssd1306() {}
 
@@ -185,3 +187,4 @@ void Ssd1306::setIcbDisplay(IcbDisplay& icb_display)
 {
     icbDisplay = &icb_display;
 }
+}  // namespace device_layer

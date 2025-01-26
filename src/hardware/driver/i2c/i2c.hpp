@@ -10,6 +10,8 @@
 #include <span>
 #include <unordered_map>
 
+namespace hardware_layer
+{
 class I2c : public II2c
 {
    public:
@@ -124,5 +126,7 @@ class I2c : public II2c
         }
     }
 };
+
+}  // namespace hardware_layer
 
 #endif  // I2C_HPP

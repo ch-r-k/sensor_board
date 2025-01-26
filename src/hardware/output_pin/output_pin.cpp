@@ -1,6 +1,8 @@
 #include "output_pin.hpp"
 #include <type_traits>
 
+namespace hardware_layer
+{
 OutputPin::OutputPin() {}
 
 OutputPin::~OutputPin()
@@ -73,3 +75,5 @@ GPIO_TypeDef* OutputPin::getPort(Port port)
             break;
     }
 }
+
+}  // namespace hardware_layer

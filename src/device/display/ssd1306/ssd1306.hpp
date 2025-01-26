@@ -13,6 +13,8 @@
 #include "serial_commander/i_serial_commander.hpp"
 #include "serial_commander/icb_serial_commander.hpp"
 
+namespace device_layer
+{
 class Ssd1306 : public IDisplay, public IcbSerialCommander
 {
    public:
@@ -128,4 +130,5 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     void displayOn(ISerialCommander::Command& command);
 };
 
+}  // namespace device_layer
 #endif  // SSD1306_HPP

@@ -317,13 +317,13 @@ QP::QStateHandler SerialCommander::getStateFromInst(Instructions instruction)
     assert(false);
 }
 
-void SerialCommander::setSerialInterface(II2c& i_i2c)
+void SerialCommander::setSerialInterface(hardware_layer::II2c& i_i2c)
 {
     iSpi = nullptr;
     iI2c = &i_i2c;
 }
 
-void SerialCommander::setSerialInterface(ISpi& i_spi)
+void SerialCommander::setSerialInterface(hardware_layer::ISpi& i_spi)
 {
     iI2c = nullptr;
     iSpi = &i_spi;

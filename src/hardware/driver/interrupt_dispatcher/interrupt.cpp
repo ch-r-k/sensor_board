@@ -3,6 +3,8 @@
 #include "stm32l476xx.h"
 #include "qpcpp.hpp"
 
+namespace hardware_layer
+{
 // Singleton instance
 Interrupt& Interrupt::getInstance()
 {
@@ -79,3 +81,5 @@ extern "C" void I2C3_EV_IRQHandler(void)
 {
     Interrupt::getInstance().dispatchInterrupt(I2C3_EV_IRQn, nullptr);
 }
+
+}  // namespace hardware_layer

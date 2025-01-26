@@ -8,7 +8,8 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
-
+namespace device_layer
+{
 class Aht10 : public ISensor, public IcbSerialCommander
 {
    public:
@@ -73,5 +74,7 @@ class Aht10 : public ISensor, public IcbSerialCommander
     void setIcbSensor(IcbSensor& icb_sensor);
     SensorData getMeasurement(Quantities quantity) override;
 };
+
+}  // namespace device_layer
 
 #endif  // AHT10_HPP

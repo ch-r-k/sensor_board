@@ -5,6 +5,8 @@
 #include "qpcpp.hpp"
 #include "stm32l4xx_hal_def.h"
 
+namespace hardware_layer
+{
 std::unordered_map<I2C_TypeDef *, I2c *> I2c::instanceMap;
 
 I2c::I2c(std::uint8_t instance)
@@ -205,3 +207,5 @@ extern "C" void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
     UNUSED(hi2c);
     assert(true && "i2c error");
 }
+
+}  // namespace hardware_layer

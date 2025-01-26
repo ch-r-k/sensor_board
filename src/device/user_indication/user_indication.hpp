@@ -7,12 +7,12 @@
 class UserIndication : public IUserIndication
 {
    private:
-    IOutputPin* outputPin = nullptr;
+    hardware_layer::IOutputPin* outputPin = nullptr;
 
    public:
     void set() override;
     void reset() override;
-    void setOutputPin(IOutputPin& init_output_pin);
+    void setOutputPin(hardware_layer::IOutputPin& init_output_pin);
 };
 
 #endif  // USER_INDICATION_HPP

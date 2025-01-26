@@ -35,36 +35,38 @@ HardwareManager::HardwareManager()
     __HAL_RCC_SYSCFG_CLK_ENABLE();
     __HAL_RCC_PWR_CLK_ENABLE();
 
-    ledPin.configure(OutputPin::Port::PORT_A, OutputPin::Pin::PIN_5,
-                     OutputPin::Mode::PUSH_PULL, OutputPin::Pull::NOPULL,
-                     OutputPin::Speed::LOW);
+    ledPin.configure(hardware_layer::OutputPin::Port::PORT_A,
+                     hardware_layer::OutputPin::Pin::PIN_5,
+                     hardware_layer::OutputPin::Mode::PUSH_PULL,
+                     hardware_layer::OutputPin::Pull::NOPULL,
+                     hardware_layer::OutputPin::Speed::LOW);
 
     // Spi
     __HAL_RCC_SPI1_CLK_ENABLE();
 
-    sensorSpi.configure(Spi::Mode::MASTER);
-    sensorSpi.configure(Spi::Direction::DIRECTION2_LINES);
-    sensorSpi.configure(Spi::DataSize::DATA_SIZE8_BIT);
-    sensorSpi.configure(Spi::ClockPolarity::POLARITY_LOW);
-    sensorSpi.configure(Spi::ClockPhase::PHASE1_EDGE);
-    sensorSpi.configure(Spi::Nss::SOFT);
-    sensorSpi.configure(Spi::BaudratePrescaler::PRE_SCALE256);
-    sensorSpi.configure(Spi::FirstBit::MSB);
-    // sensorSpi.Configure(Spi::T);
-    sensorSpi.configure(Spi::CRCCalculation::DISABLE);
-    sensorSpi.configure(Spi::NssPMode::PULSE_ENABLE);
+    sensorSpi.configure(hardware_layer::Spi::Mode::MASTER);
+    sensorSpi.configure(hardware_layer::Spi::Direction::DIRECTION2_LINES);
+    sensorSpi.configure(hardware_layer::Spi::DataSize::DATA_SIZE8_BIT);
+    sensorSpi.configure(hardware_layer::Spi::ClockPolarity::POLARITY_LOW);
+    sensorSpi.configure(hardware_layer::Spi::ClockPhase::PHASE1_EDGE);
+    sensorSpi.configure(hardware_layer::Spi::Nss::SOFT);
+    sensorSpi.configure(hardware_layer::Spi::BaudratePrescaler::PRE_SCALE256);
+    sensorSpi.configure(hardware_layer::Spi::FirstBit::MSB);
+    // sensorSpi.Configuhardware_layer::re(Spi::T);
+    sensorSpi.configure(hardware_layer::Spi::CRCCalculation::DISABLE);
+    sensorSpi.configure(hardware_layer::Spi::NssPMode::PULSE_ENABLE);
 
     sensorI2c.configureTiming(0xF010F3FE);  // todo
-    sensorI2c.configure(I2c::AddressingMode::SEVEN_BIT);
-    sensorI2c.configure(I2c::DualAddressMode::DISABLE);
-    sensorI2c.configure(I2c::GeneralCallMode::DISABLE);
-    sensorI2c.configure(I2c::NoStretchMode::DISABLE);
+    sensorI2c.configure(hardware_layer::I2c::AddressingMode::SEVEN_BIT);
+    sensorI2c.configure(hardware_layer::I2c::DualAddressMode::DISABLE);
+    sensorI2c.configure(hardware_layer::I2c::GeneralCallMode::DISABLE);
+    sensorI2c.configure(hardware_layer::I2c::NoStretchMode::DISABLE);
 
     displayI2c.configureTiming(0xF010F3FE);  // todo
-    displayI2c.configure(I2c::AddressingMode::SEVEN_BIT);
-    displayI2c.configure(I2c::DualAddressMode::DISABLE);
-    displayI2c.configure(I2c::GeneralCallMode::DISABLE);
-    displayI2c.configure(I2c::NoStretchMode::DISABLE);
+    displayI2c.configure(hardware_layer::I2c::AddressingMode::SEVEN_BIT);
+    displayI2c.configure(hardware_layer::I2c::DualAddressMode::DISABLE);
+    displayI2c.configure(hardware_layer::I2c::GeneralCallMode::DISABLE);
+    displayI2c.configure(hardware_layer::I2c::NoStretchMode::DISABLE);
 }
 
 void HardwareManager::SystemClock_Config(void)
@@ -111,10 +113,10 @@ void HardwareManager::SystemClock_Config(void)
 
 HardwareManager::~HardwareManager() {}
 
-OutputPin& HardwareManager::getLedPin() { return ledPin; }
+hardware_layer::OutputPin& HardwareManager::getLedPin() { return ledPin; }
 
-Spi& HardwareManager::getSensorSpi() { return sensorSpi; }
+hardware_layer::Spi& HardwareManager::getSensorSpi() { return sensorSpi; }
 
-I2c& HardwareManager::getSensorI2c() { return sensorI2c; }
+hardware_layer::I2c& HardwareManager::getSensorI2c() { return sensorI2c; }
 
-I2c& HardwareManager::getDisplayI2c() { return displayI2c; };
+hardware_layer::I2c& HardwareManager::getDisplayI2c() { return displayI2c; };

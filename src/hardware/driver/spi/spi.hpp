@@ -7,6 +7,8 @@
 #include "stm32l476xx.h"
 #include <cassert>
 
+namespace hardware_layer
+{
 class Spi : public ISpi
 {
    public:
@@ -143,5 +145,7 @@ class Spi : public ISpi
         }
     }
 };
+
+}  // namespace hardware_layer
 
 #endif  // SPI_HPP

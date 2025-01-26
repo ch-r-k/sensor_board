@@ -5,7 +5,6 @@
 
 #include "serial_commander/serial_commander.hpp"
 
-#include "sensors/test/test.hpp"
 #include "sensors/aht10/aht10.hpp"
 #include "display/ssd1306/ssd1306.hpp"
 #include "user_indication/user_indication.hpp"
@@ -16,8 +15,8 @@ class DeviceManager
     UserIndication userIndication;
     SerialCommander aoSensor;
     SerialCommander aoDisplay;
-    Aht10 aht10;
-    Ssd1306 ssd1306;
+    device_layer::Aht10 aht10;
+    device_layer::Ssd1306 ssd1306;
 
     // Test test;
 
@@ -25,8 +24,8 @@ class DeviceManager
     DeviceManager(HardwareManager& hardware_manager);
     ~DeviceManager();
     UserIndication& getUserIndication();
-    Aht10& getAht10();
-    Ssd1306& getSsd1306();
+    device_layer::Aht10& getAht10();
+    device_layer::Ssd1306& getSsd1306();
 
     void start();
 };

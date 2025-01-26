@@ -22,8 +22,8 @@ DeviceManager::DeviceManager(HardwareManager& hardware_manager)
 DeviceManager::~DeviceManager() {}
 
 UserIndication& DeviceManager::getUserIndication() { return userIndication; }
-Aht10& DeviceManager::getAht10() { return aht10; };
-Ssd1306& DeviceManager::getSsd1306() { return ssd1306; };
+device_layer::Aht10& DeviceManager::getAht10() { return aht10; };
+device_layer::Ssd1306& DeviceManager::getSsd1306() { return ssd1306; };
 
 void DeviceManager::start()
 {

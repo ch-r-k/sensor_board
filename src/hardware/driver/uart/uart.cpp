@@ -2,6 +2,8 @@
 #include <cassert>
 #include "driver/interrupt_dispatcher/interrupt.hpp"
 
+namespace hardware_layer
+{
 Uart::Uart(std::uint8_t instance)
 {
     assert(instance >= 1 && instance <= 5);
@@ -222,3 +224,5 @@ extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
     Uart::TxISR(huart);
 }
+
+}  // namespace hardware_layer

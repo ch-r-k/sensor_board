@@ -2,6 +2,9 @@
 #define I_SENSOR_HPP
 
 #include <cstdint>
+
+namespace device_layer
+{
 class ISensor
 {
    public:
@@ -30,5 +33,7 @@ class ISensor
     virtual void triggerMeasurement() = 0;
     virtual SensorData getMeasurement(Quantities quantity) = 0;
 };
+
+}  // namespace device_layer
 
 #endif  // I_SENSOR_HPP

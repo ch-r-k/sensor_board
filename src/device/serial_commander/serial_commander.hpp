@@ -26,13 +26,13 @@ class CommandEvent : public QP::QEvt
 
 class SerialCommander : public QP::QActive,
                         public ISerialCommander,
-                        public IcbI2c
+                        public hardware_layer::IcbI2c
 {
    private:
     QP::QTimeEvt m_timeEvt;
     IcbSerialCommander* icbSerialCommander = nullptr;
-    II2c* iI2c = nullptr;
-    ISpi* iSpi = nullptr;
+    hardware_layer::II2c* iI2c = nullptr;
+    hardware_layer::ISpi* iSpi = nullptr;
     std::array<Command, 64> commands;
     std::size_t command_length = 0;
     std::size_t command_index = 0;
@@ -50,8 +50,8 @@ class SerialCommander : public QP::QActive,
    public:
     SerialCommander();
 
-    void setSerialInterface(II2c& i_i2c);
-    void setSerialInterface(ISpi& i_i2c);
+    void setSerialInterface(hardware_layer::II2c& i_i2c);
+    void setSerialInterface(hardware_layer::ISpi& i_i2c);
     void setIcbSerialCommander(IcbSerialCommander& icb_serial_commander);
 
    protected:

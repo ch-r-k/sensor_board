@@ -5,6 +5,8 @@
 #include "stm32l4xx_hal_spi.h"
 #include "qpcpp.hpp"
 
+namespace hardware_layer
+{
 Spi::Spi(std::uint8_t instance)
 {
     assert(instance >= 1 && instance <= 3);
@@ -214,3 +216,5 @@ extern "C" void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 {
     Spi::txIsr(hspi);
 }
+
+}  // namespace hardware_layer

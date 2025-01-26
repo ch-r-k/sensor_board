@@ -8,7 +8,7 @@
 
 #include <cstdint>
 
-static Uart qsUart{2};
+static hardware_layer::Uart qsUart{2};
 
 static QP::QSTimeCtr qsTickTime;
 static QP::QSTimeCtr qsTickPeriod;
@@ -24,13 +24,13 @@ int main()
 
     // Uart for QSPY
     qsUart.ConfigureBaudrate(115200);
-    qsUart.Configure(Uart::WordLength::Length_8);
-    qsUart.Configure(Uart::StopBits::Bit_1_0);
-    qsUart.Configure(Uart::Parity::None);
-    qsUart.Configure(Uart::HardwareControl::None);
-    qsUart.Configure(Uart::Mode::TxRx);
-    qsUart.Configure(Uart::OneBitSample::Disable);
-    qsUart.Configure(Uart::Oversampling::Oversampling16);
+    qsUart.Configure(hardware_layer::Uart::WordLength::Length_8);
+    qsUart.Configure(hardware_layer::Uart::StopBits::Bit_1_0);
+    qsUart.Configure(hardware_layer::Uart::Parity::None);
+    qsUart.Configure(hardware_layer::Uart::HardwareControl::None);
+    qsUart.Configure(hardware_layer::Uart::Mode::TxRx);
+    qsUart.Configure(hardware_layer::Uart::OneBitSample::Disable);
+    qsUart.Configure(hardware_layer::Uart::Oversampling::Oversampling16);
 
     qsUart.Open();
 

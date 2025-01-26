@@ -8,6 +8,8 @@
 
 #include <cstddef>
 
+namespace hardware_layer
+{
 class Interrupt
 {
    public:
@@ -35,5 +37,7 @@ class Interrupt
 };
 
 extern "C" void USART2_IRQHandler(void);
+
+}  // namespace hardware_layer
 
 #endif  // INTERRUPT_DISPATCHER_HPP

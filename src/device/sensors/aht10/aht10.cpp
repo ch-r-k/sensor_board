@@ -4,6 +4,8 @@
 #include "sensors/icb_sensor.hpp"
 #include "serial_commander/i_serial_commander.hpp"
 
+namespace device_layer
+{
 Aht10::Aht10() {}
 Aht10::~Aht10() {}
 
@@ -140,3 +142,5 @@ ISensor::SensorData Aht10::getMeasurement(Quantities quantity)
             break;
     }
 }
+
+}  // namespace device_layer

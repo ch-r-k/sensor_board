@@ -2,6 +2,8 @@
 #define I_DISPLAY_HPP
 
 #include <cstdint>
+namespace device_layer
+{
 class IDisplay
 {
    public:
@@ -12,5 +14,5 @@ class IDisplay
     virtual void drawPixel(std::uint32_t x, std::uint32_t y) = 0;
     virtual void clear() = 0;
 };
-
+}  // namespace device_layer
 #endif  // I_DISPLAY_HPP

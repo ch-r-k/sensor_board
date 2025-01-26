@@ -8,6 +8,8 @@
 #include <cassert>
 #include <span>
 
+namespace hardware_layer
+{
 class Uart : public IUart
 {
    public:
@@ -123,5 +125,6 @@ class Uart : public IUart
         }
     }
 };
+}  // namespace hardware_layer
 
 #endif  // UART_HPP

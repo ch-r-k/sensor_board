@@ -7,6 +7,8 @@
 #include "stm32l4xx.h"
 #include "stm32l4xx_hal.h"
 
+namespace hardware_layer
+{
 class OutputPin : public IOutputPin
 {
    public:
@@ -79,5 +81,7 @@ class OutputPin : public IOutputPin
     void reset() override;
     GPIO_TypeDef* getPort(Port port);
 };
+
+}  // namespace hardware_layer
 
 #endif  // OUTPUT_PIN_HPP

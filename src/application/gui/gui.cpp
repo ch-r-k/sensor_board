@@ -106,7 +106,10 @@ Q_STATE_DEF(Gui, update)
     return status;
 }
 //............................................................................
-void Gui::setDisplayInterface(IDisplay& i_display) { iDisplay = &i_display; }
+void Gui::setDisplayInterface(device_layer::IDisplay& i_display)
+{
+    iDisplay = &i_display;
+}
 
 void Gui::initDone()
 {

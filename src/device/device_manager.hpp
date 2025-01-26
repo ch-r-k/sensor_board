@@ -25,7 +25,6 @@ class DeviceManager
     DeviceManager(HardwareManager& hardware_manager);
     ~DeviceManager();
     UserIndication& getUserIndication();
-    // Test& getTest();
     Aht10& getAht10();
     Ssd1306& getSsd1306();
 

@@ -5,8 +5,6 @@
 DeviceManager::DeviceManager(HardwareManager& hardware_manager)
 {
     userIndication.setOutputPin(hardware_manager.getLedPin());
-    // test.setSpiInterface(hardwareManager.getSensorSpi());
-    // test.setI2cInterface(hardwareManager.getSensorI2c());
 
     // serial commander to sensor
     aht10.setSerialInterface(aoSensor);
@@ -19,14 +17,11 @@ DeviceManager::DeviceManager(HardwareManager& hardware_manager)
     aoDisplay.setIcbSerialCommander(ssd1306);
     aoDisplay.setSerialInterface(hardware_manager.getDisplayI2c());
     hardware_manager.getDisplayI2c().setIcb(aoDisplay);
-
-    // serial commander to hardware
 }
 
 DeviceManager::~DeviceManager() {}
 
 UserIndication& DeviceManager::getUserIndication() { return userIndication; }
-// Test& DeviceManager::getTest() {}
 Aht10& DeviceManager::getAht10() { return aht10; };
 Ssd1306& DeviceManager::getSsd1306() { return ssd1306; };
 

@@ -1,9 +1,3 @@
-//! @date
-//! @version
-//!
-//! @file
-//! @brief Gui
-//!
 #include "gui.hpp"
 #include <bits/c++config.h>
 #include "application_signals.hpp"

@@ -1,7 +1,3 @@
-//============================================================================
-//
-//============================================================================
-
 #include <bits/c++config.h>
 #include <cassert>
 #include <cstdint>
@@ -35,12 +31,12 @@ Q_STATE_DEF(SerialCommander, initial)
 {
     (void)e;  // unused parameter
 
-    // subscribe(AppSignals::BLINKY_DONE);
-    // subscribe(AppSignals::SENSOR_DONE);
-
-    // QS_FUN_DICTIONARY(&blinky);
-    // QS_FUN_DICTIONARY(&sensor);
-    // QS_FUN_DICTIONARY(&done);
+    QS_FUN_DICTIONARY(&initial);
+    QS_FUN_DICTIONARY(&idle);
+    QS_FUN_DICTIONARY(&write);
+    QS_FUN_DICTIONARY(&write_span);
+    QS_FUN_DICTIONARY(&read);
+    QS_FUN_DICTIONARY(&pause);
 
     return tran(&idle);
 }

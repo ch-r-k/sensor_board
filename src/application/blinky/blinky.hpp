@@ -3,7 +3,7 @@
 
 #include "qpcpp.hpp"
 #include "i_user_indication.hpp"
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 namespace app
 {
 class Blinky : public QP::QActive

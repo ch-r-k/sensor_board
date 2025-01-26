@@ -6,7 +6,7 @@
 #include "device/sensors/i_sensor.hpp"
 #include "device/sensors/icb_sensor.hpp"
 
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 
 namespace app
 {

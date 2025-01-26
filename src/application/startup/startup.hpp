@@ -6,7 +6,7 @@
 #define STARTUP_HPP_
 
 #include "qpcpp.hpp"
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 
 namespace app
 {

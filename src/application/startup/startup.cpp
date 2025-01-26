@@ -30,9 +30,9 @@ Q_STATE_DEF(Startup, initial)
 {
     (void)e;  // unused parameter
 
-    subscribe(AppSignals::BLINKY_DONE);
-    subscribe(AppSignals::SENSOR_DONE);
-    subscribe(AppSignals::GUI_DONE);
+    subscribe(system_layer::BLINKY_DONE);
+    subscribe(system_layer::SENSOR_DONE);
+    subscribe(system_layer::GUI_DONE);
 
     QS_FUN_DICTIONARY(&blinky);
     QS_FUN_DICTIONARY(&sensor);
@@ -48,13 +48,13 @@ Q_STATE_DEF(Startup, blinky)
     {
         case Q_ENTRY_SIG:
         {
-            static QP::QEvt const my_evt{AppSignals::BLINKY_START};
+            static QP::QEvt const my_evt{system_layer::BLINKY_START};
             QP::QActive::PUBLISH(&my_evt, this);
 
             status = Q_RET_HANDLED;
             break;
         }
-        case AppSignals::BLINKY_DONE:
+        case system_layer::BLINKY_DONE:
         {
             status = tran(&sensor);
             break;
@@ -75,13 +75,13 @@ Q_STATE_DEF(Startup, sensor)
     {
         case Q_ENTRY_SIG:
         {
-            static QP::QEvt const my_evt{AppSignals::SENSOR_START};
+            static QP::QEvt const my_evt{system_layer::SENSOR_START};
             QP::QActive::PUBLISH(&my_evt, this);
 
             status = Q_RET_HANDLED;
             break;
         }
-        case AppSignals::SENSOR_DONE:
+        case system_layer::SENSOR_DONE:
         {
             status = tran(&display);
             break;
@@ -102,13 +102,13 @@ Q_STATE_DEF(Startup, display)
     {
         case Q_ENTRY_SIG:
         {
-            static QP::QEvt const my_evt{AppSignals::GUI_START};
+            static QP::QEvt const my_evt{system_layer::GUI_START};
             QP::QActive::PUBLISH(&my_evt, this);
 
             status = Q_RET_HANDLED;
             break;
         }
-        case AppSignals::GUI_DONE:
+        case system_layer::GUI_DONE:
         {
             status = tran(&done);
             break;
@@ -132,7 +132,7 @@ Q_STATE_DEF(Startup, done)
             status = Q_RET_HANDLED;
             break;
         }
-        case SENSOR_DONE:
+        case system_layer::SENSOR_DONE:
         {
             status = Q_RET_HANDLED;
             break;

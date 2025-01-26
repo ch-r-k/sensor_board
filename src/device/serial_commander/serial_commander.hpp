@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <span>
 #include "qpcpp.hpp"
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 
 #include "i_serial_commander.hpp"
 #include "icb_serial_commander.hpp"

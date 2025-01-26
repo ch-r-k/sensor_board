@@ -16,7 +16,7 @@ ApplicationManager::~ApplicationManager() {}
 void ApplicationManager::start()
 {
     // initialize publish-subscribe
-    static QP::QSubscrList subscr_sto[app::MAX_PUB_SIG];
+    static QP::QSubscrList subscr_sto[system_layer::MAX_PUB_SIG];
     QP::QActive::psInit(subscr_sto, Q_DIM(subscr_sto));
 
     // instantiate and start AOs/threads...

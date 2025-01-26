@@ -1,11 +1,11 @@
-#ifndef APPLICATION_SIGNALS_HPP_
-#define APPLICATION_SIGNALS_HPP_
+#ifndef SYSTEM_SIGNALS_HPP_
+#define SYSTEM_SIGNALS_HPP_
 
 #include "qpcpp.hpp"
 
-namespace app
+namespace system_layer
 {
-enum AppSignals : QP::QSignal
+enum Signals : QP::QSignal
 {
     DUMMY_SIG = QP::Q_USER_SIG,
     SENSOR_START,
@@ -30,4 +30,4 @@ enum AppSignals : QP::QSignal
 };
 }
 
-#endif  // APPLICATION_SIGNALS_HPP_
+#endif  // SYSTEM_SIGNALS_HPP_

@@ -1,13 +1,13 @@
 #include "gui.hpp"
 #include <bits/c++config.h>
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 #include "common.hpp"
 #include "display/i_display.hpp"
 
 namespace app
 {
 //............................................................................
-Gui::Gui() : QP::QActive(&initial), m_timeEvt(this, BLINKY_TIMEOUT, 0U)
+Gui::Gui() : QP::QActive(&initial)
 {
     // empty
 }
@@ -16,7 +16,7 @@ Gui::Gui() : QP::QActive(&initial), m_timeEvt(this, BLINKY_TIMEOUT, 0U)
 Q_STATE_DEF(Gui, initial)
 {
     (void)e;  // unused parameter
-    subscribe(AppSignals::GUI_START);
+    subscribe(system_layer::GUI_START);
 
     QS_FUN_DICTIONARY(&idle);
     QS_FUN_DICTIONARY(&initial);
@@ -35,9 +35,9 @@ Q_STATE_DEF(Gui, idle)
             status = Q_RET_HANDLED;
             break;
         }
-        case AppSignals::GUI_START:
+        case system_layer::GUI_START:
         {
-            static QP::QEvt const my_evt{AppSignals::GUI_DONE};
+            static QP::QEvt const my_evt{system_layer::GUI_DONE};
             QP::QActive::PUBLISH(&my_evt, this);
 
             status = tran(&initialize);
@@ -63,7 +63,7 @@ Q_STATE_DEF(Gui, initialize)
             status = Q_RET_HANDLED;
             break;
         }
-        case GUI_INIT_DONE:
+        case system_layer::GUI_INIT_DONE:
         {
             status = tran(&update);
             break;
@@ -92,7 +92,7 @@ Q_STATE_DEF(Gui, update)
             status = Q_RET_HANDLED;
             break;
         }
-        case GUI_UPDATE_DONE:
+        case system_layer::GUI_UPDATE_DONE:
         {
             status = Q_RET_HANDLED;
             break;
@@ -110,13 +110,13 @@ void Gui::setDisplayInterface(IDisplay& i_display) { iDisplay = &i_display; }
 
 void Gui::initDone()
 {
-    static QP::QEvt const my_evt{AppSignals::GUI_INIT_DONE};
+    static QP::QEvt const my_evt{system_layer::GUI_INIT_DONE};
     this->POST(&my_evt, this);
 }
 
 void Gui::printDone()
 {
-    static QP::QEvt const my_evt{AppSignals::GUI_UPDATE_DONE};
+    static QP::QEvt const my_evt{system_layer::GUI_UPDATE_DONE};
     this->POST(&my_evt, this);
 }
 

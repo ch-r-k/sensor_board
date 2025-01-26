@@ -4,14 +4,13 @@
 #include "qpcpp.hpp"
 #include "device/display/i_display.hpp"
 #include "device/display/icb_display.hpp"
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 
 namespace app
 {
 class Gui : public QP::QActive, public IcbDisplay
 {
    private:
-    QP::QTimeEvt m_timeEvt;
     IDisplay* iDisplay = nullptr;
 
    public:

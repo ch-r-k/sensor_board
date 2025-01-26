@@ -4,7 +4,7 @@
 #include <span>
 
 #include "qpcpp.hpp"
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 #include "common.hpp"
 
 #include "serial_commander.hpp"
@@ -21,7 +21,8 @@ namespace
 
 //............................................................................
 SerialCommander::SerialCommander()
-    : QP::QActive(&initial), m_timeEvt(this, app::SERIAL_COMMANDER_TIMEOUT, 0U)
+    : QP::QActive(&initial),
+      m_timeEvt(this, system_layer::SERIAL_COMMANDER_TIMEOUT, 0U)
 {
     // empty
 }
@@ -63,7 +64,7 @@ Q_STATE_DEF(SerialCommander, idle)
             status = Q_RET_HANDLED;
             break;
         }
-        case app::AppSignals::SERIAL_COMMANDER_SET:
+        case system_layer::SERIAL_COMMANDER_SET:
         {
             status = Q_RET_HANDLED;
 
@@ -78,7 +79,7 @@ Q_STATE_DEF(SerialCommander, idle)
             command_length++;
             break;
         }
-        case app::AppSignals::SERIAL_COMMANDER_START:
+        case system_layer::SERIAL_COMMANDER_START:
         {
             if (iI2c)
             {
@@ -133,7 +134,7 @@ Q_STATE_DEF(SerialCommander, write)
             status = Q_RET_HANDLED;
             break;
         }
-        case app::AppSignals::SERIAL_COMMANDER_DONE:
+        case system_layer::SERIAL_COMMANDER_DONE:
         {
             status = tran(nextState());
             break;
@@ -173,7 +174,7 @@ Q_STATE_DEF(SerialCommander, write_span)
             status = Q_RET_HANDLED;
             break;
         }
-        case app::AppSignals::SERIAL_COMMANDER_DONE:
+        case system_layer::SERIAL_COMMANDER_DONE:
         {
             status = tran(nextState());
             break;
@@ -214,7 +215,7 @@ Q_STATE_DEF(SerialCommander, read)
             status = Q_RET_HANDLED;
             break;
         }
-        case app::AppSignals::SERIAL_COMMANDER_DONE:
+        case system_layer::SERIAL_COMMANDER_DONE:
         {
             status = tran(nextState());
             break;
@@ -241,7 +242,7 @@ Q_STATE_DEF(SerialCommander, pause)
             status = Q_RET_HANDLED;
             break;
         }
-        case app::AppSignals::SERIAL_COMMANDER_TIMEOUT:
+        case system_layer::SERIAL_COMMANDER_TIMEOUT:
         {
             status = tran(nextState());
             break;
@@ -338,20 +339,20 @@ void SerialCommander::setIcbSerialCommander(
 //............................................................................
 void SerialCommander::writeDone()
 {
-    static QP::QEvt const my_evt{app::AppSignals::SERIAL_COMMANDER_DONE};
+    static QP::QEvt const my_evt{system_layer::SERIAL_COMMANDER_DONE};
     this->POST(&my_evt, this);
 }
 
 void SerialCommander::readDone()
 {
-    static QP::QEvt const my_evt{app::AppSignals::SERIAL_COMMANDER_DONE};
+    static QP::QEvt const my_evt{system_layer::SERIAL_COMMANDER_DONE};
     this->POST(&my_evt, this);
 }
 
 void SerialCommander::setCommand(Command command)
 {
     CommandEvent* commandEvent =
-        Q_NEW(CommandEvent, app::AppSignals::SERIAL_COMMANDER_SET);
+        Q_NEW(CommandEvent, system_layer::SERIAL_COMMANDER_SET);
 
     commandEvent->command.instruction = command.instruction;
     commandEvent->command.data = command.data;
@@ -373,6 +374,6 @@ void SerialCommander::setChipSelect(std::uint8_t pin)
 
 void SerialCommander::startCommands()
 {
-    static QP::QEvt const my_evt{app::AppSignals::SERIAL_COMMANDER_START};
+    static QP::QEvt const my_evt{system_layer::SERIAL_COMMANDER_START};
     this->POST(&my_evt, this);
 }

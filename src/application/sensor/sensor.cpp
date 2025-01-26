@@ -1,4 +1,4 @@
-#include "application_signals.hpp"
+#include "system_signals.hpp"
 #include "qpcpp.hpp"
 #include "sensor.hpp"
 #include "common.hpp"
@@ -6,7 +6,8 @@
 namespace app
 {
 //............................................................................
-Sensor::Sensor() : QP::QActive(&initial), m_timeEvt(this, SENSOR_TIMEOUT, 0U)
+Sensor::Sensor()
+    : QP::QActive(&initial), m_timeEvt(this, system_layer::SENSOR_TIMEOUT, 0U)
 {
     // empty
 }
@@ -17,7 +18,7 @@ Q_STATE_DEF(Sensor, initial)
     (void)e;  // unused parameter
 
     // arm the time event to expire in half a second and every half second
-    subscribe(AppSignals::SENSOR_START);
+    subscribe(system_layer::SENSOR_START);
 
     QS_FUN_DICTIONARY(&idle);
     QS_FUN_DICTIONARY(&initialize);
@@ -36,9 +37,9 @@ Q_STATE_DEF(Sensor, idle)
             status = Q_RET_HANDLED;
             break;
         }
-        case SENSOR_START:
+        case system_layer::SENSOR_START:
         {
-            static QP::QEvt const my_evt{AppSignals::SENSOR_DONE};
+            static QP::QEvt const my_evt{system_layer::SENSOR_DONE};
             QP::QActive::PUBLISH(&my_evt, this);
 
             status = tran(initialize);
@@ -64,7 +65,7 @@ Q_STATE_DEF(Sensor, initialize)
             status = Q_RET_HANDLED;
             break;
         }
-        case SENSOR_INIT_DONE:
+        case system_layer::SENSOR_INIT_DONE:
         {
             status = tran(read_measurement);
             break;
@@ -89,13 +90,13 @@ Q_STATE_DEF(Sensor, read_measurement)
             status = Q_RET_HANDLED;
             break;
         }
-        case SENSOR_TIMEOUT:
+        case system_layer::SENSOR_TIMEOUT:
         {
             iSensor->triggerMeasurement();
             status = Q_RET_HANDLED;
             break;
         }
-        case SENSOR_READ_DONE:
+        case system_layer::SENSOR_READ_DONE:
         {
             status = tran(read_measurement);
             break;
@@ -113,7 +114,7 @@ void Sensor::setSensorInterface(ISensor& i_sensor) { iSensor = &i_sensor; }
 
 void Sensor::initDone()
 {
-    static QP::QEvt const my_evt{AppSignals::SENSOR_INIT_DONE};
+    static QP::QEvt const my_evt{system_layer::SENSOR_INIT_DONE};
     this->POST(&my_evt, this);
 }
 
@@ -121,7 +122,8 @@ void Sensor::readDone()
 {
     iSensor->getMeasurement(ISensor::Quantities::HUMIDITY);
 
-    SensorEvent* sensorEvent = Q_NEW(SensorEvent, SENSOR_READ_DONE);
+    SensorEvent* sensorEvent =
+        Q_NEW(SensorEvent, system_layer::SENSOR_READ_DONE);
 
     sensorEvent->data.value =
         iSensor->getMeasurement(ISensor::Quantities::TEMPERATURE).value;

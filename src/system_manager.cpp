@@ -22,7 +22,7 @@ void SystemManager::run()
     QP::QF::poolInit(sml_pool_sto, sizeof(sml_pool_sto),
                      sizeof(sml_pool_sto[0]));
 
-    static QF_MPOOL_EL(CommandEvent) large_pool_sto[10];
+    static QF_MPOOL_EL(CommandEvent) large_pool_sto[20];
     QP::QF::poolInit(large_pool_sto, sizeof(large_pool_sto),
                      sizeof(large_pool_sto[0]));
 

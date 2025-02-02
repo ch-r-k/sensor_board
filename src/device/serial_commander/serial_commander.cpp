@@ -357,6 +357,7 @@ void SerialCommander::setCommand(Command command)
     commandEvent->command.instruction = command.instruction;
     commandEvent->command.data = command.data;
     commandEvent->command.data_length = command.data_length;
+    commandEvent->command.data_span = command.data_span;
     commandEvent->command.pauseTime = command.pauseTime;
 
     this->POST(commandEvent, this);

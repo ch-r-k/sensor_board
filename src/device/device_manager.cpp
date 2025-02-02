@@ -35,7 +35,7 @@ void DeviceManager::start()
                    nullptr);                        // no initialization param
     QS_OBJ_DICTIONARY(&aoSensor);
 
-    static QP::QEvt const* serial_display_queue_sto[10];
+    static QP::QEvt const* serial_display_queue_sto[16];
     aoDisplay.start(6U,                               // QP prio. of the AO
                     serial_display_queue_sto,         // event queue storage
                     Q_DIM(serial_display_queue_sto),  // queue length [events]

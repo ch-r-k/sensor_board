@@ -33,7 +33,7 @@ class SerialCommander : public QP::QActive,
     IcbSerialCommander* icbSerialCommander = nullptr;
     hardware_layer::II2c* iI2c = nullptr;
     hardware_layer::ISpi* iSpi = nullptr;
-    std::array<Command, 64> commands;
+    std::array<Command, 128> commands;
     std::size_t command_length = 0;
     std::size_t command_index = 0;
 

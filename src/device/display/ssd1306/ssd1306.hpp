@@ -22,6 +22,7 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     enum class Command : std::uint8_t
     {
         // Fundament Commands
+        SOFT_RESET = 0xE4,   // 1 byte
         SET_DISPLAY = 0xAE,  // 1 byte
 
         ENTRY_DISPLAY_ON = 0xA4,  // 1 byte
@@ -56,7 +57,7 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
         SET_SEGMENT_REMAP = 0xA0,       // 1 byte
         SET_MULTIPLEX_RATIO = 0xA8,     // 2 byte
         SET_COM_OUTPUT = 0xC0,          // 1 byte
-        SET_DISPLAY_OFF = 0xD3,         // 2 byte
+        SET_DISPLAY_OFFSET = 0xD3,      // 2 byte
         SET_COM_PINS_CONFIG = 0xDA,     // 2 byte
 
         // Timing
@@ -70,7 +71,7 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
 
    private:
     static constexpr std::size_t START_PAGE_ADDRESS = 0;
-    static constexpr std::size_t END_PAGE_ADDRESS = 3;
+    static constexpr std::size_t END_PAGE_ADDRESS = 7;
     static constexpr std::size_t START_COLUMN_NUMBER = 0;
     static constexpr std::size_t END_COLUMN_ADDRESS = 127;
     static constexpr std::size_t RAM_X_END = END_COLUMN_ADDRESS + 1;
@@ -87,7 +88,7 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     IcbDisplay* icbDisplay = nullptr;
     ISerialCommander* iSerial = nullptr;
 
-    std::uint8_t address = 0x3D;
+    std::uint8_t address = 0x3C;
     std::array<std::uint8_t, 6> readBuffer = {0};
     std::array<std::uint8_t, CACHE_SIZE> cache;
 
@@ -127,6 +128,9 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     void disEntDispOn(ISerialCommander::Command& command);
     void disNormal(ISerialCommander::Command& command);
     void deactScroll(ISerialCommander::Command& command);
+    void entireDisplayOn(ISerialCommander::Command& command);
+    void enableChargePump(ISerialCommander::Command& command);
+    void setDisplayNormal(ISerialCommander::Command& command);
     void displayOn(ISerialCommander::Command& command);
 };
 

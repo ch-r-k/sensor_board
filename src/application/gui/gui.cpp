@@ -84,10 +84,16 @@ Q_STATE_DEF(Gui, update)
     {
         case Q_ENTRY_SIG:
         {
-            for (std::size_t it = 0; it < 32; it++)
+            for (std::size_t it_2 = 0; it_2 < 127; it_2++)
             {
-                iDisplay->drawPixel(it, it);
+                iDisplay->clear();
+
+                for (std::size_t it = 0; it < 63; it++)
+                {
+                    iDisplay->drawPixel(it_2, it);
+                }
             }
+
             iDisplay->update();
             status = Q_RET_HANDLED;
             break;

@@ -7,7 +7,8 @@
 namespace app
 {
 //............................................................................
-Gui::Gui() : QP::QActive(&initial)
+Gui::Gui()
+    : QP::QActive(&initial), m_timeEvt(this, system_layer::GUI_TIMEOUT, 0U)
 {
     // empty
 }
@@ -66,6 +67,8 @@ Q_STATE_DEF(Gui, initialize)
         case system_layer::GUI_INIT_DONE:
         {
             status = tran(&update);
+            x = 0;
+            y = 0;
             break;
         }
         default:
@@ -84,17 +87,40 @@ Q_STATE_DEF(Gui, update)
     {
         case Q_ENTRY_SIG:
         {
-            for (std::size_t it_2 = 0; it_2 < 127; it_2++)
-            {
-                iDisplay->clear();
+            iDisplay->clear();
 
-                for (std::size_t it = 0; it < 63; it++)
-                {
-                    iDisplay->drawPixel(it_2, it);
-                }
-            }
+            iDisplay->drawPixel(x, y);
 
             iDisplay->update();
+
+            m_timeEvt.armX(TICKS_PER_SEC / 50U, 0);
+
+            status = Q_RET_HANDLED;
+            break;
+        }
+        case system_layer::GUI_TIMEOUT:
+        {
+            iDisplay->clear();
+
+            iDisplay->drawPixel(x, y);
+
+            iDisplay->update();
+
+            m_timeEvt.armX(TICKS_PER_SEC / 50U, 0);
+
+            x++;
+
+            if (x >= 127)
+            {
+                y++;
+                x = 0;
+            }
+            if (y >= 63)
+            {
+                y = 0;
+                x = 0;
+            }
+
             status = Q_RET_HANDLED;
             break;
         }

@@ -63,7 +63,7 @@ HardwareManager::HardwareManager()
     sensorI2c.configure(hardware_layer::I2c::NoStretchMode::DISABLE);
     sensorI2c.setErrorCallback(errorCallback);
 
-    displayI2c.configureTiming(0xF010F3FE);  // todo
+    displayI2c.configureTiming(0x00300F33);  // todo
     displayI2c.configure(hardware_layer::I2c::AddressingMode::SEVEN_BIT);
     displayI2c.configure(hardware_layer::I2c::DualAddressMode::DISABLE);
     displayI2c.configure(hardware_layer::I2c::GeneralCallMode::DISABLE);

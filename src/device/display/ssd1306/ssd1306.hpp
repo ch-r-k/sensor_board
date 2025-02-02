@@ -18,7 +18,7 @@ namespace device_layer
 class Ssd1306 : public IDisplay, public IcbSerialCommander
 {
    public:
-    // Enum for AHT10 commands
+    // Enum for Ssd1306 commands
     enum class Command : std::uint8_t
     {
         // Fundament Commands
@@ -90,7 +90,7 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
 
     std::uint8_t address = 0x3C;
     std::array<std::uint8_t, 6> readBuffer = {0};
-    std::array<std::uint8_t, CACHE_SIZE> cache;
+    std::array<std::uint8_t, CACHE_SIZE + 1> cache;
 
    public:
     Ssd1306();

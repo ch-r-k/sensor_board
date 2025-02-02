@@ -24,6 +24,7 @@ enum Signals : QP::QSignal
     GUI_UPDATE_DONE,
     GUI_INIT_DONE,
     BLINKY_TIMEOUT,
+    GUI_TIMEOUT,
     SERIAL_COMMANDER_TIMEOUT,
     SERIAL_COMMANDER_DONE,
     MAX_SIG  // the last signal

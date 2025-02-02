@@ -1,4 +1,5 @@
 #include "ssd1306.hpp"
+#include <bits/c++config.h>
 #include <cassert>
 #include <cstdint>
 #include "serial_commander/serial_commander.hpp"
@@ -89,12 +90,7 @@ void Ssd1306::init()
     initialized = true;
 }
 
-void Ssd1306::clear()
-{
-    cache.fill(0U);
-    cache[0] = 0x40U;
-    cache[1] = 0x02U;
-}
+void Ssd1306::clear() { cache.fill(0U); }
 
 void Ssd1306::drawPixel(std::uint32_t x, std::uint32_t y)
 {
@@ -103,9 +99,11 @@ void Ssd1306::drawPixel(std::uint32_t x, std::uint32_t y)
 
     assert((x <= MAX_X) && (y <= MAX_Y));
 
-    page = y >> END_PAGE_ADDRESS;                   // find page (y / 8)
-    pixel = 1 << (y - (page << END_PAGE_ADDRESS));  // which pixel (y % 8)
-    cache[x + (page << 7) + 1] |= pixel;            // save pixel
+    page = y / RAM_Y_END;   // find page (y / 8)
+    pixel = y % RAM_Y_END;  // which pixel (y % 8)
+
+    std::size_t index = x + (page << 7);
+    cache[index + 1] = 1U << pixel;  // save pixel
 }
 
 void Ssd1306::update()
@@ -115,13 +113,8 @@ void Ssd1306::update()
 
     ISerialCommander::Command command;
 
-    // set start line (in this case 0)
-    // command.instruction = Instructions::WRITE;
-    // command.data[0] = 0U;
-    // command.data[1] =
-    //    static_cast<std::uint8_t>(Command::SET_DISPLAY_START_LINE);
-    // command.data_length = 2;
-    // iSerial->setCommand(command);
+    // set command
+    cache[0] = 0x40;
 
     // write cache
     command.instruction = Instructions::WRITE_SPAN;
@@ -190,14 +183,14 @@ void Ssd1306::segRemapOp(ISerialCommander::Command& command)
 {
     prepareCommand(
         command,
-        {0, static_cast<std::uint8_t>(Command::SET_SEGMENT_REMAP) | 0x00});
+        {0, static_cast<std::uint8_t>(Command::SET_SEGMENT_REMAP) | 0x01});
 }
 
 void Ssd1306::comScanDirOp(ISerialCommander::Command& command)
 {
     prepareCommand(
         command,
-        {0, static_cast<std::uint8_t>(Command::SET_COM_OUTPUT) | 0x08});
+        {0, static_cast<std::uint8_t>(Command::SET_COM_OUTPUT) | 0x00});
 }
 
 void Ssd1306::setContrast(ISerialCommander::Command& command)
@@ -235,6 +228,7 @@ void Ssd1306::done(IcbSerialCommander::ReturnValue return_value)
     UNUSED(return_value);
     // todo: implement
     icbDisplay->initDone();
+    // icbDisplay->printDone();
 }
 
 void Ssd1306::setIcbDisplay(IcbDisplay& icb_display)

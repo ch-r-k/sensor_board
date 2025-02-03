@@ -29,58 +29,49 @@ void Ssd1306::init()
 
     ISerialCommander::Command command;
 
-    prepareCommand(command,
-                   {0, static_cast<std::uint8_t>(Command::SOFT_RESET)});
+    prepareCommand(command, Command::SET_DISPLAY, 0);
     iSerial->setCommand(command);
 
-    displayOff(command);
+    prepareCommand(command, Command::SET_MULTIPLEX_RATIO, 0, {0x3F});
     iSerial->setCommand(command);
 
-    setMuxRatio(command);
+    prepareCommand(command, Command::SET_MEMORY_MODE, 0, {0x00});
     iSerial->setCommand(command);
 
-    memoryAddrMode(command);
+    prepareCommand(command, Command::SET_DISPLAY_START_LINE, 0);
     iSerial->setCommand(command);
 
-    setStartLine(command);
+    prepareCommand(command, Command::SET_DISPLAY_OFFSET, 0, {0x00});
     iSerial->setCommand(command);
 
-    displayOffset(command);
+    prepareCommand(command, Command::SET_SEGMENT_REMAP, 0x01);
     iSerial->setCommand(command);
 
-    segRemapOp(command);
+    prepareCommand(command, Command::SET_COM_OUTPUT, 0x00);
     iSerial->setCommand(command);
 
-    comScanDirOp(command);
+    prepareCommand(command, Command::SET_COM_PINS_CONFIG, 0x00, {0x12});
     iSerial->setCommand(command);
 
-    // Com Pins Hardware configuration
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_COM_PINS_CONFIG), 0x12});
+    prepareCommand(command, Command::SET_CONTRAST_CONTROL, 0x00, {0x7F});
     iSerial->setCommand(command);
 
-    setContrast(command);
+    prepareCommand(command, Command::ENTRY_DISPLAY_ON, 0x00);
     iSerial->setCommand(command);
 
-    entireDisplayOn(command);
+    prepareCommand(command, Command::DISPLAY_NORMAL, 0x00);
     iSerial->setCommand(command);
 
-    setDisplayNormal(command);
+    prepareCommand(command, Command::SET_CLOCK_DIVIDER, 0x00, {0x80});
     iSerial->setCommand(command);
 
-    setOscFreq(command);
+    prepareCommand(command, Command::ENABLE_CHARGE_PUMP, 0x00, {0x14});
     iSerial->setCommand(command);
 
-    enableChargePump(command);
+    prepareCommand(command, Command::DEACTIVATE_SCROLL, 0x00);
     iSerial->setCommand(command);
 
-    // deactivate Scroll
-    prepareCommand(command,
-                   {0, static_cast<std::uint8_t>(Command::DEACTIVATE_SCROLL)});
-    iSerial->setCommand(command);
-
-    displayOn(command);
+    prepareCommand(command, Command::SET_DISPLAY, 0x01);
     iSerial->setCommand(command);
     // -----------------------------
 
@@ -114,7 +105,7 @@ void Ssd1306::update()
     ISerialCommander::Command command;
 
     // set command
-    cache[0] = 0x40;
+    cache[0] = static_cast<std::uint8_t>(Command::SET_DISPLAY_START_LINE);
 
     // write cache
     command.instruction = Instructions::WRITE_SPAN;
@@ -130,97 +121,33 @@ void Ssd1306::setSerialCommanderInterface(ISerialCommander& i_serial_commander)
     iSerial = &i_serial_commander;
 }
 
-void Ssd1306::prepareCommand(ISerialCommander::Command& command,
+void Ssd1306::prepareCommand(ISerialCommander::Command& serial_command,
+                             Command device_command,
+                             std::uint8_t device_command_manipulator,
                              const std::initializer_list<std::uint8_t>& data)
 {
-    command.instruction = ISerialCommander::Instructions::WRITE;
-    std::copy(data.begin(), data.end(), command.data.begin());
-    command.data_length = data.size();
+    serial_command.instruction = ISerialCommander::Instructions::WRITE;
+    serial_command.data[0] = 0;
+
+    serial_command.data[1] =
+        static_cast<std::uint8_t>(device_command) | device_command_manipulator;
+
+    std::copy(data.begin(), data.end(), serial_command.data.begin() + 2);
+
+    serial_command.data_length = data.size() + 2;
 }
 
-void Ssd1306::displayOff(ISerialCommander::Command& command)
+void Ssd1306::prepareCommand(ISerialCommander::Command& serial_command,
+                             Command device_command,
+                             std::uint8_t device_command_manipulator)
 {
-    prepareCommand(command,
-                   {0, static_cast<std::uint8_t>(Command::SET_DISPLAY)});
-}
+    serial_command.instruction = ISerialCommander::Instructions::WRITE;
+    serial_command.data[0] = 0;
 
-void Ssd1306::setOscFreq(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_CLOCK_DIVIDER), 0x80});
-}
+    serial_command.data[1] =
+        static_cast<std::uint8_t>(device_command) | device_command_manipulator;
 
-void Ssd1306::setMuxRatio(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_MULTIPLEX_RATIO), 0x3F});
-}
-
-void Ssd1306::displayOffset(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_DISPLAY_OFFSET), 0x00});
-}
-
-void Ssd1306::setStartLine(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_DISPLAY_START_LINE)});
-}
-
-void Ssd1306::memoryAddrMode(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_MEMORY_MODE), 0x00});
-}
-
-void Ssd1306::segRemapOp(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_SEGMENT_REMAP) | 0x01});
-}
-
-void Ssd1306::comScanDirOp(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_COM_OUTPUT) | 0x00});
-}
-
-void Ssd1306::setContrast(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::SET_CONTRAST_CONTROL), 0x7F});
-}
-
-void Ssd1306::displayOn(ISerialCommander::Command& command)
-{
-    prepareCommand(command,
-                   {0, static_cast<std::uint8_t>(Command::SET_DISPLAY) | 0x01});
-}
-void Ssd1306::entireDisplayOn(ISerialCommander::Command& command)
-{
-    prepareCommand(command,
-                   {0, static_cast<std::uint8_t>(Command::ENTRY_DISPLAY_ON)});
-}
-void Ssd1306::enableChargePump(ISerialCommander::Command& command)
-{
-    prepareCommand(
-        command,
-        {0, static_cast<std::uint8_t>(Command::ENABLE_CHARGE_PUMP), 0x14});
-}
-
-void Ssd1306::setDisplayNormal(ISerialCommander::Command& command)
-{
-    prepareCommand(command,
-                   {0, static_cast<std::uint8_t>(Command::DISPLAY_NORMAL)});
+    serial_command.data_length = 2;
 }
 
 void Ssd1306::done(IcbSerialCommander::ReturnValue return_value)

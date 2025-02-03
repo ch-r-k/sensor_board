@@ -110,8 +110,15 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     void setIcbDisplay(IcbDisplay& icb_display);
 
    private:
-    void prepareCommand(ISerialCommander::Command& command,
+    void prepareCommand(ISerialCommander::Command& serial_command,
+                        Command device_command,
+                        std::uint8_t device_command_manipulator,
                         const std::initializer_list<std::uint8_t>& data);
+
+    void prepareCommand(ISerialCommander::Command& serial_command,
+                        Command device_command,
+                        std::uint8_t device_command_manipulator);
+
     void displayOff(ISerialCommander::Command& command);
     void setOscFreq(ISerialCommander::Command& command);
     void setMuxRatio(ISerialCommander::Command& command);

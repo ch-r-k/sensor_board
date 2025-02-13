@@ -2,11 +2,19 @@
 
 ApplicationManager::ApplicationManager(DeviceManager& device_manager)
 {
+    // application manager
+    // Sensor -> Gui
+    aoSensor.setGuiInterface(aoGui);
+
+    // device manager
+    // blinky
     aoBlinky.setUserIndication(device_manager.getUserIndication());
 
+    // sensor
     aoSensor.setSensorInterface(device_manager.getAht10());
     device_manager.getAht10().setIcbSensor(aoSensor);
 
+    // gui
     aoGui.setDisplayInterface(device_manager.getSsd1306());
     device_manager.getSsd1306().setIcbDisplay(aoGui);
 }

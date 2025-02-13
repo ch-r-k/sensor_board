@@ -1,9 +1,19 @@
 #include "gui.hpp"
-#include <bits/c++config.h>
+
+// std libs
+#include <cassert>
 #include <cstdint>
-#include "system_signals.hpp"
+#include <bits/c++config.h>
+
+// 3d party libs
 #include "common.hpp"
-#include "display/i_display.hpp"
+
+// app layer interfaces
+
+// device layer interface
+
+// signals
+#include "system_signals.hpp"
 
 namespace app
 {
@@ -80,47 +90,21 @@ Q_STATE_DEF(Gui, initialize)
 
             /*Used to copy the buffer's content to the display*/
             disp_drv.flush_cb = staticFlushCallback;
-
-            lv_disp_t *disp;
-            disp = lv_disp_drv_register(&disp_drv);
+            lv_disp_drv_register(&disp_drv);
 
             //
-            /*{
-                lv_obj_t *label = lv_label_create(lv_scr_act());
-                lv_label_set_text(label, "Hello world");
-                lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-            } */
-
             {
-                /*Create a menu object*/
-                lv_obj_t *menu = lv_menu_create(lv_scr_act());
-                lv_obj_set_size(menu, 128, 64);
-                lv_obj_center(menu);
+                labelTitle = lv_label_create(lv_scr_act());
+                lv_label_set_text(labelTitle, "Hello world");
+                lv_obj_align(labelTitle, LV_ALIGN_TOP_LEFT, 0, 0);
 
-                lv_obj_t *cont;
-                lv_obj_t *label;
+                labelTemperature = lv_label_create(lv_scr_act());
+                lv_label_set_text(labelTemperature, "");
+                lv_obj_align(labelTemperature, LV_ALIGN_TOP_LEFT, 0, 15);
 
-                /*Create a sub page*/
-                lv_obj_t *sub_page = lv_menu_page_create(menu, NULL);
-
-                cont = lv_menu_cont_create(sub_page);
-                label = lv_label_create(cont);
-                lv_label_set_text(label, "Hello");
-
-                /*Create a main page*/
-                lv_obj_t *main_page = lv_menu_page_create(menu, NULL);
-
-                cont = lv_menu_cont_create(main_page);
-                label = lv_label_create(cont);
-                lv_label_set_text(label, "Item 1");
-
-                cont = lv_menu_cont_create(main_page);
-                label = lv_label_create(cont);
-                lv_label_set_text(label, "Item 2");
-
-                lv_menu_set_load_page_event(menu, cont, sub_page);
-
-                lv_menu_set_page(menu, main_page);
+                labelHumidity = lv_label_create(lv_scr_act());
+                lv_label_set_text(labelHumidity, "");
+                lv_obj_align(labelHumidity, LV_ALIGN_TOP_LEFT, 0, 30);
             }
 
             status = Q_RET_HANDLED;
@@ -155,12 +139,37 @@ Q_STATE_DEF(Gui, update)
             status = Q_RET_HANDLED;
             break;
         }
+        case system_layer::GUI_UPDATE_SENSOR_VALUE:
+        {
+            std::uint8_t identifier = Q_EVT_CAST(GuiLabel)->identifier;
+
+            if (identifier == 0)
+            {
+                lv_label_set_text_fmt(labelTemperature, " T = %d C",
+                                      Q_EVT_CAST(GuiLabel)->value);
+            }
+            else if (identifier == 1)
+            {
+                lv_label_set_text_fmt(labelHumidity, " h = %d ",
+                                      Q_EVT_CAST(GuiLabel)->value);
+            }
+
+            status = Q_RET_HANDLED;
+            break;
+        }
         case system_layer::GUI_TIMEOUT:
         {
+            static std::uint16_t debug = 0;
+
             lv_timer_handler();
+            lv_refr_now(NULL);
+
             m_timeEvt.armX(TICKS_PER_SEC / 50U, 0);
 
             status = Q_RET_HANDLED;
+
+            debug++;
+
             break;
         }
         case system_layer::GUI_UPDATE_DONE:
@@ -225,6 +234,26 @@ void Gui::staticFlushCallback(lv_disp_drv_t *disp_drv, const lv_area_t *area,
 
     // Notify LVGL that flushing is done
     lv_disp_flush_ready(disp_drv);
+}
+
+void Gui::setTempLabel(std::uint8_t value)
+{
+    GuiLabel *guiEvent = Q_NEW(GuiLabel, system_layer::GUI_UPDATE_SENSOR_VALUE);
+
+    guiEvent->value = value;
+    guiEvent->identifier = 0;
+
+    this->POST(guiEvent, this);
+}
+
+void Gui::setHumidityLabel(std::uint8_t value)
+{
+    GuiLabel *guiEvent = Q_NEW(GuiLabel, system_layer::GUI_UPDATE_SENSOR_VALUE);
+
+    guiEvent->value = value;
+    guiEvent->identifier = 1;
+
+    this->POST(guiEvent, this);
 }
 
 }  // namespace app

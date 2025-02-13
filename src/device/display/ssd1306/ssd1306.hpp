@@ -102,7 +102,7 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     void done(IcbSerialCommander::ReturnValue return_value) override;
 
     void init();
-    void drawPixel(std::uint32_t x, std::uint32_t y) override;
+    void drawPixel(std::uint32_t x, std::uint32_t y, Color color) override;
     void clear() override;
     void update() override;
 

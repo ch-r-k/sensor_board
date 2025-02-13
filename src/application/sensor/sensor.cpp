@@ -1,3 +1,4 @@
+#include <cstring>
 #include "system_signals.hpp"
 #include "qpcpp.hpp"
 #include "sensor.hpp"
@@ -86,7 +87,7 @@ Q_STATE_DEF(Sensor, read_measurement)
     {
         case Q_ENTRY_SIG:
         {
-            m_timeEvt.armX(TICKS_PER_SEC / 2U, 0);
+            m_timeEvt.armX(TICKS_PER_SEC / 2U, TICKS_PER_SEC / 2U);
             status = Q_RET_HANDLED;
             break;
         }
@@ -98,7 +99,21 @@ Q_STATE_DEF(Sensor, read_measurement)
         }
         case system_layer::SENSOR_READ_DONE:
         {
-            status = tran(read_measurement);
+            device_layer::ISensor::SensorData data;
+
+            data = Q_EVT_CAST(SensorEvent)->data;
+
+            if (data.quantity == device_layer::ISensor::Quantities::TEMPERATURE)
+            {
+                iGui->setTempLabel(Q_EVT_CAST(SensorEvent)->data.value);
+            }
+            else if (data.quantity ==
+                     device_layer::ISensor::Quantities::HUMIDITY)
+            {
+                iGui->setHumidityLabel(Q_EVT_CAST(SensorEvent)->data.value);
+            }
+
+            status = Q_RET_HANDLED;
             break;
         }
         default:
@@ -115,6 +130,8 @@ void Sensor::setSensorInterface(device_layer::ISensor& i_sensor)
     iSensor = &i_sensor;
 }
 
+void Sensor::setGuiInterface(IGui& i_gui) { iGui = &i_gui; }
+
 void Sensor::initDone()
 {
     static QP::QEvt const my_evt{system_layer::SENSOR_INIT_DONE};
@@ -125,18 +142,31 @@ void Sensor::readDone()
 {
     iSensor->getMeasurement(device_layer::ISensor::Quantities::HUMIDITY);
 
-    SensorEvent* sensorEvent =
+    SensorEvent* temperatureEvent =
         Q_NEW(SensorEvent, system_layer::SENSOR_READ_DONE);
 
-    sensorEvent->data.value =
+    temperatureEvent->data.value =
         iSensor->getMeasurement(device_layer::ISensor::Quantities::TEMPERATURE)
             .value;
 
-    sensorEvent->data.quantity =
+    temperatureEvent->data.quantity =
         iSensor->getMeasurement(device_layer::ISensor::Quantities::TEMPERATURE)
             .quantity;
 
-    this->POST(sensorEvent, this);
+    this->POST(temperatureEvent, this);
+
+    SensorEvent* humidityEvent =
+        Q_NEW(SensorEvent, system_layer::SENSOR_READ_DONE);
+
+    humidityEvent->data.value =
+        iSensor->getMeasurement(device_layer::ISensor::Quantities::HUMIDITY)
+            .value;
+
+    humidityEvent->data.quantity =
+        iSensor->getMeasurement(device_layer::ISensor::Quantities::HUMIDITY)
+            .quantity;
+
+    this->POST(humidityEvent, this);
 }
 
 }  // namespace app

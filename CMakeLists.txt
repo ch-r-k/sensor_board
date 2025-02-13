@@ -19,11 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(${PROJECT} LANGUAGES C CXX ASM)
 
-# option(ENABLE_FOTA "Enable firmware update over the air" OFF)
-# option(ENABLE_RTT "Enable SEGGER RTT for debugging" OFF)
-
 option(ENABLE_QS "Enable Qs for tracing" ON)
-
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "")
@@ -34,12 +30,15 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel"
 endif()
 
 add_subdirectory(3d_party EXCLUDE_FROM_ALL)
+add_subdirectory(3d_party/lvgl EXCLUDE_FROM_ALL)
+
 add_subdirectory(src/hardware/platform)
 
 set(INCLUDE_DIRS
     3d_party/cmsis_device_stm_l4/Include
     3d_party/cmsis_5/CMSIS/Core/Include
     3d_party/stm32l4xx_hal_driver/Inc
+    3d_party/lvgl  # Include LVGL submodule
     src
     src/application
     src/device
@@ -51,7 +50,6 @@ set(INCLUDE_DIRS
     src/hardware/qpcpp_callbacks
 )
 
-
 ## Application source files
 # C++ source files
 set(APP_CPP_SRCS
@@ -60,8 +58,7 @@ set(APP_CPP_SRCS
     src/_common/io_functions.cpp
     src/_common/common.cpp
     src/_common/error/error.cpp
-
-
+    
     src/application/application_manager.cpp
     src/application/blinky/blinky.cpp
     src/application/sensor/sensor.cpp
@@ -84,29 +81,30 @@ set(APP_CPP_SRCS
 
 include_directories(${INCLUDE_DIRS})
 
-add_executable( ${PROJECT} 
-                ${APP_CPP_SRCS})
+add_executable(${PROJECT} ${APP_CPP_SRCS})
 
 target_include_directories(${PROJECT} PRIVATE include)
 
 target_link_libraries(${PROJECT} PRIVATE stm32)
-
 target_link_libraries(${PROJECT} PRIVATE qpcpp)
+target_link_libraries(${PROJECT} PRIVATE lvgl)
 
 target_linker_script(${PROJECT} "${CMAKE_CURRENT_LIST_DIR}/src/hardware/linker/blinky.ld")
 
+target_compile_options(lvgl PUBLIC -DLV_CONF_PATH=/workspaces/sensor_board/3d_party/lv_conf.h)
+
 if (ENABLE_QS)
-target_compile_definitions(${PROJECT} PUBLIC Q_SPY)
-target_compile_definitions(qpcpp PUBLIC Q_SPY)
+    target_compile_definitions(${PROJECT} PUBLIC Q_SPY)
+    target_compile_definitions(qpcpp PUBLIC Q_SPY)
 endif ()
 
 set(WARNINGS
     all
-	extra
-	maybe-uninitialized
-	strict-overflow=2
-	switch
-	write-strings
+    extra
+    maybe-uninitialized
+    strict-overflow=2
+    switch
+    write-strings
 )
 
 list(TRANSFORM WARNINGS PREPEND "-W")

@@ -83,7 +83,7 @@ void Ssd1306::init()
 
 void Ssd1306::clear() { cache.fill(0U); }
 
-void Ssd1306::drawPixel(std::uint32_t x, std::uint32_t y)
+void Ssd1306::drawPixel(std::uint32_t x, std::uint32_t y, Color color)
 {
     std::uint8_t page = 0;
     std::uint8_t pixel = 0;
@@ -94,7 +94,15 @@ void Ssd1306::drawPixel(std::uint32_t x, std::uint32_t y)
     pixel = y % RAM_Y_END;  // which pixel (y % 8)
 
     std::size_t index = x + (page << 7);
-    cache[index + 1] = 1U << pixel;  // save pixel
+
+    if (color.red || color.blue || color.green)
+    {
+        cache[index + 1] |= (1U << pixel);  // set pixel
+    }
+    else
+    {
+        cache[index + 1] &= ~(1U << pixel);  // clear pixel
+    }
 }
 
 void Ssd1306::update()

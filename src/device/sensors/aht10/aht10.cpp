@@ -30,8 +30,9 @@ void Aht10::init()
     const std::uint8_t commandContinuationByte =
         *(reinterpret_cast<std::uint8_t*>(&commandContinuation));
 
-    ISerialCommander::Command command;
-    command.instruction = ISerialCommander::Instructions::WRITE;
+    hardware_layer::interface::ISerialCommander::Command command;
+    command.instruction =
+        hardware_layer::interface::ISerialCommander::Instructions::WRITE;
     command.data[0] = static_cast<std::uint8_t>(Command::INIT);
     command.data[1] = commandContinuationByte;
     command.data[2] = 0x00U;
@@ -56,10 +57,11 @@ void Aht10::triggerMeasurement()
 
     // Trigger a measurement
 
-    ISerialCommander::Command command;
+    hardware_layer::interface::ISerialCommander::Command command;
 
     // Start Measurement
-    command.instruction = ISerialCommander::Instructions::WRITE;
+    command.instruction =
+        hardware_layer::interface::ISerialCommander::Instructions::WRITE;
     command.data[0] = static_cast<std::uint8_t>(Command::MEASURE);
     command.data[1] = commandContinuationByte;
     command.data[2] = 0x00U;
@@ -67,13 +69,15 @@ void Aht10::triggerMeasurement()
     iSerial->setCommand(command);
 
     // Pause
-    command.instruction = ISerialCommander::Instructions::PAUSE;
+    command.instruction =
+        hardware_layer::interface::ISerialCommander::Instructions::PAUSE;
     command.data_length = 0;
     command.pauseTime = 100;
     iSerial->setCommand(command);
 
     // Read Measurement
-    command.instruction = ISerialCommander::Instructions::READ;
+    command.instruction =
+        hardware_layer::interface::ISerialCommander::Instructions::READ;
     command.data_length = 6;
     iSerial->setCommand(command);
 
@@ -83,12 +87,16 @@ void Aht10::triggerMeasurement()
     iSerial->startCommands();
 }
 
-void Aht10::setSerialInterface(ISerialCommander& i_serial)
+void Aht10::setSerialInterface(
+    hardware_layer::interface::ISerialCommander& i_serial)
 {
     iSerial = &i_serial;
 }
 
-void Aht10::setIcbSensor(IcbSensor& icb_sensor) { icbSensor = &icb_sensor; }
+void Aht10::setIcbSensor(interface::IcbSensor& icb_sensor)
+{
+    icbSensor = &icb_sensor;
+}
 
 void Aht10::done(ReturnValue return_value)
 {
@@ -126,7 +134,7 @@ void Aht10::done(ReturnValue return_value)
     activeInstruction = ISensor::Operation::NOP;
 }
 
-ISensor::SensorData Aht10::getMeasurement(Quantities quantity)
+interface::ISensor::SensorData Aht10::getMeasurement(Quantities quantity)
 {
     switch (quantity)
     {

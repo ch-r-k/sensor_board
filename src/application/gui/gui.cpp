@@ -186,7 +186,7 @@ Q_STATE_DEF(Gui, update)
     return status;
 }
 //............................................................................
-void Gui::setDisplayInterface(device_layer::IDisplay &i_display)
+void Gui::setDisplayInterface(device_layer::interface::IDisplay &i_display)
 {
     iDisplay = &i_display;
 }
@@ -216,7 +216,7 @@ void Gui::staticFlushCallback(lv_disp_drv_t *disp_drv, const lv_area_t *area,
         for (int x = area->x1; x <= area->x2; x++)
         {
             // Extract pixel color (1-bit depth: 0 = off, 1 = on)
-            device_layer::IDisplay::Color pixel_color;
+            device_layer::interface::IDisplay::Color pixel_color;
             pixel_color.red = lv_color_to1(*color_p);
             pixel_color.green = lv_color_to1(*color_p);
             pixel_color.blue = lv_color_to1(*color_p);

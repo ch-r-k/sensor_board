@@ -4,7 +4,9 @@ cmake_minimum_required (VERSION 3.17)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/arm_setup/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/hardware/platform")
 
+#set(CMAKE_TOOLCHAIN_FILE ./arm_setup/cmake/arm-clang-toolchain.cmake)
 set(CMAKE_TOOLCHAIN_FILE ./arm_setup/cmake/arm-gcc-toolchain.cmake)
+
 set(DEVICE STM32L476RG)
 set(PROJECT blinky)
 
@@ -69,10 +71,10 @@ set(APP_CPP_SRCS
     src/device/user_indication/user_indication.cpp
     src/device/sensors/aht10/aht10.cpp
     src/device/display/ssd1306/ssd1306.cpp
-    src/device/serial_commander/serial_commander.cpp
     
     src/hardware/hardware_manager.cpp
-    src/hardware/output_pin/output_pin.cpp
+    src/hardware/serial_commander/serial_commander.cpp
+    src/hardware/driver/output_pin/output_pin.cpp
     src/hardware/driver/spi/spi.cpp
     src/hardware/driver/i2c/i2c.cpp
     src/hardware/driver/uart/uart.cpp
@@ -85,11 +87,14 @@ add_executable(${PROJECT} ${APP_CPP_SRCS})
 
 target_include_directories(${PROJECT} PRIVATE include)
 
+#target_link_libraries(${PROJECT} PUBLIC toolchain) 
+
 target_link_libraries(${PROJECT} PRIVATE stm32)
 target_link_libraries(${PROJECT} PRIVATE qpcpp)
 target_link_libraries(${PROJECT} PRIVATE lvgl)
 
 target_linker_script(${PROJECT} "${CMAKE_CURRENT_LIST_DIR}/src/hardware/linker/blinky.ld")
+#target_link_options(${PROJECT} PRIVATE -T${CMAKE_CURRENT_LIST_DIR}/src/hardware/linker/blinky.ld)
 
 target_compile_options(lvgl PUBLIC -DLV_CONF_PATH=/workspaces/sensor_board/3d_party/lv_conf.h)
 

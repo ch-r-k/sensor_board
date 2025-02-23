@@ -10,7 +10,8 @@
 #include <cstdint>
 namespace device_layer
 {
-class Aht10 : public ISensor, public IcbSerialCommander
+class Aht10 : public interface::ISensor,
+              public hardware_layer::interface::IcbSerialCommander
 {
    public:
     // Enum for AHT10 commands
@@ -41,9 +42,9 @@ class Aht10 : public ISensor, public IcbSerialCommander
    private:
     bool isOpen = false;
     bool initialized = false;
-    ISerialCommander* iSerial = nullptr;
-    ISensor::Operation activeInstruction = ISensor::Operation::NOP;
-    IcbSensor* icbSensor = nullptr;
+    hardware_layer::interface::ISerialCommander* iSerial = nullptr;
+    interface::ISensor::Operation activeInstruction = ISensor::Operation::NOP;
+    interface::IcbSensor* icbSensor = nullptr;
 
     std::uint8_t address = 0x38;
 
@@ -70,8 +71,9 @@ class Aht10 : public ISensor, public IcbSerialCommander
 
     void done(ReturnValue return_value) override;
 
-    void setSerialInterface(ISerialCommander& i_serial);
-    void setIcbSensor(IcbSensor& icb_sensor);
+    void setSerialInterface(
+        hardware_layer::interface::ISerialCommander& i_serial);
+    void setIcbSensor(interface::IcbSensor& icb_sensor);
     SensorData getMeasurement(Quantities quantity) override;
 };
 

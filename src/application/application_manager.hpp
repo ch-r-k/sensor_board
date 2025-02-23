@@ -10,6 +10,9 @@
 
 #include "device_manager.hpp"
 
+namespace manager
+{
+
 class ApplicationManager
 {
    private:
@@ -24,5 +27,7 @@ class ApplicationManager
 
     void start();
 };
+
+}  // namespace manager
 
 #endif  // APPLICATION_MANAGER_HPP

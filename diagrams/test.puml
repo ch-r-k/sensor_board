@@ -1,0 +1,350 @@
+@startuml
+package [src] as C_0011100957978370531577 {
+package [device] as C_0006694467202503346707 {
+package [user_indication] as C_0007150561736413337987 {
+class "IUserIndication" as C_0014917396999637096547
+class C_0014917396999637096547 {
+__
+}
+class "UserIndication" as C_0011878340680608868563
+class C_0011878340680608868563 {
+__
+-outputPin : hardware_layer::interface::IOutputPin *
+}
+}
+package [sensors] as C_0008002442099408640964 {
+class "ISensor" as C_0009346279371554902746
+class C_0009346279371554902746 {
+__
+}
+class "ISensor::SensorData" as C_0011239382349120831495
+class C_0011239382349120831495 {
+__
+}
+class "IcbSensor" as C_0005275836689281178162
+class C_0005275836689281178162 {
+__
+}
+package [aht10] as C_0000220586222809802987 {
+class "Aht10" as C_0005532910924077348494
+class C_0005532910924077348494 {
+__
+-activeInstruction : interface::ISensor::Operation
+-address : std::uint8_t
+-commandContinuation : device_layer::Aht10::CommandContinuation
+-humidity : device_layer::interface::ISensor::SensorData
+-iSerial : hardware_layer::interface::ISerialCommander *
+-icbSensor : interface::IcbSensor *
+-initialized : bool
+-isOpen : bool
+-temperature : device_layer::interface::ISensor::SensorData
+}
+class "Aht10::CommandContinuation" as C_0017574253537192038882
+class C_0017574253537192038882 {
+__
+}
+}
+}
+package [display] as C_0015086275916328519314 {
+class "IDisplay" as C_0001688748224213787617
+class C_0001688748224213787617 {
+__
+}
+class "IDisplay::Color" as C_0002629644745516036601
+class C_0002629644745516036601 {
+__
+}
+class "IcbDisplay" as C_0004794764142398018568
+class C_0004794764142398018568 {
+__
+}
+package [ssd1306] as C_0001164134272287276534 {
+class "Ssd1306" as C_0009753622253334925123
+class C_0009753622253334925123 {
+-prepareCommand(hardware_layer::interface::ISerialCommander::Command & serial_command, device_layer::Ssd1306::Command device_command, std::uint8_t device_command_manipulator, const std::initializer_list<std::uint8_t> & data) : void
+-prepareCommand(hardware_layer::interface::ISerialCommander::Command & serial_command, device_layer::Ssd1306::Command device_command, std::uint8_t device_command_manipulator) : void
+__
+{static} -CACHE_SIZE : const std::size_t
+{static} -END_COLUMN_ADDRESS : const std::size_t
+{static} -END_PAGE_ADDRESS : const std::size_t
+{static} -MAX_X : const std::size_t
+{static} -MAX_Y : const std::size_t
+{static} -RAM_X_END : const std::size_t
+{static} -RAM_Y_END : const std::size_t
+{static} -START_COLUMN_NUMBER : const std::size_t
+{static} -START_PAGE_ADDRESS : const std::size_t
+-address : std::uint8_t
+-cache : std::array<std::uint8_t,CACHE_SIZE + 1>
+-iSerial : hardware_layer::interface::ISerialCommander *
+-icbDisplay : interface::IcbDisplay *
+-initialized : bool
+-isOpen : bool
+-readBuffer : std::array<std::uint8_t,6>
+}
+}
+}
+class "DeviceManager" as C_0013863018875624683104
+class C_0013863018875624683104 {
+__
+-aht10 : device_layer::Aht10
+-aoDisplay : hardware_layer::SerialCommander
+-aoSensor : hardware_layer::SerialCommander
+-ssd1306 : device_layer::Ssd1306
+-userIndication : device_layer::UserIndication
+}
+}
+package [application] as C_0007250404570915629403 {
+package [blinky] as C_0003089195684290093452 {
+class "Blinky" as C_0007883474967757026754
+class C_0007883474967757026754 {
+__
+-m_timeEvt : QP::QTimeEvt
+-userIndication : device_layer::IUserIndication *
+}
+}
+package [gui] as C_0004102074582343719711 {
+class "GuiLabel" as C_0013702176452719247331
+class C_0013702176452719247331 {
+__
+}
+class "IGui" as C_0013636042511666871916
+class C_0013636042511666871916 {
+__
+}
+class "Gui" as C_0000948712860644548974
+class C_0000948712860644548974 {
+-initDone() : void
+-printDone() : void
+{static} -staticFlushCallback(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p) : void
+__
+-buf_1 : lv_color_t[8192]
+-disp_buf : lv_disp_draw_buf_t
+-iDisplay : device_layer::interface::IDisplay *
+-labelHumidity : lv_obj_t *
+-labelTemperature : lv_obj_t *
+-labelTitle : lv_obj_t *
+-m_timeEvt : QP::QTimeEvt
+}
+}
+package [sensor] as C_0016058708233006242418 {
+class "SensorEvent" as C_0017221047164731324295
+class C_0017221047164731324295 {
+__
+}
+class "Sensor" as C_0015178894446977333668
+class C_0015178894446977333668 {
+-initDone() : void
+-readDone() : void
+__
+-iGui : app::IGui *
+-iSensor : device_layer::interface::ISensor *
+-m_timeEvt : QP::QTimeEvt
+}
+}
+package [startup] as C_0013012395938187449945 {
+class "Startup" as C_0008329927423251204232
+class C_0008329927423251204232 {
+__
+}
+}
+class "ApplicationManager" as C_0013307138085226643557
+class C_0013307138085226643557 {
+__
+-aoBlinky : app::Blinky
+-aoGui : app::Gui
+-aoSensor : app::Sensor
+-aoStartup : app::Startup
+}
+}
+package [hardware] as C_0018294288599492866740 {
+package [driver] as C_0010413016684820122153 {
+package [output_pin] as C_0007513421075199775033 {
+class "IOutputPin" as C_0015574588586859921782
+class C_0015574588586859921782 {
+__
+}
+class "OutputPin" as C_0018190368568554910621
+class C_0018190368568554910621 {
+__
+-mode : hardware_layer::OutputPin::Mode
+-pin : hardware_layer::OutputPin::Pin
+-port : hardware_layer::OutputPin::Port
+-pull : hardware_layer::OutputPin::Pull
+-speed : hardware_layer::OutputPin::Speed
+}
+}
+package [spi] as C_0006872747968432227899 {
+class "ISpi" as C_0016688720395534663797
+class C_0016688720395534663797 {
+__
+}
+class "Spi" as C_0011517053732404143824
+class C_0011517053732404143824 {
+__
+-gpioClk : GPIO_InitTypeDef
+-gpioMiso : GPIO_InitTypeDef
+-gpioMosi : GPIO_InitTypeDef
+-handler : SPI_HandleTypeDef
+-isOpen : bool
+-portClk : GPIO_TypeDef *
+-portMiso : GPIO_TypeDef *
+-portMosi : GPIO_TypeDef *
+}
+}
+package [uart] as C_0005588286709872427853 {
+class "IUart" as C_0004972765147661009650
+class C_0004972765147661009650 {
+__
+}
+class "Uart" as C_0014239512524853039198
+class C_0014239512524853039198 {
+__
+-gpioRx : GPIO_InitTypeDef
+-gpioTx : GPIO_InitTypeDef
+-handler : UART_HandleTypeDef
+-open : bool
+-periphClkInit : RCC_PeriphCLKInitTypeDef
+-portRx : GPIO_TypeDef *
+-portTx : GPIO_TypeDef *
+}
+}
+package [i2c] as C_0003514875363464416490 {
+class "II2c" as C_0001955225274653391297
+class C_0001955225274653391297 {
+__
+}
+class "IcbI2c" as C_0001043120281719416176
+class C_0001043120281719416176 {
+__
+}
+class "I2c" as C_0000102306443127453571
+class C_0000102306443127453571 {
+__
+-address : std::uint8_t
+-handler : I2C_HandleTypeDef
+-icbI2c : interface::IcbI2c *
+{static} -instanceMap : std::unordered_map<I2C_TypeDef *,I2c *>
+-isOpen : bool
+}
+}
+}
+class "HardwareManager" as C_0013820397576961944853
+class C_0013820397576961944853 {
+-systemClockConfig() : void
+__
+-TEST : hardware_layer::OutputPin
+-displayI2c : hardware_layer::I2c
+-ledPin : hardware_layer::OutputPin
+-sensorI2c : hardware_layer::I2c
+-sensorSpi : hardware_layer::Spi
+}
+package [serial_commander] as C_0016115113449937623462 {
+class "ISerialCommander" as C_0012909992160874174612
+class C_0012909992160874174612 {
+__
+}
+class "ISerialCommander::Command" as C_0009582969386813537689
+class C_0009582969386813537689 {
+__
+}
+class "IcbSerialCommander" as C_0006717726296434081648
+class C_0006717726296434081648 {
+__
+}
+class "IcbSerialCommander::ReturnValue" as C_0017247723677403813919
+class C_0017247723677403813919 {
+__
+}
+class "CommandEvent" as C_0012389330116771108594
+class C_0012389330116771108594 {
+__
+}
+class "SerialCommander" as C_0012458789690594031884
+class C_0012458789690594031884 {
+-getStateFromInst(hardware_layer::interface::ISerialCommander::Instructions instruction) : QP::QStateHandler
+-nextState() : QP::QStateHandler
+-readDone() : void
+-setChipSelect(std::uint8_t pin) : void
+-setCommand(hardware_layer::interface::ISerialCommander::Command command) : void
+-setI2CAddress(std::uint8_t address) : void
+-startCommands() : void
+-writeDone() : void
+__
+-command_index : std::size_t
+-command_length : std::size_t
+-commands : std::array<Command,128>
+-iI2c : hardware_layer::interface::II2c *
+-iSpi : hardware_layer::interface::ISpi *
+-icbSerialCommander : interface::IcbSerialCommander *
+-m_timeEvt : QP::QTimeEvt
+}
+}
+}
+}
+C_0011878340680608868563 --> C_0015574588586859921782 : -outputPin
+C_0014917396999637096547 <|-- C_0011878340680608868563
+C_0009346279371554902746 ..> C_0011239382349120831495
+C_0011239382349120831495 --+ C_0009346279371554902746
+C_0005532910924077348494 ..> C_0017247723677403813919
+C_0005532910924077348494 --> C_0012909992160874174612 : -iSerial
+C_0005532910924077348494 --> C_0005275836689281178162 : -icbSensor
+C_0005532910924077348494 o-- C_0011239382349120831495 : -humidity
+C_0005532910924077348494 o-- C_0011239382349120831495 : -temperature
+C_0005532910924077348494 o-- C_0017574253537192038882 : -commandContinuation
+C_0009346279371554902746 <|-- C_0005532910924077348494
+C_0006717726296434081648 <|-- C_0005532910924077348494
+C_0017574253537192038882 --+ C_0005532910924077348494
+C_0001688748224213787617 ..> C_0002629644745516036601
+C_0002629644745516036601 --+ C_0001688748224213787617
+C_0009753622253334925123 ..> C_0017247723677403813919
+C_0009753622253334925123 ..> C_0002629644745516036601
+C_0009753622253334925123 ..> C_0009582969386813537689
+C_0009753622253334925123 --> C_0004794764142398018568 : -icbDisplay
+C_0009753622253334925123 --> C_0012909992160874174612 : -iSerial
+C_0001688748224213787617 <|-- C_0009753622253334925123
+C_0006717726296434081648 <|-- C_0009753622253334925123
+C_0013863018875624683104 ..> C_0013820397576961944853
+C_0013863018875624683104 o-- C_0011878340680608868563 : -userIndication
+C_0013863018875624683104 o-- C_0012458789690594031884 : -aoSensor
+C_0013863018875624683104 o-- C_0012458789690594031884 : -aoDisplay
+C_0013863018875624683104 o-- C_0005532910924077348494 : -aht10
+C_0013863018875624683104 o-- C_0009753622253334925123 : -ssd1306
+C_0007883474967757026754 --> C_0014917396999637096547 : -userIndication
+C_0000948712860644548974 --> C_0001688748224213787617 : -iDisplay
+C_0004794764142398018568 <|-- C_0000948712860644548974
+C_0013636042511666871916 <|-- C_0000948712860644548974
+C_0017221047164731324295 o-- C_0011239382349120831495 : +data
+C_0015178894446977333668 --> C_0009346279371554902746 : -iSensor
+C_0015178894446977333668 --> C_0013636042511666871916 : -iGui
+C_0005275836689281178162 <|-- C_0015178894446977333668
+C_0013307138085226643557 ..> C_0013863018875624683104
+C_0013307138085226643557 o-- C_0007883474967757026754 : -aoBlinky
+C_0013307138085226643557 o-- C_0015178894446977333668 : -aoSensor
+C_0013307138085226643557 o-- C_0008329927423251204232 : -aoStartup
+C_0013307138085226643557 o-- C_0000948712860644548974 : -aoGui
+C_0015574588586859921782 <|-- C_0018190368568554910621
+C_0016688720395534663797 <|-- C_0011517053732404143824
+C_0004972765147661009650 <|-- C_0014239512524853039198
+C_0000102306443127453571 --> C_0001043120281719416176 : -icbI2c
+C_0000102306443127453571 --> C_0000102306443127453571 : -instanceMap
+C_0001955225274653391297 <|-- C_0000102306443127453571
+C_0013820397576961944853 o-- C_0018190368568554910621 : -ledPin
+C_0013820397576961944853 o-- C_0018190368568554910621 : -TEST
+C_0013820397576961944853 o-- C_0011517053732404143824 : -sensorSpi
+C_0013820397576961944853 o-- C_0000102306443127453571 : -sensorI2c
+C_0013820397576961944853 o-- C_0000102306443127453571 : -displayI2c
+C_0012909992160874174612 ..> C_0009582969386813537689
+C_0009582969386813537689 --+ C_0012909992160874174612
+C_0006717726296434081648 ..> C_0017247723677403813919
+C_0017247723677403813919 --+ C_0006717726296434081648
+C_0012389330116771108594 o-- C_0009582969386813537689 : +command
+C_0012458789690594031884 --> C_0006717726296434081648 : -icbSerialCommander
+C_0012458789690594031884 --> C_0001955225274653391297 : -iI2c
+C_0012458789690594031884 --> C_0016688720395534663797 : -iSpi
+C_0012458789690594031884 o-- C_0009582969386813537689 : -commands
+C_0012909992160874174612 <|-- C_0012458789690594031884
+C_0001043120281719416176 <|-- C_0012458789690594031884
+
+'Generated with clang-uml, version 0.6.0
+'LLVM version Ubuntu clang version 15.0.7
+@enduml

@@ -1,0 +1,152 @@
+# Path to the directory where `compile_commands.json` can be found
+compilation_database_dir: build
+# Output directory for the diagrams
+output_directory: diagrams
+# Diagrams definitions
+diagrams:
+  # Diagram name
+  test:
+    # Type of diagram (has to be `class`)
+    type: class
+    # Include only translation units matching the following patterns
+    glob:
+      - src/*.cpp
+    # Render namespaces as packages
+    package_type : directory
+    generate_packages: true  
+    # Render all names in the diagram relative to specific namespace
+    include:
+      namespaces:
+        - app
+        - device_layer
+        - hardware_layer
+        - manager
+    exclude:
+      access:
+          - public
+          - protected
+#          - private
+      element_types:
+          - enum
+
+  
+  blinky:
+    # Type of diagram (has to be `class`)
+    type: class
+    # Include only translation units matching the following patterns
+    glob:
+      - src/*.cpp
+    package_type : directory
+    # Render namespaces as packages
+    generate_packages: true  
+    # Render all names in the diagram relative to specific namespace
+    include:
+      elements:
+        - manager::ApplicationManager
+        - app::Blinky
+        - manager::DeviceManager
+        - device_layer::IUserIndication
+        - device_layer::UserIndication
+        - manager::HardwareManager
+        - hardware_layer::interface::IOutputPin
+        - hardware_layer::OutputPin
+
+
+  Sensor:
+    # Type of diagram (has to be `class`)
+    type: class
+    # Include only translation units matching the following patterns
+    glob:
+      - src/*.cpp
+    package_type : directory
+    # Render namespaces as packages
+    generate_packages: true  
+    # Render all names in the diagram relative to specific namespace
+    include:
+      elements:
+        - manager::ApplicationManager
+        - app::Sensor
+        - manager::DeviceManager
+        - device_layer::interface::ISensor
+        - device_layer::interface::IcbSensor
+        - device_layer::Aht10
+        - manager::HardwareManager
+        - hardware_layer::interface::ISerialCommander
+        - hardware_layer::interface::IcbSerialCommander
+        - hardware_layer::SerialCommander
+        - hardware_layer::interface::II2c
+        - hardware_layer::interface::IcbI2c
+        - hardware_layer::I2c
+    exclude:
+#      access:
+#          - public
+#          - protected
+#          - private
+      element_types:
+          - enum
+
+    layout:
+      # Add layout hints for PlantUML
+      manager::ApplicationManager:
+        - down: manager::DeviceManager
+        - right: app::Sensor
+      manager::DeviceManage:
+        - down: manager::HardwareManager
+        - right: device_layer::interface::ISensor
+        - right: device_layer::interface::IcbSensor
+        - right: device_layer::Aht10
+        - right: hardware_layer::interface::ISerialCommander
+        - right: hardware_layer::interface::IcbSerialCommander
+        - right: hardware_layer::SerialCommander
+      device_layer::Aht10:
+        - up: device_layer::interface::ISensor
+        - up: device_layer::interface::IcbSensor
+        - down: hardware_layer::interface::ISerialCommander
+        - down: hardware_layer::interface::IcbSerialCommander
+      hardware_layer::SerialCommander:
+        - up: hardware_layer::interface::ISerialCommander
+        - up: hardware_layer::interface::IcbSerialCommander
+        - down: hardware_layer::interface::II2c
+        - down: hardware_layer::interface::IcbI2c
+      manager::HardwareManager:
+        - right: hardware_layer::interface::II2c
+        - right: hardware_layer::interface::IcbI2c
+        - right: hardware_layer::I2c
+      hardware_layer::I2c:
+        - up: hardware_layer::interface::II2c
+        - up: hardware_layer::interface::IcbI2c
+
+
+  Gui:
+    # Type of diagram (has to be `class`)
+    type: class
+    # Include only translation units matching the following patterns
+    glob:
+      - src/*.cpp
+    package_type : namespace
+    # Render namespaces as packages
+    generate_packages: true  
+    # Render all names in the diagram relative to specific namespace
+    include:
+      elements:
+        - manager::ApplicationManager
+        - app::Gui
+        - app::IGui
+        - manager::DeviceManager
+        - device_layer::interface::IDisplay
+        - device_layer::interface::IcbDisplay
+        - device_layer::Ssd1306
+        - manager::HardwareManager
+        - hardware_layer::interface::ISerialCommander
+        - hardware_layer::interface::IcbSerialCommander
+        - hardware_layer::SerialCommander
+        - hardware_layer::interface::II2c
+        - hardware_layer::interface::IcbI2c
+        - hardware_layer::I2c
+    exclude:
+      access:
+          - public
+          - protected
+          - private
+      element_types:
+          - enum

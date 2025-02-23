@@ -1,7 +1,11 @@
 #include "hardware_manager.hpp"
 
+#include "serial_commander/serial_commander.hpp"
 #include "stm32l4xx.h"  // CMSIS-compliant header file for the MCU used
 #include "stm32l4xx_hal.h"
+
+namespace manager
+{
 
 HardwareManager::HardwareManager()
 {
@@ -69,6 +73,14 @@ HardwareManager::HardwareManager()
     displayI2c.configure(hardware_layer::I2c::GeneralCallMode::DISABLE);
     displayI2c.configure(hardware_layer::I2c::NoStretchMode::DISABLE);
     displayI2c.setErrorCallback(errorCallback);
+
+    // Serial
+    aoSensor.setSerialInterface(sensorI2c);
+    sensorI2c.setIcb(aoSensor);
+
+    // Serial
+    aoDisplay.setSerialInterface(displayI2c);
+    displayI2c.setIcb(aoDisplay);
 }
 
 void HardwareManager::systemClockConfig(void)
@@ -115,10 +127,37 @@ void HardwareManager::systemClockConfig(void)
 
 HardwareManager::~HardwareManager() {}
 
+void HardwareManager::run()
+{
+    static QP::QEvt const* serial_sensor_queue_sto[10];
+    aoSensor.start(5U,                              // QP prio. of the AO
+                   serial_sensor_queue_sto,         // event queue storage
+                   Q_DIM(serial_sensor_queue_sto),  // queue length [events]
+                   nullptr, 0U,                     // no stack storage
+                   nullptr);                        // no initialization param
+    QS_OBJ_DICTIONARY(&aoSensor);
+
+    static QP::QEvt const* serial_display_queue_sto[16];
+    aoDisplay.start(6U,                               // QP prio. of the AO
+                    serial_display_queue_sto,         // event queue storage
+                    Q_DIM(serial_display_queue_sto),  // queue length [events]
+                    nullptr, 0U,                      // no stack storage
+                    nullptr);                         // no initialization param
+    QS_OBJ_DICTIONARY(&aoDisplay);
+}
+
 hardware_layer::OutputPin& HardwareManager::getLedPin() { return ledPin; }
 
 hardware_layer::Spi& HardwareManager::getSensorSpi() { return sensorSpi; }
 
-hardware_layer::I2c& HardwareManager::getSensorI2c() { return sensorI2c; }
+hardware_layer::SerialCommander& HardwareManager::getDisplaySerial()
+{
+    return aoDisplay;
+};
 
-hardware_layer::I2c& HardwareManager::getDisplayI2c() { return displayI2c; };
+hardware_layer::SerialCommander& HardwareManager::getSensorSerial()
+{
+    return aoSensor;
+};
+
+}  // namespace manager

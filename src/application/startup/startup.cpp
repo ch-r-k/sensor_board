@@ -10,13 +10,6 @@
 #include "qpcpp.hpp"
 #include "startup.hpp"
 
-// unnamed namespace for local definitions with internal linkage
-namespace
-{
-// Q_DEFINE_THIS_FILE
-
-}  // unnamed namespace
-
 namespace app
 {
 //............................................................................

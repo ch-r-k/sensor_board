@@ -3,6 +3,11 @@
 
 #include <array>
 #include <cstdint>
+
+namespace hardware_layer
+{
+namespace interface
+{
 class IcbSerialCommander
 {
    public:
@@ -17,5 +22,7 @@ class IcbSerialCommander
     virtual ~IcbSerialCommander() = default;
     virtual void done(ReturnValue return_value) = 0;
 };
+}  // namespace interface
+}  // namespace hardware_layer
 
 #endif  // ICB_SERIAL_COMMANDER_HPP

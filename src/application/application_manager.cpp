@@ -1,5 +1,8 @@
 #include "application_manager.hpp"
 
+namespace manager
+{
+
 ApplicationManager::ApplicationManager(DeviceManager& device_manager)
 {
     // application manager
@@ -61,3 +64,5 @@ void ApplicationManager::start()
                 nullptr);              // no initialization param
     QS_OBJ_DICTIONARY(&aoStartup);
 }
+
+}  // namespace manager

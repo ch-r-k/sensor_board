@@ -20,7 +20,7 @@ int main()
     // QS_GLB_FILTER(QP::QS_SM_RECORDS);
     // QS_GLB_FILTER(QP::QS_SC_RECORDS);
 
-    static SystemManager system_manager;
+    static manager_::SystemManager system_manager;
 
     // Uart for QSPY
     qsUart.ConfigureBaudrate(115200);

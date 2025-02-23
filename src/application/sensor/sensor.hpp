@@ -22,13 +22,13 @@ namespace app
 class SensorEvent : public QP::QEvt
 {
    public:
-    device_layer::ISensor::SensorData data;
+    device_layer::interface::ISensor::SensorData data;
 };
-class Sensor : public QP::QActive, public device_layer::IcbSensor
+class Sensor : public QP::QActive, public device_layer::interface::IcbSensor
 {
    private:
     QP::QTimeEvt m_timeEvt;
-    device_layer::ISensor* iSensor = nullptr;
+    device_layer::interface::ISensor* iSensor = nullptr;
     IGui* iGui = nullptr;
 
     void initDone() override;
@@ -36,7 +36,7 @@ class Sensor : public QP::QActive, public device_layer::IcbSensor
 
    public:
     Sensor();
-    void setSensorInterface(device_layer::ISensor& i_sensor);
+    void setSensorInterface(device_layer::interface::ISensor& i_sensor);
     void setGuiInterface(IGui& i_gui);
 
    protected:

@@ -8,10 +8,10 @@ Uart::Uart(std::uint8_t instance)
 {
     assert(instance >= 1 && instance <= 5);
 
-    static constexpr USART_TypeDef *uartInstances[] = {USART1, USART2, USART3,
-                                                       UART4, UART5};
+    static USART_TypeDef *uart_instances[] = {USART1, USART2, USART3, UART4,
+                                              UART5};
 
-    handler.Instance = uartInstances[instance - 1];
+    handler.Instance = uart_instances[instance - 1];
 
     switch (instance)
     {

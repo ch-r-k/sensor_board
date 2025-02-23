@@ -5,6 +5,10 @@
 #include <array>
 #include <span>
 
+namespace hardware_layer
+{
+namespace interface
+{
 class ISerialCommander
 {
    public:
@@ -33,5 +37,7 @@ class ISerialCommander
     virtual void setChipSelect(std::uint8_t pin) = 0;
     virtual void startCommands() = 0;
 };
+}  // namespace interface
+}  // namespace hardware_layer
 
 #endif  // I_SERIAL_COMMANDER_HPP

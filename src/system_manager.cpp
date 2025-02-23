@@ -1,6 +1,9 @@
 #include "system_manager.hpp"
 #include "qpcpp.hpp"
 
+namespace manager_
+{
+
 SystemManager::SystemManager()
     : hardwareManager(),
       deviceManager(hardwareManager),
@@ -22,10 +25,13 @@ void SystemManager::run()
     QP::QF::poolInit(sml_pool_sto, sizeof(sml_pool_sto),
                      sizeof(sml_pool_sto[0]));
 
-    static QF_MPOOL_EL(CommandEvent) large_pool_sto[20];
+    static QF_MPOOL_EL(hardware_layer::CommandEvent) large_pool_sto[20];
     QP::QF::poolInit(large_pool_sto, sizeof(large_pool_sto),
                      sizeof(large_pool_sto[0]));
 
     applicationManager.start();
     deviceManager.start();
+    hardwareManager.run();
 }
+
+}  // namespace manager_

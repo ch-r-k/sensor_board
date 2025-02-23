@@ -99,16 +99,17 @@ Q_STATE_DEF(Sensor, read_measurement)
         }
         case system_layer::SENSOR_READ_DONE:
         {
-            device_layer::ISensor::SensorData data;
+            device_layer::interface::ISensor::SensorData data;
 
             data = Q_EVT_CAST(SensorEvent)->data;
 
-            if (data.quantity == device_layer::ISensor::Quantities::TEMPERATURE)
+            if (data.quantity ==
+                device_layer::interface::ISensor::Quantities::TEMPERATURE)
             {
                 iGui->setTempLabel(Q_EVT_CAST(SensorEvent)->data.value);
             }
             else if (data.quantity ==
-                     device_layer::ISensor::Quantities::HUMIDITY)
+                     device_layer::interface::ISensor::Quantities::HUMIDITY)
             {
                 iGui->setHumidityLabel(Q_EVT_CAST(SensorEvent)->data.value);
             }
@@ -125,7 +126,7 @@ Q_STATE_DEF(Sensor, read_measurement)
     return status;
 }
 //............................................................................
-void Sensor::setSensorInterface(device_layer::ISensor& i_sensor)
+void Sensor::setSensorInterface(device_layer::interface::ISensor& i_sensor)
 {
     iSensor = &i_sensor;
 }
@@ -140,17 +141,22 @@ void Sensor::initDone()
 
 void Sensor::readDone()
 {
-    iSensor->getMeasurement(device_layer::ISensor::Quantities::HUMIDITY);
+    iSensor->getMeasurement(
+        device_layer::interface::ISensor::Quantities::HUMIDITY);
 
     SensorEvent* temperatureEvent =
         Q_NEW(SensorEvent, system_layer::SENSOR_READ_DONE);
 
     temperatureEvent->data.value =
-        iSensor->getMeasurement(device_layer::ISensor::Quantities::TEMPERATURE)
+        iSensor
+            ->getMeasurement(
+                device_layer::interface::ISensor::Quantities::TEMPERATURE)
             .value;
 
     temperatureEvent->data.quantity =
-        iSensor->getMeasurement(device_layer::ISensor::Quantities::TEMPERATURE)
+        iSensor
+            ->getMeasurement(
+                device_layer::interface::ISensor::Quantities::TEMPERATURE)
             .quantity;
 
     this->POST(temperatureEvent, this);
@@ -159,11 +165,15 @@ void Sensor::readDone()
         Q_NEW(SensorEvent, system_layer::SENSOR_READ_DONE);
 
     humidityEvent->data.value =
-        iSensor->getMeasurement(device_layer::ISensor::Quantities::HUMIDITY)
+        iSensor
+            ->getMeasurement(
+                device_layer::interface::ISensor::Quantities::HUMIDITY)
             .value;
 
     humidityEvent->data.quantity =
-        iSensor->getMeasurement(device_layer::ISensor::Quantities::HUMIDITY)
+        iSensor
+            ->getMeasurement(
+                device_layer::interface::ISensor::Quantities::HUMIDITY)
             .quantity;
 
     this->POST(humidityEvent, this);

@@ -12,12 +12,8 @@
 #include "driver/i2c/i_i2c.hpp"
 #include "stm32l4xx_hal_def.h"
 
-// unnamed namespace for local definitions with internal linkage
-namespace
+namespace hardware_layer
 {
-// Q_DEFINE_THIS_FILE
-
-}  // unnamed namespace
 
 //............................................................................
 SerialCommander::SerialCommander()
@@ -261,7 +257,7 @@ Q_STATE_DEF(SerialCommander, pause)
 
 QP::QStateHandler SerialCommander::nextState()
 {
-    IcbSerialCommander::ReturnValue returnValue;
+    interface::IcbSerialCommander::ReturnValue returnValue;
     returnValue.data = commands[command_index].data;
     returnValue.data_length = commands[command_index].data_length;
 
@@ -317,20 +313,20 @@ QP::QStateHandler SerialCommander::getStateFromInst(Instructions instruction)
     assert(false);
 }
 
-void SerialCommander::setSerialInterface(hardware_layer::II2c& i_i2c)
+void SerialCommander::setSerialInterface(hardware_layer::interface::II2c& i_i2c)
 {
     iSpi = nullptr;
     iI2c = &i_i2c;
 }
 
-void SerialCommander::setSerialInterface(hardware_layer::ISpi& i_spi)
+void SerialCommander::setSerialInterface(hardware_layer::interface::ISpi& i_spi)
 {
     iI2c = nullptr;
     iSpi = &i_spi;
 }
 
 void SerialCommander::setIcbSerialCommander(
-    IcbSerialCommander& icb_serial_commander)
+    interface::IcbSerialCommander& icb_serial_commander)
 {
     icbSerialCommander = &icb_serial_commander;
 }
@@ -378,3 +374,5 @@ void SerialCommander::startCommands()
     static QP::QEvt const my_evt{system_layer::SERIAL_COMMANDER_START};
     this->POST(&my_evt, this);
 }
+
+}  // namespace hardware_layer

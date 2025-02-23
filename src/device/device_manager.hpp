@@ -3,18 +3,17 @@
 
 #include "hardware_manager.hpp"
 
-#include "serial_commander/serial_commander.hpp"
-
 #include "sensors/aht10/aht10.hpp"
 #include "display/ssd1306/ssd1306.hpp"
 #include "user_indication/user_indication.hpp"
 
+namespace manager
+{
+
 class DeviceManager
 {
    private:
-    UserIndication userIndication;
-    SerialCommander aoSensor;
-    SerialCommander aoDisplay;
+    device_layer::UserIndication userIndication;
     device_layer::Aht10 aht10;
     device_layer::Ssd1306 ssd1306;
 
@@ -23,11 +22,13 @@ class DeviceManager
    public:
     DeviceManager(HardwareManager& hardware_manager);
     ~DeviceManager();
-    UserIndication& getUserIndication();
+    device_layer::UserIndication& getUserIndication();
     device_layer::Aht10& getAht10();
     device_layer::Ssd1306& getSsd1306();
 
     void start();
 };
+
+}  // namespace manager
 
 #endif  // DEVICE_MANAGER_HPP

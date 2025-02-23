@@ -5,6 +5,8 @@
 
 namespace device_layer
 {
+namespace interface
+{
 class ISensor
 {
    public:
@@ -33,7 +35,7 @@ class ISensor
     virtual void triggerMeasurement() = 0;
     virtual SensorData getMeasurement(Quantities quantity) = 0;
 };
-
+}  // namespace interface
 }  // namespace device_layer
 
 #endif  // I_SENSOR_HPP

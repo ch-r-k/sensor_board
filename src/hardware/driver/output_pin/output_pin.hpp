@@ -9,7 +9,7 @@
 
 namespace hardware_layer
 {
-class OutputPin : public IOutputPin
+class OutputPin : public interface::IOutputPin
 {
    public:
     enum class Port : uint8_t

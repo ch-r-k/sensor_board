@@ -13,9 +13,9 @@ I2c::I2c(std::uint8_t instance)
 {
     assert(instance >= 1 && instance <= 3);
 
-    static constexpr I2C_TypeDef *I2C_INSTANCES[] = {I2C1, I2C2, I2C3};
+    static I2C_TypeDef *i2_c_instances[] = {I2C1, I2C2, I2C3};
 
-    handler.Instance = I2C_INSTANCES[instance - 1];
+    handler.Instance = i2_c_instances[instance - 1];
     registerInstance();
 
     switch (instance)
@@ -140,7 +140,7 @@ void I2c::close()
     isOpen = false;
 }
 
-void I2c::setIcb(IcbI2c &icb_i2c) { icbI2c = &icb_i2c; }
+void I2c::setIcb(interface::IcbI2c &icb_i2c) { icbI2c = &icb_i2c; }
 
 void I2c::startWrite(const std::span<const std::uint8_t> data)
 {

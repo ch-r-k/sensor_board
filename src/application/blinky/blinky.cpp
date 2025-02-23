@@ -104,7 +104,8 @@ Q_STATE_DEF(Blinky, on)
     return status;
 }
 //............................................................................
-void Blinky::setUserIndication(IUserIndication& init_user_indication)
+void Blinky::setUserIndication(
+    device_layer::IUserIndication& init_user_indication)
 {
     userIndication = &init_user_indication;
 }

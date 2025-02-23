@@ -3,6 +3,8 @@
 
 namespace hardware_layer
 {
+namespace interface
+{
 class IOutputPin
 {
    public:
@@ -10,6 +12,7 @@ class IOutputPin
     virtual void reset() = 0;
 };
 
+}  // namespace interface
 }  // namespace hardware_layer
 
 #endif  // I_OUTPUT_PIN_HPP

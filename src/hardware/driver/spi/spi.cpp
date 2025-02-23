@@ -11,9 +11,9 @@ Spi::Spi(std::uint8_t instance)
 {
     assert(instance >= 1 && instance <= 3);
 
-    static constexpr SPI_TypeDef *SPI_INSTANCES[] = {SPI1, SPI2, SPI3};
+    static SPI_TypeDef *spi_instances[] = {SPI1, SPI2, SPI3};
 
-    handler.Instance = SPI_INSTANCES[instance - 1];
+    handler.Instance = spi_instances[instance - 1];
 
     switch (instance)
     {

@@ -5,17 +5,22 @@
 #include "device/device_manager.hpp"
 #include "hardware/hardware_manager.hpp"
 
+namespace manager_
+{
+
 class SystemManager
 {
    private:
-    HardwareManager hardwareManager;
-    DeviceManager deviceManager;
-    ApplicationManager applicationManager;
+    manager::HardwareManager hardwareManager;
+    manager::DeviceManager deviceManager;
+    manager::ApplicationManager applicationManager;
 
    public:
     SystemManager();
     ~SystemManager();
     void run();
 };
+
+}  // namespace manager_
 
 #endif  // SYSTEM_MANAGER_HPP

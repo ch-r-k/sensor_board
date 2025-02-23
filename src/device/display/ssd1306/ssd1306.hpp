@@ -15,7 +15,8 @@
 
 namespace device_layer
 {
-class Ssd1306 : public IDisplay, public IcbSerialCommander
+class Ssd1306 : public interface::IDisplay,
+                public hardware_layer::interface::IcbSerialCommander
 {
    public:
     // Enum for Ssd1306 commands
@@ -85,8 +86,8 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     bool isOpen = false;
     bool initialized = false;
 
-    IcbDisplay* icbDisplay = nullptr;
-    ISerialCommander* iSerial = nullptr;
+    interface::IcbDisplay* icbDisplay = nullptr;
+    hardware_layer::interface::ISerialCommander* iSerial = nullptr;
 
     std::uint8_t address = 0x3C;
     std::array<std::uint8_t, 6> readBuffer = {0};
@@ -106,39 +107,19 @@ class Ssd1306 : public IDisplay, public IcbSerialCommander
     void clear() override;
     void update() override;
 
-    void setSerialCommanderInterface(ISerialCommander& i_serial_commander);
-    void setIcbDisplay(IcbDisplay& icb_display);
+    void setSerialCommanderInterface(
+        hardware_layer::interface::ISerialCommander& i_serial_commander);
+    void setIcbDisplay(interface::IcbDisplay& icb_display);
 
    private:
-    void prepareCommand(ISerialCommander::Command& serial_command,
-                        Command device_command,
-                        std::uint8_t device_command_manipulator,
-                        const std::initializer_list<std::uint8_t>& data);
+    void prepareCommand(
+        hardware_layer::interface::ISerialCommander::Command& serial_command,
+        Command device_command, std::uint8_t device_command_manipulator,
+        const std::initializer_list<std::uint8_t>& data);
 
-    void prepareCommand(ISerialCommander::Command& serial_command,
-                        Command device_command,
-                        std::uint8_t device_command_manipulator);
-
-    void displayOff(ISerialCommander::Command& command);
-    void setOscFreq(ISerialCommander::Command& command);
-    void setMuxRatio(ISerialCommander::Command& command);
-    void displayOffset(ISerialCommander::Command& command);
-    void setStartLine(ISerialCommander::Command& command);
-    void setCharReg(ISerialCommander::Command& command);
-    void memoryAddrMode(ISerialCommander::Command& command);
-    void segRemapOp(ISerialCommander::Command& command);
-    void comScanDirOp(ISerialCommander::Command& command);
-    void comPinConf(ISerialCommander::Command& command);
-    void setContrast(ISerialCommander::Command& command);
-    void setPrecharge(ISerialCommander::Command& command);
-    void vcomDeselect(ISerialCommander::Command& command);
-    void disEntDispOn(ISerialCommander::Command& command);
-    void disNormal(ISerialCommander::Command& command);
-    void deactScroll(ISerialCommander::Command& command);
-    void entireDisplayOn(ISerialCommander::Command& command);
-    void enableChargePump(ISerialCommander::Command& command);
-    void setDisplayNormal(ISerialCommander::Command& command);
-    void displayOn(ISerialCommander::Command& command);
+    void prepareCommand(
+        hardware_layer::interface::ISerialCommander::Command& serial_command,
+        Command device_command, std::uint8_t device_command_manipulator);
 };
 
 }  // namespace device_layer

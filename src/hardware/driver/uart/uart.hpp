@@ -10,7 +10,7 @@
 
 namespace hardware_layer
 {
-class Uart : public IUart
+class Uart : public interface::IUart
 {
    public:
     enum class Baudrate : std::uint32_t

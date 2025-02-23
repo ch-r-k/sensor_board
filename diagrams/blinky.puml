@@ -1,0 +1,131 @@
+@startuml
+package [src] as C_0011100957978370531577 {
+package [device] as C_0006694467202503346707 {
+package [user_indication] as C_0007150561736413337987 {
+abstract "IUserIndication" as C_0014917396999637096547
+abstract C_0014917396999637096547 {
+{abstract} +reset() = 0 : void
+{abstract} +set() = 0 : void
+__
+}
+class "UserIndication" as C_0011878340680608868563
+class C_0011878340680608868563 {
++reset() : void
++set() : void
++setOutputPin(hardware_layer::interface::IOutputPin & init_output_pin) : void
+__
+-outputPin : hardware_layer::interface::IOutputPin *
+}
+}
+class "DeviceManager" as C_0013863018875624683104
+class C_0013863018875624683104 {
++DeviceManager(manager::HardwareManager & hardware_manager) : void
++~DeviceManager() : void
+..
++getAht10() : device_layer::Aht10 &
++getSsd1306() : device_layer::Ssd1306 &
++getUserIndication() : device_layer::UserIndication &
++start() : void
+__
+-aht10 : device_layer::Aht10
+-aoDisplay : hardware_layer::SerialCommander
+-aoSensor : hardware_layer::SerialCommander
+-ssd1306 : device_layer::Ssd1306
+-userIndication : device_layer::UserIndication
+}
+}
+package [application] as C_0007250404570915629403 {
+package [blinky] as C_0003089195684290093452 {
+class "Blinky" as C_0007883474967757026754
+class C_0007883474967757026754 {
++Blinky() : void
+..
+{static} #idle(void *const me, const QP::QEvt *const e) : QP::QState
+#idle_h(const QP::QEvt *const e) : QP::QState
+{static} #initial(void *const me, const QP::QEvt *const e) : QP::QState
+#initial_h(const QP::QEvt *const e) : QP::QState
+{static} #off(void *const me, const QP::QEvt *const e) : QP::QState
+#off_h(const QP::QEvt *const e) : QP::QState
+{static} #on(void *const me, const QP::QEvt *const e) : QP::QState
+#on_h(const QP::QEvt *const e) : QP::QState
++setUserIndication(device_layer::IUserIndication & init_user_indication) : void
+__
+-m_timeEvt : QP::QTimeEvt
+-userIndication : device_layer::IUserIndication *
+}
+}
+class "ApplicationManager" as C_0013307138085226643557
+class C_0013307138085226643557 {
++ApplicationManager(manager::DeviceManager & device_manager) : void
++~ApplicationManager() : void
+..
++start() : void
+__
+-aoBlinky : app::Blinky
+-aoGui : app::Gui
+-aoSensor : app::Sensor
+-aoStartup : app::Startup
+}
+}
+package [hardware] as C_0018294288599492866740 {
+package [driver] as C_0010413016684820122153 {
+package [output_pin] as C_0007513421075199775033 {
+abstract "IOutputPin" as C_0015574588586859921782
+abstract C_0015574588586859921782 {
+{abstract} +reset() = 0 : void
+{abstract} +set() = 0 : void
+__
+}
+class "OutputPin" as C_0018190368568554910621
+class C_0018190368568554910621 {
++OutputPin() : void
++~OutputPin() : void
+..
++configure(hardware_layer::OutputPin::Port initPort, hardware_layer::OutputPin::Pin initPin, hardware_layer::OutputPin::Mode initMode, hardware_layer::OutputPin::Pull initPull, hardware_layer::OutputPin::Speed initSpeed) : void
++getPort(hardware_layer::OutputPin::Port port) : GPIO_TypeDef *
++reset() : void
++set() : void
+__
+-mode : hardware_layer::OutputPin::Mode
+-pin : hardware_layer::OutputPin::Pin
+-port : hardware_layer::OutputPin::Port
+-pull : hardware_layer::OutputPin::Pull
+-speed : hardware_layer::OutputPin::Speed
+}
+}
+}
+class "HardwareManager" as C_0013820397576961944853
+class C_0013820397576961944853 {
++HardwareManager() : void
++~HardwareManager() : void
+..
+{static} +errorCallback(int error_code) : void
++getDisplayI2c() : hardware_layer::I2c &
++getLedPin() : hardware_layer::OutputPin &
++getSensorI2c() : hardware_layer::I2c &
++getSensorSpi() : hardware_layer::Spi &
++run() : void
+-systemClockConfig() : void
+__
+-TEST : hardware_layer::OutputPin
+-displayI2c : hardware_layer::I2c
+-ledPin : hardware_layer::OutputPin
+-sensorI2c : hardware_layer::I2c
+-sensorSpi : hardware_layer::Spi
+}
+}
+}
+C_0011878340680608868563 --> C_0015574588586859921782 : -outputPin
+C_0014917396999637096547 <|-- C_0011878340680608868563
+C_0013863018875624683104 ..> C_0013820397576961944853
+C_0013863018875624683104 o-- C_0011878340680608868563 : -userIndication
+C_0007883474967757026754 --> C_0014917396999637096547 : -userIndication
+C_0013307138085226643557 ..> C_0013863018875624683104
+C_0013307138085226643557 o-- C_0007883474967757026754 : -aoBlinky
+C_0015574588586859921782 <|-- C_0018190368568554910621
+C_0013820397576961944853 o-- C_0018190368568554910621 : -ledPin
+C_0013820397576961944853 o-- C_0018190368568554910621 : -TEST
+
+'Generated with clang-uml, version 0.6.0
+'LLVM version Ubuntu clang version 15.0.7
+@enduml

@@ -1,0 +1,277 @@
+@startuml
+package [src] as C_0011100957978370531577 {
+package [device] as C_0006694467202503346707 {
+package [sensors] as C_0008002442099408640964 {
+abstract "ISensor" as C_0009346279371554902746
+abstract C_0009346279371554902746 {
++~ISensor() constexpr = default : void
+..
+{abstract} +close() = 0 : void
+{abstract} +getMeasurement(device_layer::interface::ISensor::Quantities quantity) = 0 : device_layer::interface::ISensor::SensorData
+{abstract} +open() = 0 : void
+{abstract} +triggerMeasurement() = 0 : void
+__
+}
+abstract "IcbSensor" as C_0005275836689281178162
+abstract C_0005275836689281178162 {
++~IcbSensor() constexpr = default : void
+..
+{abstract} +initDone() = 0 : void
+{abstract} +readDone() = 0 : void
+__
+}
+package [aht10] as C_0000220586222809802987 {
+class "Aht10" as C_0005532910924077348494
+class C_0005532910924077348494 {
++Aht10() : void
++~Aht10() : void
+..
++close() : void
++done(hardware_layer::interface::IcbSerialCommander::ReturnValue return_value) : void
++getMeasurement(device_layer::interface::ISensor::Quantities quantity) : device_layer::interface::ISensor::SensorData
++init() : void
++open() : void
++readDone() : void
++setIcbSensor(interface::IcbSensor & icb_sensor) : void
++setSerialInterface(hardware_layer::interface::ISerialCommander & i_serial) : void
++triggerMeasurement() : void
+__
+-activeInstruction : interface::ISensor::Operation
+-address : std::uint8_t
+-commandContinuation : device_layer::Aht10::CommandContinuation
+-humidity : device_layer::interface::ISensor::SensorData
+-iSerial : hardware_layer::interface::ISerialCommander *
+-icbSensor : interface::IcbSensor *
+-initialized : bool
+-isOpen : bool
+-temperature : device_layer::interface::ISensor::SensorData
+}
+}
+}
+class "DeviceManager" as C_0013863018875624683104
+class C_0013863018875624683104 {
++DeviceManager(manager::HardwareManager & hardware_manager) : void
++~DeviceManager() : void
+..
++getAht10() : device_layer::Aht10 &
++getSsd1306() : device_layer::Ssd1306 &
++getUserIndication() : device_layer::UserIndication &
++start() : void
+__
+-aht10 : device_layer::Aht10
+-aoDisplay : hardware_layer::SerialCommander
+-aoSensor : hardware_layer::SerialCommander
+-ssd1306 : device_layer::Ssd1306
+-userIndication : device_layer::UserIndication
+}
+}
+package [application] as C_0007250404570915629403 {
+package [sensor] as C_0016058708233006242418 {
+class "Sensor" as C_0015178894446977333668
+class C_0015178894446977333668 {
++Sensor() : void
+..
+{static} #idle(void *const me, const QP::QEvt *const e) : QP::QState
+#idle_h(const QP::QEvt *const e) : QP::QState
+-initDone() : void
+{static} #initial(void *const me, const QP::QEvt *const e) : QP::QState
+#initial_h(const QP::QEvt *const e) : QP::QState
+{static} #initialize(void *const me, const QP::QEvt *const e) : QP::QState
+#initialize_h(const QP::QEvt *const e) : QP::QState
+-readDone() : void
+{static} #read_measurement(void *const me, const QP::QEvt *const e) : QP::QState
+#read_measurement_h(const QP::QEvt *const e) : QP::QState
++setGuiInterface(app::IGui & i_gui) : void
++setSensorInterface(device_layer::interface::ISensor & i_sensor) : void
+__
+-iGui : app::IGui *
+-iSensor : device_layer::interface::ISensor *
+-m_timeEvt : QP::QTimeEvt
+}
+}
+class "ApplicationManager" as C_0013307138085226643557
+class C_0013307138085226643557 {
++ApplicationManager(manager::DeviceManager & device_manager) : void
++~ApplicationManager() : void
+..
++start() : void
+__
+-aoBlinky : app::Blinky
+-aoGui : app::Gui
+-aoSensor : app::Sensor
+-aoStartup : app::Startup
+}
+}
+package [hardware] as C_0018294288599492866740 {
+package [driver] as C_0010413016684820122153 {
+package [i2c] as C_0003514875363464416490 {
+abstract "II2c" as C_0001955225274653391297
+abstract C_0001955225274653391297 {
++~II2c() constexpr = default : void
+..
+{abstract} +close() = 0 : void
+{abstract} +open() = 0 : void
+{abstract} +setAddress(const std::uint8_t) = 0 : void
+{abstract} +startRead(const std::span<std::uint8_t> data) = 0 : void
+{abstract} +startWrite(const std::span<const std::uint8_t> data) = 0 : void
+__
+}
+abstract "IcbI2c" as C_0001043120281719416176
+abstract C_0001043120281719416176 {
++~IcbI2c() constexpr = default : void
+..
+{abstract} +readDone() = 0 : void
+{abstract} +writeDone() = 0 : void
+__
+}
+class "I2c" as C_0000102306443127453571
+class C_0000102306443127453571 {
++I2c(std::uint8_t instance) : void
++~I2c() : void
+..
++close() : void
++configure(hardware_layer::I2c::DualAddressMode dual_address_mode) : void
++configure(hardware_layer::I2c::NoStretchMode no_stretch_mode) : void
++configure(hardware_layer::I2c::GeneralCallMode general_call_mode) : void
++configure(hardware_layer::I2c::AddressingMode addressing_mode) : void
++configureTiming(std::uint32_t timing) : void
+{static} +errorIsr(I2C_HandleTypeDef * hi2c) : void
+{static} +isr(void * callback_object, void * parameter) : void
++open() : void
++registerInstance() : void
+{static} +rxIsr(I2C_HandleTypeDef * hi2c) : void
++setAddress(const std::uint8_t address) : void
++setIcb(interface::IcbI2c & icb_i2c) : void
++startRead(const std::span<std::uint8_t> data) : void
++startWrite(const std::span<const std::uint8_t> data) : void
+{static} +txIsr(I2C_HandleTypeDef * hi2c) : void
++unregisterInstance() : void
+__
+-address : std::uint8_t
++gpioClk : GPIO_InitTypeDef
++gpioSData : GPIO_InitTypeDef
+-handler : I2C_HandleTypeDef
+-icbI2c : interface::IcbI2c *
+{static} -instanceMap : std::unordered_map<I2C_TypeDef *,I2c *>
+-isOpen : bool
++portClk : GPIO_TypeDef *
++portSData : GPIO_TypeDef *
+}
+}
+}
+class "HardwareManager" as C_0013820397576961944853
+class C_0013820397576961944853 {
++HardwareManager() : void
++~HardwareManager() : void
+..
+{static} +errorCallback(int error_code) : void
++getDisplayI2c() : hardware_layer::I2c &
++getLedPin() : hardware_layer::OutputPin &
++getSensorI2c() : hardware_layer::I2c &
++getSensorSpi() : hardware_layer::Spi &
++run() : void
+-systemClockConfig() : void
+__
+-TEST : hardware_layer::OutputPin
+-displayI2c : hardware_layer::I2c
+-ledPin : hardware_layer::OutputPin
+-sensorI2c : hardware_layer::I2c
+-sensorSpi : hardware_layer::Spi
+}
+package [serial_commander] as C_0016115113449937623462 {
+abstract "ISerialCommander" as C_0012909992160874174612
+abstract C_0012909992160874174612 {
++~ISerialCommander() constexpr = default : void
+..
+{abstract} +setChipSelect(std::uint8_t pin) = 0 : void
+{abstract} +setCommand(hardware_layer::interface::ISerialCommander::Command command) = 0 : void
+{abstract} +setI2CAddress(std::uint8_t address) = 0 : void
+{abstract} +startCommands() = 0 : void
+__
+}
+abstract "IcbSerialCommander" as C_0006717726296434081648
+abstract C_0006717726296434081648 {
++~IcbSerialCommander() constexpr = default : void
+..
+{abstract} +done(hardware_layer::interface::IcbSerialCommander::ReturnValue return_value) = 0 : void
+__
+}
+class "SerialCommander" as C_0012458789690594031884
+class C_0012458789690594031884 {
++SerialCommander() : void
+..
+-getStateFromInst(hardware_layer::interface::ISerialCommander::Instructions instruction) : QP::QStateHandler
+{static} #idle(void *const me, const QP::QEvt *const e) : QP::QState
+#idle_h(const QP::QEvt *const e) : QP::QState
+{static} #initial(void *const me, const QP::QEvt *const e) : QP::QState
+#initial_h(const QP::QEvt *const e) : QP::QState
+-nextState() : QP::QStateHandler
+{static} #pause(void *const me, const QP::QEvt *const e) : QP::QState
+#pause_h(const QP::QEvt *const e) : QP::QState
+{static} #read(void *const me, const QP::QEvt *const e) : QP::QState
+-readDone() : void
+#read_h(const QP::QEvt *const e) : QP::QState
+-setChipSelect(std::uint8_t pin) : void
+-setCommand(hardware_layer::interface::ISerialCommander::Command command) : void
+-setI2CAddress(std::uint8_t address) : void
++setIcbSerialCommander(interface::IcbSerialCommander & icb_serial_commander) : void
++setSerialInterface(hardware_layer::interface::ISpi & i_i2c) : void
++setSerialInterface(hardware_layer::interface::II2c & i_i2c) : void
+-startCommands() : void
+{static} #write(void *const me, const QP::QEvt *const e) : QP::QState
+-writeDone() : void
+#write_h(const QP::QEvt *const e) : QP::QState
+{static} #write_span(void *const me, const QP::QEvt *const e) : QP::QState
+#write_span_h(const QP::QEvt *const e) : QP::QState
+__
+-command_index : std::size_t
+-command_length : std::size_t
+-commands : std::array<Command,128>
+-iI2c : hardware_layer::interface::II2c *
+-iSpi : hardware_layer::interface::ISpi *
+-icbSerialCommander : interface::IcbSerialCommander *
+-m_timeEvt : QP::QTimeEvt
+}
+}
+}
+}
+C_0005532910924077348494 --> C_0012909992160874174612 : -iSerial
+C_0005532910924077348494 --> C_0005275836689281178162 : -icbSensor
+C_0009346279371554902746 <|-- C_0005532910924077348494
+C_0006717726296434081648 <|-- C_0005532910924077348494
+C_0013863018875624683104 ..> C_0013820397576961944853
+C_0013863018875624683104 o-- C_0012458789690594031884 : -aoSensor
+C_0013863018875624683104 o-- C_0012458789690594031884 : -aoDisplay
+C_0013863018875624683104 o-- C_0005532910924077348494 : -aht10
+C_0015178894446977333668 --> C_0009346279371554902746 : -iSensor
+C_0005275836689281178162 <|-- C_0015178894446977333668
+C_0013307138085226643557 ..> C_0013863018875624683104
+C_0013307138085226643557 o-- C_0015178894446977333668 : -aoSensor
+C_0000102306443127453571 --> C_0001043120281719416176 : -icbI2c
+C_0000102306443127453571 --> C_0000102306443127453571 : -instanceMap
+C_0001955225274653391297 <|-- C_0000102306443127453571
+C_0013820397576961944853 o-- C_0000102306443127453571 : -sensorI2c
+C_0013820397576961944853 o-- C_0000102306443127453571 : -displayI2c
+C_0012458789690594031884 --> C_0006717726296434081648 : -icbSerialCommander
+C_0012458789690594031884 --> C_0001955225274653391297 : -iI2c
+C_0012909992160874174612 <|-- C_0012458789690594031884
+C_0001043120281719416176 <|-- C_0012458789690594031884
+C_0005532910924077348494 -[hidden]up- C_0009346279371554902746
+C_0005532910924077348494 -[hidden]up- C_0005275836689281178162
+C_0005532910924077348494 -[hidden]down- C_0012909992160874174612
+C_0005532910924077348494 -[hidden]down- C_0006717726296434081648
+C_0000102306443127453571 -[hidden]up- C_0001955225274653391297
+C_0000102306443127453571 -[hidden]up- C_0001043120281719416176
+C_0012458789690594031884 -[hidden]up- C_0012909992160874174612
+C_0012458789690594031884 -[hidden]up- C_0006717726296434081648
+C_0012458789690594031884 -[hidden]down- C_0001955225274653391297
+C_0012458789690594031884 -[hidden]down- C_0001043120281719416176
+C_0013307138085226643557 -[hidden]down- C_0013863018875624683104
+C_0013307138085226643557 -[hidden]right- C_0015178894446977333668
+C_0013820397576961944853 -[hidden]right- C_0001955225274653391297
+C_0013820397576961944853 -[hidden]right- C_0001043120281719416176
+C_0013820397576961944853 -[hidden]right- C_0000102306443127453571
+
+'Generated with clang-uml, version 0.6.0
+'LLVM version Ubuntu clang version 15.0.7
+@enduml

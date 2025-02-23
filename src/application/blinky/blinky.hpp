@@ -10,11 +10,11 @@ class Blinky : public QP::QActive
 {
    private:
     QP::QTimeEvt m_timeEvt;
-    IUserIndication* userIndication = nullptr;
+    device_layer::IUserIndication* userIndication = nullptr;
 
    public:
     Blinky();
-    void setUserIndication(IUserIndication& init_user_indication);
+    void setUserIndication(device_layer::IUserIndication& init_user_indication);
 
    protected:
     Q_STATE_DECL(initial);

@@ -16,3 +16,6 @@
 [submodule "3d_party/lvgl"]
 	path = 3d_party/lvgl
 	url = https://github.com/lvgl/lvgl.git
+[submodule "3d_party/pico_sdk"]
+	path = 3d_party/pico_sdk
+	url = https://github.com/raspberrypi/pico-sdk.git

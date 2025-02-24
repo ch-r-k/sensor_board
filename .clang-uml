@@ -48,7 +48,7 @@ diagrams:
         - device_layer::IUserIndication
         - device_layer::UserIndication
         - manager::HardwareManager
-        - hardware_layer::interface::IOutputPin
+        - hardware_layer::IOutputPin
         - hardware_layer::OutputPin
 
 
@@ -67,15 +67,15 @@ diagrams:
         - manager::ApplicationManager
         - app::Sensor
         - manager::DeviceManager
-        - device_layer::interface::ISensor
-        - device_layer::interface::IcbSensor
+        - device_layer::ISensor
+        - device_layer::IcbSensor
         - device_layer::Aht10
         - manager::HardwareManager
-        - hardware_layer::interface::ISerialCommander
-        - hardware_layer::interface::IcbSerialCommander
+        - hardware_layer::ISerialCommander
+        - hardware_layer::IcbSerialCommander
         - hardware_layer::SerialCommander
-        - hardware_layer::interface::II2c
-        - hardware_layer::interface::IcbI2c
+        - hardware_layer::II2c
+        - hardware_layer::IcbI2c
         - hardware_layer::I2c
     exclude:
 #      access:
@@ -92,29 +92,29 @@ diagrams:
         - right: app::Sensor
       manager::DeviceManage:
         - down: manager::HardwareManager
-        - right: device_layer::interface::ISensor
-        - right: device_layer::interface::IcbSensor
+        - right: device_layer::ISensor
+        - right: device_layer::IcbSensor
         - right: device_layer::Aht10
-        - right: hardware_layer::interface::ISerialCommander
-        - right: hardware_layer::interface::IcbSerialCommander
+        - right: hardware_layer::ISerialCommander
+        - right: hardware_layer::IcbSerialCommander
         - right: hardware_layer::SerialCommander
       device_layer::Aht10:
-        - up: device_layer::interface::ISensor
-        - up: device_layer::interface::IcbSensor
-        - down: hardware_layer::interface::ISerialCommander
-        - down: hardware_layer::interface::IcbSerialCommander
+        - up: device_layer::ISensor
+        - up: device_layer::IcbSensor
+        - down: hardware_layer::ISerialCommander
+        - down: hardware_layer::IcbSerialCommander
       hardware_layer::SerialCommander:
-        - up: hardware_layer::interface::ISerialCommander
-        - up: hardware_layer::interface::IcbSerialCommander
-        - down: hardware_layer::interface::II2c
-        - down: hardware_layer::interface::IcbI2c
+        - up: hardware_layer::ISerialCommander
+        - up: hardware_layer::IcbSerialCommander
+        - down: hardware_layer::II2c
+        - down: hardware_layer::IcbI2c
       manager::HardwareManager:
-        - right: hardware_layer::interface::II2c
-        - right: hardware_layer::interface::IcbI2c
+        - right: hardware_layer::II2c
+        - right: hardware_layer::IcbI2c
         - right: hardware_layer::I2c
       hardware_layer::I2c:
-        - up: hardware_layer::interface::II2c
-        - up: hardware_layer::interface::IcbI2c
+        - up: hardware_layer::II2c
+        - up: hardware_layer::IcbI2c
 
 
   Gui:
@@ -133,15 +133,15 @@ diagrams:
         - app::Gui
         - app::IGui
         - manager::DeviceManager
-        - device_layer::interface::IDisplay
-        - device_layer::interface::IcbDisplay
+        - device_layer::IDisplay
+        - device_layer::IcbDisplay
         - device_layer::Ssd1306
         - manager::HardwareManager
-        - hardware_layer::interface::ISerialCommander
-        - hardware_layer::interface::IcbSerialCommander
+        - hardware_layer::ISerialCommander
+        - hardware_layer::IcbSerialCommander
         - hardware_layer::SerialCommander
-        - hardware_layer::interface::II2c
-        - hardware_layer::interface::IcbI2c
+        - hardware_layer::II2c
+        - hardware_layer::IcbI2c
         - hardware_layer::I2c
     exclude:
       access:

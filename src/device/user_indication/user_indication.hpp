@@ -10,12 +10,12 @@ namespace device_layer
 class UserIndication : public IUserIndication
 {
    private:
-    hardware_layer::interface::IOutputPin* outputPin = nullptr;
+    hardware_layer::IOutputPin* outputPin = nullptr;
 
    public:
     void set() override;
     void reset() override;
-    void setOutputPin(hardware_layer::interface::IOutputPin& init_output_pin);
+    void setOutputPin(hardware_layer::IOutputPin& init_output_pin);
 };
 
 }  // namespace device_layer

@@ -12,9 +12,9 @@ class "UserIndication" as C_0011878340680608868563
 class C_0011878340680608868563 {
 +reset() : void
 +set() : void
-+setOutputPin(hardware_layer::interface::IOutputPin & init_output_pin) : void
++setOutputPin(hardware_layer::IOutputPin & init_output_pin) : void
 __
--outputPin : hardware_layer::interface::IOutputPin *
+-outputPin : hardware_layer::IOutputPin *
 }
 }
 class "DeviceManager" as C_0013863018875624683104

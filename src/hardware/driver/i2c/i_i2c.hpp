@@ -6,8 +6,7 @@
 
 namespace hardware_layer
 {
-namespace interface
-{
+
 class II2c
 {
    public:
@@ -18,6 +17,6 @@ class II2c
     virtual void startWrite(const std::span<const std::uint8_t> data) = 0;
     virtual void startRead(const std::span<std::uint8_t> data) = 0;
 };
-}  // namespace interface
+
 }  // namespace hardware_layer
 #endif  // I_I2C_HPP

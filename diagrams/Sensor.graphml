@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with clang-uml 0.6.0 -->
+<!-- LLVM version Ubuntu clang version 15.0.7 -->
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key attr.name="id" attr.type="string" for="graph" id="gd0" />
+  <key attr.name="diagram_type" attr.type="string" for="graph" id="gd1" />
+  <key attr.name="name" attr.type="string" for="graph" id="gd2" />
+  <key attr.name="using_namespace" attr.type="string" for="graph" id="gd3" />
+  <key attr.name="id" attr.type="string" for="node" id="nd0" />
+  <key attr.name="type" attr.type="string" for="node" id="nd1" />
+  <key attr.name="name" attr.type="string" for="node" id="nd2" />
+  <key attr.name="stereotype" attr.type="string" for="node" id="nd3" />
+  <key attr.name="url" attr.type="string" for="node" id="nd4" />
+  <key attr.name="tooltip" attr.type="string" for="node" id="nd5" />
+  <key attr.name="is_template" attr.type="boolean" for="node" id="nd6" />
+  <key attr.name="type" attr.type="string" for="edge" id="ed0" />
+  <key attr.name="access" attr.type="string" for="edge" id="ed1" />
+  <key attr.name="label" attr.type="string" for="edge" id="ed2" />
+  <key attr.name="url" attr.type="string" for="edge" id="ed3" />
+  <graph id="g0" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+    <node id="n0">
+      <data key="nd2">src</data>
+      <data key="nd1">directory</data>
+      <graph id="g1" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+        <node id="n1">
+          <data key="nd2">device</data>
+          <data key="nd1">directory</data>
+          <graph id="g2" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+            <node id="n2">
+              <data key="nd2">sensors</data>
+              <data key="nd1">directory</data>
+              <graph id="g3" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                <node id="n3">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[ISensor]]></data>
+                  <data key="nd3">abstract</data>
+                  <data key="nd6">false</data>
+                </node>
+                <node id="n4">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[IcbSensor]]></data>
+                  <data key="nd3">abstract</data>
+                  <data key="nd6">false</data>
+                </node>
+                <node id="n5">
+                  <data key="nd2">aht10</data>
+                  <data key="nd1">directory</data>
+                  <graph id="g4" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                    <node id="n6">
+                      <data key="nd1">class</data>
+                      <data key="nd2"><![CDATA[Aht10]]></data>
+                      <data key="nd6">false</data>
+                    </node>
+                  </graph>
+                </node>
+              </graph>
+            </node>
+            <node id="n7">
+              <data key="nd1">class</data>
+              <data key="nd2"><![CDATA[DeviceManager]]></data>
+              <data key="nd6">false</data>
+            </node>
+          </graph>
+        </node>
+        <node id="n8">
+          <data key="nd2">application</data>
+          <data key="nd1">directory</data>
+          <graph id="g5" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+            <node id="n9">
+              <data key="nd2">sensor</data>
+              <data key="nd1">directory</data>
+              <graph id="g6" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                <node id="n10">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[Sensor]]></data>
+                  <data key="nd6">false</data>
+                </node>
+              </graph>
+            </node>
+            <node id="n11">
+              <data key="nd1">class</data>
+              <data key="nd2"><![CDATA[ApplicationManager]]></data>
+              <data key="nd6">false</data>
+            </node>
+          </graph>
+        </node>
+        <node id="n12">
+          <data key="nd2">hardware</data>
+          <data key="nd1">directory</data>
+          <graph id="g7" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+            <node id="n13">
+              <data key="nd2">driver</data>
+              <data key="nd1">directory</data>
+              <graph id="g8" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                <node id="n14">
+                  <data key="nd2">i2c</data>
+                  <data key="nd1">directory</data>
+                  <graph id="g9" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                    <node id="n15">
+                      <data key="nd1">class</data>
+                      <data key="nd2"><![CDATA[II2c]]></data>
+                      <data key="nd3">abstract</data>
+                      <data key="nd6">false</data>
+                    </node>
+                    <node id="n16">
+                      <data key="nd1">class</data>
+                      <data key="nd2"><![CDATA[IcbI2c]]></data>
+                      <data key="nd3">abstract</data>
+                      <data key="nd6">false</data>
+                    </node>
+                    <node id="n17">
+                      <data key="nd1">class</data>
+                      <data key="nd2"><![CDATA[I2c]]></data>
+                      <data key="nd6">false</data>
+                    </node>
+                  </graph>
+                </node>
+              </graph>
+            </node>
+            <node id="n18">
+              <data key="nd2">serial_commander</data>
+              <data key="nd1">directory</data>
+              <graph id="g10" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                <node id="n19">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[ISerialCommander]]></data>
+                  <data key="nd3">abstract</data>
+                  <data key="nd6">false</data>
+                </node>
+                <node id="n20">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[IcbSerialCommander]]></data>
+                  <data key="nd3">abstract</data>
+                  <data key="nd6">false</data>
+                </node>
+                <node id="n21">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[SerialCommander]]></data>
+                  <data key="nd6">false</data>
+                </node>
+              </graph>
+            </node>
+            <node id="n22">
+              <data key="nd1">class</data>
+              <data key="nd2"><![CDATA[HardwareManager]]></data>
+              <data key="nd6">false</data>
+            </node>
+          </graph>
+        </node>
+      </graph>
+    </node>
+    <edge id="e0" source="n10" target="n3">
+      <data key="ed0">association</data>
+      <data key="ed2">iSensor</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e1" source="n10" target="n4">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e2" source="n17" target="n16">
+      <data key="ed0">association</data>
+      <data key="ed2">icbI2c</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e3" source="n17" target="n17">
+      <data key="ed0">association</data>
+      <data key="ed2">instanceMap</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e4" source="n17" target="n15">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e5" source="n21" target="n20">
+      <data key="ed0">association</data>
+      <data key="ed2">icbSerialCommander</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e6" source="n21" target="n15">
+      <data key="ed0">association</data>
+      <data key="ed2">iI2c</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e7" source="n21" target="n19">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e8" source="n21" target="n16">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e9" source="n22" target="n17">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">sensorI2c</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e10" source="n22" target="n17">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">displayI2c</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e11" source="n22" target="n21">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">aoSensor</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e12" source="n22" target="n21">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">aoDisplay</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e13" source="n6" target="n19">
+      <data key="ed0">association</data>
+      <data key="ed2">iSerial</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e14" source="n6" target="n4">
+      <data key="ed0">association</data>
+      <data key="ed2">icbSensor</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e15" source="n6" target="n3">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e16" source="n6" target="n20">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e17" source="n7" target="n22">
+      <data key="ed0">dependency</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e18" source="n7" target="n6">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">aht10</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e19" source="n11" target="n7">
+      <data key="ed0">dependency</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e20" source="n11" target="n10">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">aoSensor</data>
+      <data key="ed1">private</data>
+    </edge>
+  </graph>
+</graphml>

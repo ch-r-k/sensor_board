@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with clang-uml 0.6.0 -->
+<!-- LLVM version Ubuntu clang version 15.0.7 -->
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key attr.name="id" attr.type="string" for="graph" id="gd0" />
+  <key attr.name="diagram_type" attr.type="string" for="graph" id="gd1" />
+  <key attr.name="name" attr.type="string" for="graph" id="gd2" />
+  <key attr.name="using_namespace" attr.type="string" for="graph" id="gd3" />
+  <key attr.name="id" attr.type="string" for="node" id="nd0" />
+  <key attr.name="type" attr.type="string" for="node" id="nd1" />
+  <key attr.name="name" attr.type="string" for="node" id="nd2" />
+  <key attr.name="stereotype" attr.type="string" for="node" id="nd3" />
+  <key attr.name="url" attr.type="string" for="node" id="nd4" />
+  <key attr.name="tooltip" attr.type="string" for="node" id="nd5" />
+  <key attr.name="is_template" attr.type="boolean" for="node" id="nd6" />
+  <key attr.name="type" attr.type="string" for="edge" id="ed0" />
+  <key attr.name="access" attr.type="string" for="edge" id="ed1" />
+  <key attr.name="label" attr.type="string" for="edge" id="ed2" />
+  <key attr.name="url" attr.type="string" for="edge" id="ed3" />
+  <graph id="g0" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+    <node id="n0">
+      <data key="nd2">src</data>
+      <data key="nd1">directory</data>
+      <graph id="g1" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+        <node id="n1">
+          <data key="nd2">device</data>
+          <data key="nd1">directory</data>
+          <graph id="g2" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+            <node id="n2">
+              <data key="nd2">user_indication</data>
+              <data key="nd1">directory</data>
+              <graph id="g3" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                <node id="n3">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[IUserIndication]]></data>
+                  <data key="nd3">abstract</data>
+                  <data key="nd6">false</data>
+                </node>
+                <node id="n4">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[UserIndication]]></data>
+                  <data key="nd6">false</data>
+                </node>
+              </graph>
+            </node>
+            <node id="n5">
+              <data key="nd1">class</data>
+              <data key="nd2"><![CDATA[DeviceManager]]></data>
+              <data key="nd6">false</data>
+            </node>
+          </graph>
+        </node>
+        <node id="n6">
+          <data key="nd2">application</data>
+          <data key="nd1">directory</data>
+          <graph id="g4" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+            <node id="n7">
+              <data key="nd2">blinky</data>
+              <data key="nd1">directory</data>
+              <graph id="g5" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                <node id="n8">
+                  <data key="nd1">class</data>
+                  <data key="nd2"><![CDATA[Blinky]]></data>
+                  <data key="nd6">false</data>
+                </node>
+              </graph>
+            </node>
+            <node id="n9">
+              <data key="nd1">class</data>
+              <data key="nd2"><![CDATA[ApplicationManager]]></data>
+              <data key="nd6">false</data>
+            </node>
+          </graph>
+        </node>
+        <node id="n10">
+          <data key="nd2">hardware</data>
+          <data key="nd1">directory</data>
+          <graph id="g6" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+            <node id="n11">
+              <data key="nd2">driver</data>
+              <data key="nd1">directory</data>
+              <graph id="g7" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                <node id="n12">
+                  <data key="nd2">output_pin</data>
+                  <data key="nd1">directory</data>
+                  <graph id="g8" edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+                    <node id="n13">
+                      <data key="nd1">class</data>
+                      <data key="nd2"><![CDATA[IOutputPin]]></data>
+                      <data key="nd3">abstract</data>
+                      <data key="nd6">false</data>
+                    </node>
+                    <node id="n14">
+                      <data key="nd1">class</data>
+                      <data key="nd2"><![CDATA[OutputPin]]></data>
+                      <data key="nd6">false</data>
+                    </node>
+                  </graph>
+                </node>
+              </graph>
+            </node>
+            <node id="n15">
+              <data key="nd1">class</data>
+              <data key="nd2"><![CDATA[HardwareManager]]></data>
+              <data key="nd6">false</data>
+            </node>
+          </graph>
+        </node>
+      </graph>
+    </node>
+    <edge id="e0" source="n8" target="n3">
+      <data key="ed0">association</data>
+      <data key="ed2">userIndication</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e1" source="n14" target="n13">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e2" source="n15" target="n14">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">ledPin</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e3" source="n15" target="n14">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">TEST</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e4" source="n4" target="n13">
+      <data key="ed0">association</data>
+      <data key="ed2">outputPin</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e5" source="n4" target="n3">
+      <data key="ed0">extension</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e6" source="n5" target="n15">
+      <data key="ed0">dependency</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e7" source="n5" target="n4">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">userIndication</data>
+      <data key="ed1">private</data>
+    </edge>
+    <edge id="e8" source="n9" target="n5">
+      <data key="ed0">dependency</data>
+      <data key="ed1">public</data>
+    </edge>
+    <edge id="e9" source="n9" target="n8">
+      <data key="ed0">aggregation</data>
+      <data key="ed2">aoBlinky</data>
+      <data key="ed1">private</data>
+    </edge>
+  </graph>
+</graphml>

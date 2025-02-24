@@ -6,8 +6,7 @@
 
 namespace hardware_layer
 {
-namespace interface
-{
+
 class IcbI2c
 {
    public:
@@ -16,6 +15,5 @@ class IcbI2c
     virtual void readDone() = 0;
 };
 
-}  // namespace interface
 }  // namespace hardware_layer
 #endif  // ICB_I2C_HPP

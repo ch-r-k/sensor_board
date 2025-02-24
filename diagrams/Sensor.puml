@@ -7,7 +7,7 @@ abstract C_0009346279371554902746 {
 +~ISensor() constexpr = default : void
 ..
 {abstract} +close() = 0 : void
-{abstract} +getMeasurement(device_layer::interface::ISensor::Quantities quantity) = 0 : device_layer::interface::ISensor::SensorData
+{abstract} +getMeasurement(device_layer::ISensor::Quantities quantity) = 0 : device_layer::ISensor::SensorData
 {abstract} +open() = 0 : void
 {abstract} +triggerMeasurement() = 0 : void
 __
@@ -27,24 +27,24 @@ class C_0005532910924077348494 {
 +~Aht10() : void
 ..
 +close() : void
-+done(hardware_layer::interface::IcbSerialCommander::ReturnValue return_value) : void
-+getMeasurement(device_layer::interface::ISensor::Quantities quantity) : device_layer::interface::ISensor::SensorData
++done(hardware_layer::IcbSerialCommander::ReturnValue return_value) : void
++getMeasurement(device_layer::ISensor::Quantities quantity) : device_layer::ISensor::SensorData
 +init() : void
 +open() : void
 +readDone() : void
-+setIcbSensor(interface::IcbSensor & icb_sensor) : void
-+setSerialInterface(hardware_layer::interface::ISerialCommander & i_serial) : void
++setIcbSensor(IcbSensor & icb_sensor) : void
++setSerialInterface(hardware_layer::ISerialCommander & i_serial) : void
 +triggerMeasurement() : void
 __
--activeInstruction : interface::ISensor::Operation
+-activeInstruction : ISensor::Operation
 -address : std::uint8_t
 -commandContinuation : device_layer::Aht10::CommandContinuation
--humidity : device_layer::interface::ISensor::SensorData
--iSerial : hardware_layer::interface::ISerialCommander *
--icbSensor : interface::IcbSensor *
+-humidity : device_layer::ISensor::SensorData
+-iSerial : hardware_layer::ISerialCommander *
+-icbSensor : IcbSensor *
 -initialized : bool
 -isOpen : bool
--temperature : device_layer::interface::ISensor::SensorData
+-temperature : device_layer::ISensor::SensorData
 }
 }
 }
@@ -82,10 +82,10 @@ class C_0015178894446977333668 {
 {static} #read_measurement(void *const me, const QP::QEvt *const e) : QP::QState
 #read_measurement_h(const QP::QEvt *const e) : QP::QState
 +setGuiInterface(app::IGui & i_gui) : void
-+setSensorInterface(device_layer::interface::ISensor & i_sensor) : void
++setSensorInterface(device_layer::ISensor & i_sensor) : void
 __
 -iGui : app::IGui *
--iSensor : device_layer::interface::ISensor *
+-iSensor : device_layer::ISensor *
 -m_timeEvt : QP::QTimeEvt
 }
 }
@@ -141,7 +141,7 @@ class C_0000102306443127453571 {
 +registerInstance() : void
 {static} +rxIsr(I2C_HandleTypeDef * hi2c) : void
 +setAddress(const std::uint8_t address) : void
-+setIcb(interface::IcbI2c & icb_i2c) : void
++setIcb(IcbI2c & icb_i2c) : void
 +startRead(const std::span<std::uint8_t> data) : void
 +startWrite(const std::span<const std::uint8_t> data) : void
 {static} +txIsr(I2C_HandleTypeDef * hi2c) : void
@@ -151,7 +151,7 @@ __
 +gpioClk : GPIO_InitTypeDef
 +gpioSData : GPIO_InitTypeDef
 -handler : I2C_HandleTypeDef
--icbI2c : interface::IcbI2c *
+-icbI2c : IcbI2c *
 {static} -instanceMap : std::unordered_map<I2C_TypeDef *,I2c *>
 -isOpen : bool
 +portClk : GPIO_TypeDef *
@@ -184,7 +184,7 @@ abstract C_0012909992160874174612 {
 +~ISerialCommander() constexpr = default : void
 ..
 {abstract} +setChipSelect(std::uint8_t pin) = 0 : void
-{abstract} +setCommand(hardware_layer::interface::ISerialCommander::Command command) = 0 : void
+{abstract} +setCommand(hardware_layer::ISerialCommander::Command command) = 0 : void
 {abstract} +setI2CAddress(std::uint8_t address) = 0 : void
 {abstract} +startCommands() = 0 : void
 __
@@ -193,14 +193,14 @@ abstract "IcbSerialCommander" as C_0006717726296434081648
 abstract C_0006717726296434081648 {
 +~IcbSerialCommander() constexpr = default : void
 ..
-{abstract} +done(hardware_layer::interface::IcbSerialCommander::ReturnValue return_value) = 0 : void
+{abstract} +done(hardware_layer::IcbSerialCommander::ReturnValue return_value) = 0 : void
 __
 }
 class "SerialCommander" as C_0012458789690594031884
 class C_0012458789690594031884 {
 +SerialCommander() : void
 ..
--getStateFromInst(hardware_layer::interface::ISerialCommander::Instructions instruction) : QP::QStateHandler
+-getStateFromInst(hardware_layer::ISerialCommander::Instructions instruction) : QP::QStateHandler
 {static} #idle(void *const me, const QP::QEvt *const e) : QP::QState
 #idle_h(const QP::QEvt *const e) : QP::QState
 {static} #initial(void *const me, const QP::QEvt *const e) : QP::QState
@@ -212,11 +212,11 @@ class C_0012458789690594031884 {
 -readDone() : void
 #read_h(const QP::QEvt *const e) : QP::QState
 -setChipSelect(std::uint8_t pin) : void
--setCommand(hardware_layer::interface::ISerialCommander::Command command) : void
+-setCommand(hardware_layer::ISerialCommander::Command command) : void
 -setI2CAddress(std::uint8_t address) : void
-+setIcbSerialCommander(interface::IcbSerialCommander & icb_serial_commander) : void
-+setSerialInterface(hardware_layer::interface::ISpi & i_i2c) : void
-+setSerialInterface(hardware_layer::interface::II2c & i_i2c) : void
++setIcbSerialCommander(IcbSerialCommander & icb_serial_commander) : void
++setSerialInterface(hardware_layer::ISpi & i_i2c) : void
++setSerialInterface(hardware_layer::II2c & i_i2c) : void
 -startCommands() : void
 {static} #write(void *const me, const QP::QEvt *const e) : QP::QState
 -writeDone() : void
@@ -227,9 +227,9 @@ __
 -command_index : std::size_t
 -command_length : std::size_t
 -commands : std::array<Command,128>
--iI2c : hardware_layer::interface::II2c *
--iSpi : hardware_layer::interface::ISpi *
--icbSerialCommander : interface::IcbSerialCommander *
+-iI2c : hardware_layer::II2c *
+-iSpi : hardware_layer::ISpi *
+-icbSerialCommander : IcbSerialCommander *
 -m_timeEvt : QP::QTimeEvt
 }
 }

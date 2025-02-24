@@ -257,7 +257,7 @@ Q_STATE_DEF(SerialCommander, pause)
 
 QP::QStateHandler SerialCommander::nextState()
 {
-    interface::IcbSerialCommander::ReturnValue returnValue;
+    IcbSerialCommander::ReturnValue returnValue;
     returnValue.data = commands[command_index].data;
     returnValue.data_length = commands[command_index].data_length;
 
@@ -313,20 +313,20 @@ QP::QStateHandler SerialCommander::getStateFromInst(Instructions instruction)
     assert(false);
 }
 
-void SerialCommander::setSerialInterface(hardware_layer::interface::II2c& i_i2c)
+void SerialCommander::setSerialInterface(hardware_layer::II2c& i_i2c)
 {
     iSpi = nullptr;
     iI2c = &i_i2c;
 }
 
-void SerialCommander::setSerialInterface(hardware_layer::interface::ISpi& i_spi)
+void SerialCommander::setSerialInterface(hardware_layer::ISpi& i_spi)
 {
     iI2c = nullptr;
     iSpi = &i_spi;
 }
 
 void SerialCommander::setIcbSerialCommander(
-    interface::IcbSerialCommander& icb_serial_commander)
+    IcbSerialCommander& icb_serial_commander)
 {
     icbSerialCommander = &icb_serial_commander;
 }

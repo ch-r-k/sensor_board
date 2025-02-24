@@ -140,7 +140,7 @@ void I2c::close()
     isOpen = false;
 }
 
-void I2c::setIcb(interface::IcbI2c &icb_i2c) { icbI2c = &icb_i2c; }
+void I2c::setIcb(IcbI2c &icb_i2c) { icbI2c = &icb_i2c; }
 
 void I2c::startWrite(const std::span<const std::uint8_t> data)
 {

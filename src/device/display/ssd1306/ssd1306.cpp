@@ -27,7 +27,7 @@ void Ssd1306::init()
 {
     assert(isOpen && "must be open");
 
-    hardware_layer::interface::ISerialCommander::Command command;
+    hardware_layer::ISerialCommander::Command command;
 
     prepareCommand(command, Command::SET_DISPLAY, 0);
     iSerial->setCommand(command);
@@ -110,7 +110,7 @@ void Ssd1306::update()
     assert(isOpen && "must be open");
     assert(initialized && "must be initialized");
 
-    hardware_layer::interface::ISerialCommander::Command command;
+    hardware_layer::ISerialCommander::Command command;
 
     // set command
     cache[0] = static_cast<std::uint8_t>(Command::SET_DISPLAY_START_LINE);
@@ -125,18 +125,18 @@ void Ssd1306::update()
 }
 
 void Ssd1306::setSerialCommanderInterface(
-    hardware_layer::interface::ISerialCommander& i_serial_commander)
+    hardware_layer::ISerialCommander& i_serial_commander)
 {
     iSerial = &i_serial_commander;
 }
 
 void Ssd1306::prepareCommand(
-    hardware_layer::interface::ISerialCommander::Command& serial_command,
+    hardware_layer::ISerialCommander::Command& serial_command,
     Command device_command, std::uint8_t device_command_manipulator,
     const std::initializer_list<std::uint8_t>& data)
 {
     serial_command.instruction =
-        hardware_layer::interface::ISerialCommander::Instructions::WRITE;
+        hardware_layer::ISerialCommander::Instructions::WRITE;
     serial_command.data[0] = 0;
 
     serial_command.data[1] =
@@ -148,11 +148,11 @@ void Ssd1306::prepareCommand(
 }
 
 void Ssd1306::prepareCommand(
-    hardware_layer::interface::ISerialCommander::Command& serial_command,
+    hardware_layer::ISerialCommander::Command& serial_command,
     Command device_command, std::uint8_t device_command_manipulator)
 {
     serial_command.instruction =
-        hardware_layer::interface::ISerialCommander::Instructions::WRITE;
+        hardware_layer::ISerialCommander::Instructions::WRITE;
     serial_command.data[0] = 0;
 
     serial_command.data[1] =
@@ -169,7 +169,7 @@ void Ssd1306::done(IcbSerialCommander::ReturnValue return_value)
     // icbDisplay->printDone();
 }
 
-void Ssd1306::setIcbDisplay(interface::IcbDisplay& icb_display)
+void Ssd1306::setIcbDisplay(IcbDisplay& icb_display)
 {
     icbDisplay = &icb_display;
 }

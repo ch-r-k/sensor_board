@@ -2,8 +2,7 @@
 #define ICB_SENSOR_HPP
 namespace device_layer
 {
-namespace interface
-{
+
 class IcbSensor
 {
    private:
@@ -13,6 +12,5 @@ class IcbSensor
     virtual void readDone() = 0;
 };
 
-}  // namespace interface
 }  // namespace device_layer
 #endif  // ICB_SENSOR_HPP

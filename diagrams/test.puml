@@ -9,7 +9,7 @@ __
 class "UserIndication" as C_0011878340680608868563
 class C_0011878340680608868563 {
 __
--outputPin : hardware_layer::interface::IOutputPin *
+-outputPin : hardware_layer::IOutputPin *
 }
 }
 package [sensors] as C_0008002442099408640964 {
@@ -29,15 +29,15 @@ package [aht10] as C_0000220586222809802987 {
 class "Aht10" as C_0005532910924077348494
 class C_0005532910924077348494 {
 __
--activeInstruction : interface::ISensor::Operation
+-activeInstruction : ISensor::Operation
 -address : std::uint8_t
 -commandContinuation : device_layer::Aht10::CommandContinuation
--humidity : device_layer::interface::ISensor::SensorData
--iSerial : hardware_layer::interface::ISerialCommander *
--icbSensor : interface::IcbSensor *
+-humidity : device_layer::ISensor::SensorData
+-iSerial : hardware_layer::ISerialCommander *
+-icbSensor : IcbSensor *
 -initialized : bool
 -isOpen : bool
--temperature : device_layer::interface::ISensor::SensorData
+-temperature : device_layer::ISensor::SensorData
 }
 class "Aht10::CommandContinuation" as C_0017574253537192038882
 class C_0017574253537192038882 {
@@ -61,8 +61,8 @@ __
 package [ssd1306] as C_0001164134272287276534 {
 class "Ssd1306" as C_0009753622253334925123
 class C_0009753622253334925123 {
--prepareCommand(hardware_layer::interface::ISerialCommander::Command & serial_command, device_layer::Ssd1306::Command device_command, std::uint8_t device_command_manipulator, const std::initializer_list<std::uint8_t> & data) : void
--prepareCommand(hardware_layer::interface::ISerialCommander::Command & serial_command, device_layer::Ssd1306::Command device_command, std::uint8_t device_command_manipulator) : void
+-prepareCommand(hardware_layer::ISerialCommander::Command & serial_command, device_layer::Ssd1306::Command device_command, std::uint8_t device_command_manipulator, const std::initializer_list<std::uint8_t> & data) : void
+-prepareCommand(hardware_layer::ISerialCommander::Command & serial_command, device_layer::Ssd1306::Command device_command, std::uint8_t device_command_manipulator) : void
 __
 {static} -CACHE_SIZE : const std::size_t
 {static} -END_COLUMN_ADDRESS : const std::size_t
@@ -75,8 +75,8 @@ __
 {static} -START_PAGE_ADDRESS : const std::size_t
 -address : std::uint8_t
 -cache : std::array<std::uint8_t,CACHE_SIZE + 1>
--iSerial : hardware_layer::interface::ISerialCommander *
--icbDisplay : interface::IcbDisplay *
+-iSerial : hardware_layer::ISerialCommander *
+-icbDisplay : IcbDisplay *
 -initialized : bool
 -isOpen : bool
 -readBuffer : std::array<std::uint8_t,6>
@@ -119,7 +119,7 @@ class C_0000948712860644548974 {
 __
 -buf_1 : lv_color_t[8192]
 -disp_buf : lv_disp_draw_buf_t
--iDisplay : device_layer::interface::IDisplay *
+-iDisplay : device_layer::IDisplay *
 -labelHumidity : lv_obj_t *
 -labelTemperature : lv_obj_t *
 -labelTitle : lv_obj_t *
@@ -137,7 +137,7 @@ class C_0015178894446977333668 {
 -readDone() : void
 __
 -iGui : app::IGui *
--iSensor : device_layer::interface::ISensor *
+-iSensor : device_layer::ISensor *
 -m_timeEvt : QP::QTimeEvt
 }
 }
@@ -222,7 +222,7 @@ class C_0000102306443127453571 {
 __
 -address : std::uint8_t
 -handler : I2C_HandleTypeDef
--icbI2c : interface::IcbI2c *
+-icbI2c : IcbI2c *
 {static} -instanceMap : std::unordered_map<I2C_TypeDef *,I2c *>
 -isOpen : bool
 }
@@ -261,11 +261,11 @@ __
 }
 class "SerialCommander" as C_0012458789690594031884
 class C_0012458789690594031884 {
--getStateFromInst(hardware_layer::interface::ISerialCommander::Instructions instruction) : QP::QStateHandler
+-getStateFromInst(hardware_layer::ISerialCommander::Instructions instruction) : QP::QStateHandler
 -nextState() : QP::QStateHandler
 -readDone() : void
 -setChipSelect(std::uint8_t pin) : void
--setCommand(hardware_layer::interface::ISerialCommander::Command command) : void
+-setCommand(hardware_layer::ISerialCommander::Command command) : void
 -setI2CAddress(std::uint8_t address) : void
 -startCommands() : void
 -writeDone() : void
@@ -273,9 +273,9 @@ __
 -command_index : std::size_t
 -command_length : std::size_t
 -commands : std::array<Command,128>
--iI2c : hardware_layer::interface::II2c *
--iSpi : hardware_layer::interface::ISpi *
--icbSerialCommander : interface::IcbSerialCommander *
+-iI2c : hardware_layer::II2c *
+-iSpi : hardware_layer::ISpi *
+-icbSerialCommander : IcbSerialCommander *
 -m_timeEvt : QP::QTimeEvt
 }
 }

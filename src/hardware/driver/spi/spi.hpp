@@ -9,7 +9,7 @@
 
 namespace hardware_layer
 {
-class Spi : public interface::ISpi
+class Spi : public ISpi
 {
    public:
     enum class BaudratePrescaler : std::uint8_t

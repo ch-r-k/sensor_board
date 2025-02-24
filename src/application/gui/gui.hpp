@@ -21,13 +21,11 @@
 
 namespace app
 {
-class Gui : public QP::QActive,
-            public device_layer::interface::IcbDisplay,
-            public IGui
+class Gui : public QP::QActive, public device_layer::IcbDisplay, public IGui
 {
    private:
     QP::QTimeEvt m_timeEvt;
-    device_layer::interface::IDisplay *iDisplay = nullptr;
+    device_layer::IDisplay *iDisplay = nullptr;
 
     lv_disp_draw_buf_t disp_buf;
     lv_color_t buf_1[128 * 64];
@@ -38,7 +36,7 @@ class Gui : public QP::QActive,
 
    public:
     Gui();
-    void setDisplayInterface(device_layer::interface::IDisplay &i_display);
+    void setDisplayInterface(device_layer::IDisplay &i_display);
     void setTempLabel(std::uint8_t value) override;
     void setHumidityLabel(std::uint8_t value) override;
     std::uint8_t x = 0;

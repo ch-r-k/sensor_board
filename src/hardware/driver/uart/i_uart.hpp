@@ -6,8 +6,7 @@
 
 namespace hardware_layer
 {
-namespace interface
-{
+
 class IUart
 {
    public:
@@ -18,6 +17,6 @@ class IUart
     virtual void StartWrite(const std::span<std::uint8_t> data) = 0;
     virtual void StartRead(const std::span<std::uint8_t> data) = 0;
 };
-}  // namespace interface
+
 }  // namespace hardware_layer
 #endif  // I_UART_HPP

@@ -6,8 +6,7 @@
 
 namespace hardware_layer
 {
-namespace interface
-{
+
 class ISpi
 {
    public:
@@ -17,6 +16,5 @@ class ISpi
     virtual void startRead(const std::span<std::uint8_t> data) = 0;
 };
 
-}  // namespace interface
 }  // namespace hardware_layer
 #endif  // I_SPI_HPP

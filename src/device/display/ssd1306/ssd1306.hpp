@@ -15,8 +15,7 @@
 
 namespace device_layer
 {
-class Ssd1306 : public interface::IDisplay,
-                public hardware_layer::interface::IcbSerialCommander
+class Ssd1306 : public IDisplay, public hardware_layer::IcbSerialCommander
 {
    public:
     // Enum for Ssd1306 commands
@@ -86,8 +85,8 @@ class Ssd1306 : public interface::IDisplay,
     bool isOpen = false;
     bool initialized = false;
 
-    interface::IcbDisplay* icbDisplay = nullptr;
-    hardware_layer::interface::ISerialCommander* iSerial = nullptr;
+    IcbDisplay* icbDisplay = nullptr;
+    hardware_layer::ISerialCommander* iSerial = nullptr;
 
     std::uint8_t address = 0x3C;
     std::array<std::uint8_t, 6> readBuffer = {0};
@@ -108,17 +107,17 @@ class Ssd1306 : public interface::IDisplay,
     void update() override;
 
     void setSerialCommanderInterface(
-        hardware_layer::interface::ISerialCommander& i_serial_commander);
-    void setIcbDisplay(interface::IcbDisplay& icb_display);
+        hardware_layer::ISerialCommander& i_serial_commander);
+    void setIcbDisplay(IcbDisplay& icb_display);
 
    private:
     void prepareCommand(
-        hardware_layer::interface::ISerialCommander::Command& serial_command,
+        hardware_layer::ISerialCommander::Command& serial_command,
         Command device_command, std::uint8_t device_command_manipulator,
         const std::initializer_list<std::uint8_t>& data);
 
     void prepareCommand(
-        hardware_layer::interface::ISerialCommander::Command& serial_command,
+        hardware_layer::ISerialCommander::Command& serial_command,
         Command device_command, std::uint8_t device_command_manipulator);
 };
 

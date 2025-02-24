@@ -96,7 +96,7 @@ target_link_libraries(${PROJECT} PRIVATE lvgl)
 target_linker_script(${PROJECT} "${CMAKE_CURRENT_LIST_DIR}/src/hardware/linker/blinky.ld")
 #target_link_options(${PROJECT} PRIVATE -T${CMAKE_CURRENT_LIST_DIR}/src/hardware/linker/blinky.ld)
 
-target_compile_options(lvgl PUBLIC -DLV_CONF_PATH=/workspaces/sensor_board/3d_party/lv_conf.h)
+target_compile_options(lvgl PUBLIC -DLV_CONF_PATH=${CMAKE_CURRENT_LIST_DIR}/3d_party/lv_conf.h)
 
 if (ENABLE_QS)
     target_compile_definitions(${PROJECT} PUBLIC Q_SPY)

@@ -15,7 +15,7 @@
 #include "_common/error/error.hpp"
 namespace hardware_layer
 {
-class I2c : public interface::II2c, public Error
+class I2c : public II2c, public Error
 {
    public:
     enum class AddressingMode : std::uint32_t
@@ -46,7 +46,7 @@ class I2c : public interface::II2c, public Error
     I2C_HandleTypeDef handler;
     bool isOpen = false;
     std::uint8_t address;
-    interface::IcbI2c* icbI2c = nullptr;
+    IcbI2c* icbI2c = nullptr;
     static std::unordered_map<I2C_TypeDef*, I2c*> instanceMap;
 
    public:
@@ -61,7 +61,7 @@ class I2c : public interface::II2c, public Error
 
     void open() override;
     void close() override;
-    void setIcb(interface::IcbI2c& icb_i2c);
+    void setIcb(IcbI2c& icb_i2c);
 
     void startWrite(const std::span<const std::uint8_t> data) override;
     void startRead(const std::span<std::uint8_t> data) override;
